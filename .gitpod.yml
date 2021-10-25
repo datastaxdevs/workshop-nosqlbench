@@ -1,5 +1,7 @@
 tasks:
   - name: open-readme
+    before: |
+      sudo apt install -y fuse
     command: |
       echo READY TO START...
       gp open README.md
