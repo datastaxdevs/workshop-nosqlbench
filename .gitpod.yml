@@ -1,0 +1,15 @@
+tasks:
+  - name: open-readme
+    command: |
+      echo READY TO START...
+      gp open README.md
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: false
+    addCheck: true
+    addComment: false
+    addBadge: true
+    addLabel: false
