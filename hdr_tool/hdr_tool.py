@@ -21,6 +21,11 @@ from hdr_manipulation import (
     normalizedDistribution,
     histogramGetValueAtPercentile,
 )
+from output_handling import (
+    canCreateFile,
+    plotToFigure,
+    plotToDatafile,
+)
 
 # constants
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
@@ -53,6 +58,10 @@ if __name__ == '__main__':
     # sanity checks
     if not args.baseplot and not args.percentiles and not args.stability:
         print('WARNING: Nothing to do.\n')
+        parser.print_help()
+        sys.exit(0)
+    if args.plot is None and args.dump is None:
+        print('WARNING: No output mode(s) provided.\n')
         parser.print_help()
         sys.exit(0)
 
@@ -116,7 +125,7 @@ if __name__ == '__main__':
 
     # ensure a metric is chosen
     if args.metric is None:
-        print('Please choose a metric to analyse:')
+        print('Available metrics to analyse:')
         availableMetrics = sorted(slicesByTag.keys())
         print('\n'.join(
             '  (%2i) %52s (%2i non-empty slices, %9i values, covers %6i ms)' % (
@@ -128,7 +137,7 @@ if __name__ == '__main__':
             )
             for mi, m in enumerate(availableMetrics)
         ))
-        mIndex = int(input('Input the selected metric index: '))
+        mIndex = int(input('Please choose a metric index (0-%i): ' % (len(slicesByTag)-1)))
         metricName = availableMetrics[mIndex]
     else:
         metricName = args.metric[0]
@@ -143,27 +152,43 @@ if __name__ == '__main__':
 
     # ordinary distribution of the target metric ("baseplot")
     if args.baseplot:
+        print('  * Calculating base plot ... ', end='')
         xs, ys = normalizedDistribution(
             fullHistogram,
             xStep,
             MAX_PERCENTILE_REACHED,
         )
         plotDataMap['baseplot'] = [(xs, ys)]
+        print('done.')
 
     # per-slice plots
     if args.stability:
-        perSlicePlots = [
-            normalizedDistribution(
-                sl,
-                xStep,
-                MAX_PERCENTILE_REACHED,
-            )
-            for sl in slicesByTag[metricName]
-        ]
-        plotDataMap['stability'] = perSlicePlots
+        if len(slicesByTag[metricName]) > 1:
+            print('  * Calculating stability plot ... ', end='')
+            perSlicePlots0 = [
+                normalizedDistribution(
+                    sl,
+                    xStep,
+                    MAX_PERCENTILE_REACHED,
+                )
+                for sl in slicesByTag[metricName]
+            ]
+            # we need to pad this with additional trailing zeroes
+            # and have the same xs for all curves
+            fullXs = max([pl[0] for pl in perSlicePlots0], key=len)
+            perSlicePlots = [
+                (fullXs, ys + [0] * (len(fullXs) - len(ys)))
+                for xs, ys in perSlicePlots0
+            ]
+            #
+            plotDataMap['stability'] = perSlicePlots
+            print('done.')
+        else:
+            print('*WARNING*: Nothing to plot for stability analysis.')
 
     # percentile diagram (a.k.a. integral of the base plot)
     if args.percentiles:
+        print('  * Calculating percentile plot ... ', end='')
         if 'baseplot' in plotDataMap:
             bxs, bys = plotDataMap['baseplot'][0]
         else:
@@ -183,37 +208,27 @@ if __name__ == '__main__':
         )[1]
         pxs = [x * xStep * 100 for x in pxs0]
         plotDataMap['percentiles'] = [(pxs, pys)]
+        print('done.')
 
+    # Output of curves calculated so far
+    for plotK, plotData in sorted(plotDataMap.items()):
+        print('  * Output for "%s": ' % plotK)
+        if args.plot:
+            fileName = '%s_%s.%s' % (args.plot[0], plotK, 'png')
+            if canCreateFile(fileName, args.force):
+                if plotToFigure(plotK, plotData, xStep, metricName, fileName):
+                    print('      %s' % fileName)
+                else:
+                    print('      *FAILED*: %s' % fileName)
+            else:
+                print('      *SKIPPING*: %s' % fileName)
+        if args.dump:
+            fileName = '%s_%s.%s' % (args.dump[0], plotK, 'dat')
+            if canCreateFile(fileName, args.force):
+                if plotToDatafile(plotK, plotData, xStep, metricName, fileName):
+                    print('      %s' % fileName)
+                else:
+                    print('      *FAILED*: %s' % fileName)
+            else:
+                print('      *SKIPPING*: %s' % fileName)
 
-    # Output of curves calculated so far - WIP
-    import matplotlib.pyplot as plt
-    if 'baseplot' in plotDataMap:
-        xs, ys = plotDataMap['baseplot'][0]
-        plt.bar(
-            xs,
-            ys,
-            width=xStep,
-        )
-        plt.xlabel('t [ms]')
-        plt.ylabel('p(t) [1/ms]')
-        plt.show()
-    if 'stability' in plotDataMap:
-        curves = plotDataMap['stability']
-        for sli, (xs, ys) in enumerate(curves):
-            if len(xs) > 0:
-                plt.plot(
-                    xs,
-                    ys,
-                    '-',
-                    label='Slice %i' % sli,
-                )
-        plt.xlabel('t [ms]')
-        plt.ylabel('p(t) [1/ms]')
-        plt.legend()
-        plt.show()
-    if 'percentiles' in plotDataMap:
-        xs, ys = plotDataMap['percentiles'][0]
-        plt.plot(xs, ys, '-')
-        plt.xlabel('Percentile')
-        plt.ylabel('t [ms]')
-        plt.show()
