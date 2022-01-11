@@ -25,7 +25,7 @@ def saveFigure(figure, filename):
     plt.close(figure)
 
 
-def plotToFigure(pType, pData, hstep, metric, fName):
+def plotToFigure(pType, pData, hstep, metric, fName, unitName):
     # return True iff image creation succeeds
     if plt:
         if pType == 'baseplot':
@@ -36,8 +36,8 @@ def plotToFigure(pType, pData, hstep, metric, fName):
                 ys,
                 width=hstep,
             )
-            plt.xlabel('t [ms]')
-            plt.ylabel('p(t) [1/ms]')
+            plt.xlabel('t [%s]' % unitName)
+            plt.ylabel('p(t) [1/%s]' % unitName)
             plt.ylim((0, None))
             plt.title('Distribution for "%s"' % metric)
             saveFigure(plot, fName)
@@ -56,8 +56,8 @@ def plotToFigure(pType, pData, hstep, metric, fName):
                         color=colors[sli],
                         label='Slice %i' % sli,
                     )
-            plt.xlabel('t [ms]')
-            plt.ylabel('p(t) [1/ms]')
+            plt.xlabel('t [%s]' % unitName)
+            plt.ylabel('p(t) [1/%s]' % unitName)
             plt.ylim((0, None))
             plt.legend()
             plt.title('Stability analysis for "%s"' % metric)
@@ -68,7 +68,7 @@ def plotToFigure(pType, pData, hstep, metric, fName):
             xs, ys = pData[0]
             plt.plot(xs, ys, '-')
             plt.xlabel('Percentile')
-            plt.ylabel('t [ms]')
+            plt.ylabel('t [%s]' % unitName)
             xticks = [i for i in range(0, 110, 10)]
 
             def _firstOrNone(lst):

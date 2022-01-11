@@ -38,12 +38,18 @@ def sliceEndTimestamp(slice):
     return slice.end_time_stamp_msec
 
 
-def sliceMaxValue(slice):
-    return slice.max_value / VALUE_FACTOR
+def sliceMaxValue(slice, rawFlag):
+    if rawFlag:
+        return slice.max_value
+    else:
+        return slice.max_value / VALUE_FACTOR
 
 
-def sliceMinValue(slice):
-    return slice.min_value / VALUE_FACTOR
+def sliceMinValue(slice, rawFlag):
+    if rawFlag:
+        return slice.min_value
+    else:
+        return slice.min_value / VALUE_FACTOR
 
 
 def sliceValueCount(slice):
@@ -61,12 +67,12 @@ def slicesEndTimestamp(slices):
     return earliestMsec
 
 
-def slicesMinValue(slices):
-    return min(sliceMinValue(sl) for sl in slices)
+def slicesMinValue(slices, rawFlag):
+    return min(sliceMinValue(sl, rawFlag=rawFlag) for sl in slices)
 
 
-def slicesMaxValue(slices):
-    return max(sliceMaxValue(sl) for sl in slices)
+def slicesMaxValue(slices, rawFlag):
+    return max(sliceMaxValue(sl, rawFlag=rawFlag) for sl in slices)
 
 
 def slicesCountNonempty(slices):
@@ -85,25 +91,37 @@ def timestampToDate(tstamp):
     return datetime.datetime.fromtimestamp(tstamp / 1000.0)
 
 
+def valueUnitName(rawFlag):
+    # used to properly label histo-value units returned from other functions
+    return 'RU' if rawFlag else 'ms'
+
+
 def aggregateSlices(slices, sigFigures):
-    metricMax = slicesMaxValue(slices)
-    fullHistogram = HdrHistogram(1, int(1+ metricMax*VALUE_FACTOR), sigFigures)
+    # in this case we always stay on the 'raw' units as we are working
+    # under the hood, merging histograms.
+    metricMax = slicesMaxValue(slices, rawFlag=True)
+    fullHistogram = HdrHistogram(1, int(1 + metricMax), sigFigures)
     reduce(lambda _, b: fullHistogram.add(b), slices, None)
     return fullHistogram
 
 
 # Histogram functions
-def histogramGetValueAtPercentile(histogram, percentile):
-    # in the histogram we have ns, we want to make them into ms
-    return  histogram.get_value_at_percentile(percentile) / VALUE_FACTOR
+def histogramGetValueAtPercentile(histogram, percentile, rawFlag):
+    if rawFlag:
+        return histogram.get_value_at_percentile(percentile)
+    else:
+        # in the histogram we have ns, we want to make them into ms
+        return histogram.get_value_at_percentile(percentile) / VALUE_FACTOR
 
 
 # Extraction for plots
-def normalizedDistribution(histogram, x_incr, max_percentile):
-    # NOTE: x_incr is expected to be passed in ms
-    x_incr_ns = x_incr * VALUE_FACTOR
+def normalizedDistribution(histogram, x_incr, max_percentile, rawFlag):
+    vf = 1.0 if rawFlag else VALUE_FACTOR
+    # NOTE: x_incr is expected to be passed in ms if not rawFlag
+    # in any case here this is made into the 'raw' unit as found in the histo:
+    x_incr_rw = x_incr * vf
     if sliceValueCount(histogram) > 0:
-        cursor = histogram.get_linear_iterator(value_units_per_bucket=x_incr_ns)
+        cursor = histogram.get_linear_iterator(value_units_per_bucket=x_incr_rw)
         xs0, ys0 = zip(*(
             (
                 0.5 * (step.value_iterated_from + step.value_iterated_to),
@@ -113,7 +131,7 @@ def normalizedDistribution(histogram, x_incr, max_percentile):
             if step.percentile <= max_percentile
         ))
         #
-        xs = [x / VALUE_FACTOR for x in xs0]
+        xs = [x / vf for x in xs0]
         # integral must be == 1 for ease of comparisons:
         ys = [y / (histogram.total_count * x_incr) for y in ys0]
         #

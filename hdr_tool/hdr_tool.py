@@ -20,6 +20,7 @@ from hdr_manipulation import (
     aggregateSlices,
     normalizedDistribution,
     histogramGetValueAtPercentile,
+    valueUnitName,
 )
 from output_handling import (
     canCreateFile,
@@ -52,6 +53,7 @@ if __name__ == '__main__':
     oParserGroup.add_argument('-p', '--plot', metavar='PLOTFILEROOT', nargs=1, help='Create plot images (with given file root)')
     oParserGroup.add_argument('-d', '--dump', metavar='DUMPFILEROOT', nargs=1, help='Dump to data files (with given file root)')
     oParserGroup.add_argument('-f', '--force', action='store_true', help='Overwrite existing file(s) if necessary')
+    oParserGroup.add_argument('-r', '--raw', action='store_true', help='Keep raw values found in histograms (no unit conversions)')
     #
     args = parser.parse_args()
 
@@ -83,6 +85,8 @@ if __name__ == '__main__':
     t1 = max(slicesEndTimestamp(sls) for sls in slicesByTag.values())
     date1 = timestampToDate(t1)
 
+    unitName = valueUnitName(args.raw)
+
     # detailed input breakdown if required
     if args.inspect:
         print('HDR log details for "%s"' % args.filename)
@@ -98,14 +102,15 @@ if __name__ == '__main__':
             ))
             # per-tag metrics
             tagValues = slicesValueCount(slices)
-            tagMax = slicesMaxValue(slices)
-            tagMin = slicesMinValue(slices)
+            tagMax = slicesMaxValue(slices, rawFlag=args.raw)
+            tagMin = slicesMinValue(slices, rawFlag=args.raw)
             tagT0 = slicesStartTimestamp(slices)
             tagT1 = slicesEndTimestamp(slices)
-            print('      Values: %i (ranging %.2f to %.2f ms)' % (
+            print('      Values: %i (ranging %.2f to %.2f %s)' % (
                 tagValues,
                 tagMin,
                 tagMax,
+                unitName,
             ))
             print('      Time interval: %6i to %6i (%6i ms total)' % (
                 tagT0-t0,
@@ -147,7 +152,8 @@ if __name__ == '__main__':
 
     # common assessments
     fullHistogram = aggregateSlices(slicesByTag[metricName], SIGNIFICANT_FIGURES)
-    maxX = histogramGetValueAtPercentile(fullHistogram, MAX_PERCENTILE_REACHED)
+    maxX = histogramGetValueAtPercentile(fullHistogram, MAX_PERCENTILE_REACHED,
+                                         rawFlag=args.raw)
     xStep = maxX / PLOT_POINTS_COUNT
 
     # ordinary distribution of the target metric ("baseplot")
@@ -157,6 +163,7 @@ if __name__ == '__main__':
             fullHistogram,
             xStep,
             MAX_PERCENTILE_REACHED,
+            rawFlag=args.raw,
         )
         plotDataMap['baseplot'] = [(xs, ys)]
         print('done.')
@@ -170,6 +177,7 @@ if __name__ == '__main__':
                     sl,
                     xStep,
                     MAX_PERCENTILE_REACHED,
+                    rawFlag=args.raw,
                 )
                 for sl in slicesByTag[metricName]
             ]
@@ -197,6 +205,7 @@ if __name__ == '__main__':
                 fullHistogram,
                 xStep,
                 MAX_PERCENTILE_REACHED,
+                rawFlag=args.raw,
             )
         #
         pys = bxs
@@ -216,7 +225,8 @@ if __name__ == '__main__':
         if args.plot:
             fileName = '%s_%s.%s' % (args.plot[0], plotK, 'png')
             if canCreateFile(fileName, args.force):
-                if plotToFigure(plotK, plotData, xStep, metricName, fileName):
+                if plotToFigure(plotK, plotData, xStep, metricName, fileName,
+                                unitName=unitName):
                     print('      %s' % fileName)
                 else:
                     print('      *FAILED*: %s' % fileName)
