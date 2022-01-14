@@ -92,6 +92,7 @@ def plotToFigure(pType, pData, hstep, metric, fName, unitName):
         else:
             raise ValueError('unknown plot type "%s"' % pType)
     else:
+        print('      ** matplotlib not available! **')
         return False
 
 
