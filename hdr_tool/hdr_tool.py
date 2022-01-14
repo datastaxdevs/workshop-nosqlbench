@@ -15,6 +15,8 @@ from hdr_manipulation import (
     slicesCountNonempty,
     slicesMinValue,
     slicesMaxValue,
+    sliceMinValue,
+    sliceMaxValue,
     sliceValueCount,
     slicesValueCount,
     aggregateSlices,
@@ -120,12 +122,17 @@ if __name__ == '__main__':
             print('      Slices:')
             #
             for sli, sl in enumerate(slices):
-                print('        (%3i) %12i vals, t = %6i to %6i (%6i ms)' % (
+                print('        (%3i) %12i vals, t = %6i to %6i (%6i ms)%s' % (
                     sli,
                     sliceValueCount(sl),
                     sliceStartTimestamp(sl) - t0,
                     sliceEndTimestamp(sl) - t0,
                     sliceEndTimestamp(sl) - sliceStartTimestamp(sl),
+                    ', ranging %8.2f to %8.2f %s' % (
+                        sliceMinValue(sl, rawFlag=args.raw),
+                        sliceMaxValue(sl, rawFlag=args.raw),
+                        unitName,
+                    ) if sliceValueCount(sl) > 0 else '',
                 ))
 
     # ensure a metric is chosen
