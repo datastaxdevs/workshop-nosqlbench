@@ -2,6 +2,9 @@ tasks:
   - name: open-readme
     before: |
       sudo apt install -y fuse
+      cd /workspace/nbws1
+      python -m pip install --upgrade pip
+      pip install -r hdr_tool/requirements.txt
     command: |
       echo READY TO START...
       gp open README.md
