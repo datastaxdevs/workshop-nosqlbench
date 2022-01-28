@@ -18,3 +18,10 @@ github:
     addComment: false
     addBadge: true
     addLabel: false
+ports:
+  - port: 3000
+    onOpen: open-preview
+    visibility: public
+  - port: 9090
+    onOpen: ignore
+    visibility: public
