@@ -7,7 +7,7 @@ aimed at several data stores, especially NoSQL distributed databases.
 Today we are going to benchmark Astra DB, a database-as-a-service built on top of
 Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
-In this repository you will find all material you need:
+In this repository you will find all material and references you need:
 
 - [slide deck](#)
 - [exercises](#)
@@ -39,7 +39,7 @@ for more coverage of the theory part. There, you will learn more about:
 - What are the prerequisites (for me / my compuer) ?
 
 > This workshop is aimed at data architects, solution architects or anybody who
-> wants to get serious about measuring the performance of their architecture.
+> wants to get serious about measuring the performance of their data-intensive system.
 > You should know what a database is, and have a general understanding of the
 > challenges coming with communicating over a network.
 
@@ -69,7 +69,7 @@ we will then benchmark with NoSQLBench.
 > Don't worry, we will create
 > it within the "Free Tier", which offers quite a generous free
 > allowance in terms of monthly I/O (40M operations per month)
-> and storage (80 GB)._
+> and storage (80 GB).
 
 _TODO:_
 
@@ -107,9 +107,11 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 
 `sudo mv nb /usr/local/bin/`
 
+`nb --help` to check everything works
+
 ### Upload the Secure Connect Bundle to Gitpod
 
-(drag-and-drop, verify with `ls`)
+(drag-and-drop the bundle, verify with `ls`)
 
 ### Configure the Astra DB token
 
@@ -121,6 +123,16 @@ MY_CLIENT_SECRET=...
 ```
 
 ## XXX
+
+### A short dry run
+
+Launch a 2-statement `driver=console` (TO ADD)
+
+### Benchmark your Astra DB
+
+Launch this command (explained in the slides, line by line)
+
+You can keep it open in the editor as well for ease of usage
 
 ```
 nb cql-keyvalue \
@@ -136,5 +148,28 @@ nb cql-keyvalue \
     --log-histograms 'histogram_hdr_data.log:.*.cycles.servicetime:20s' \
     --log-histostats 'hdrstats.log:cqlkeyvalue_default_main.cycles.servicetime:20s'
 ```
+
+While it runs:
+
+- go to the CQL console, see what is created
+- check the Health tab on Astra UI
+
+When it finishes:
+
+- inspect summary file
+- inspect HDR file (and histostats). Look at the numbers (num/seconds) for a standard metric.
+
+### Your own analysis of the HDR
+
+Launch `hdr_tool.py` and look at the results. Note down percentiles and max value.
+
+A good point for more stuff on percentiles and "SLO". (theory)
+
+### Metrics, metrics, metrics
+
+A new run of `nb` with `docker-metrics`.
+While it runs:
+
+- check
 
 Add `cyclerate=100` (and `--docker-metrics`) later.
