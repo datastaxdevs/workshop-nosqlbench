@@ -134,6 +134,10 @@ nb --version
 ```
 should output the program version (something like `4.15.86` -- or higher).
 
+> Note that if your Gitpod instance gets hibernated (which happens after some
+> inactive time) and you restart it later, recall that only the contents
+> of `/workspace` will be restored: hence, you would have to repeat the
+> installation.
 
 ### Upload the Secure Connect Bundle to Gitpod
 
