@@ -147,7 +147,7 @@ and be around 12 KB in size) and simply **drag-and-drop** it to
 the file navigator panel ("Explorer") on the left of the Gitpod view.
 
 <details><summary>Show me</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/images/gitpod_uploading_bundle_1_annotated.png?raw=true" />
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/gitpod_uploading_bundle_1_annotated.png?raw=true" />
 </details>
 
 Once you drop it you will see it listed in the file explorer itself.
@@ -160,7 +160,7 @@ so that you get the _full path to your bundle file_ (and also verify that it is
 the correct size).
 
 <details><summary>Show me</summary>
-    <images/gitpod_uploading_bundle_2_annotated.png src="https://github.com/hemidactylus/nbws1/raw/main/images/IMG?raw=true" />
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/gitpod_uploading_bundle_2_annotated.png?raw=true" />
 </details>
 
 
