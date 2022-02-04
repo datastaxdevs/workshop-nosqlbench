@@ -24,6 +24,8 @@ In this repository you will find all material and references you need:
 3. Launch Gitpod and setup NoSQLBench
 4. XXX
 
+
+
 ## Before you start
 
 If you are not watching us live, please look at the provided presentation material
@@ -33,6 +35,7 @@ for more coverage of the theory part. There, you will learn more about:
 - Astra DB, a database-as-a-service in the cloud, built on Cassandra, ready to use in minutes with a few clicks;
 - what "testing a data store" entails;
 - the main features and general principles behind the NoSQLBench benchmarking tool.
+
 
 ### FAQ
 
@@ -53,6 +56,7 @@ for more coverage of the theory part. There, you will learn more about:
 
 > **No.** All materials and software we'll use today is _free_.
 
+
 ### Homework
 
 To complete the workshop and get a verified "NoSQLBench" badge, you will
@@ -60,6 +64,8 @@ have to do a little homework and submit it.
 
 _Homework details TBD. There'll be a workload yaml with ready-made "menu of bindings"
 and you will be asked to use them appropriately._
+
+
 
 ## Create your Astra DB instance
 
@@ -80,15 +86,17 @@ You will need to:
 Moreover, keep the Astra DB dashboard open: it will be useful later. In particular the
 Health tab and the CQL Console.
 
+
+
 ## Launch Gitpod and setup NoSQLBench
 
 Gitpod is an IDE in the cloud (modeled after VSCode). It comes with a full
 "virtual machine" (actually a Kubernetes-managed container), which we will
-use as if it were our own computer (downloading files, executing programs
-and scripts, etc).
+use as if it were our own computer (e.g. downloading files, executing programs
+and scripts, even launching containers from within it).
 
-The button below will spawn your own Gitpod container, clone this repository
-in it and preinstall the required dependencies: **ctrl-click on
+The button below will: spawn your own Gitpod container + clone this repository
+in it + preinstall the required dependencies: **ctrl-click on
 it** to make sure you "Open in new tab":
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hemidactylus/nbws1)
@@ -99,19 +107,62 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 > There are many more other features, probably familiar to those who have
 > experience with VSCode. Feel free to play around a bit!
 
+
 ### Install NoSQLBench
 
-`curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb`
+Let's download the latest stable version of NoSQLBench to this machine.
+First make sure you are in the top-level repository directory with your
+Gitpod console: type `pwd` and see if the output is `/workspace/nbws1`.
 
-`chmod +x nb`
+We will download the "Linux binary" distribution of NoSQLBench:
+as instructed [here](https://github.com/nosqlbench/nosqlbench/blob/main/DOWNLOADS.md),
+we get the file (it's a few hundred megabytes) with
+```
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb
+```
 
-`sudo mv nb /usr/local/bin/`
+and when the download is finished we make it executable and move it,
+out of convenience, to a directory which is part of the search path:
+```
+chmod +x nb
+sudo mv nb /usr/local/bin/
+```
 
-`nb --version` to check everything works
+Ok, let's check that the program starts: invoking
+```
+nb --version
+```
+should output the program version (something like `4.15.86` -- or higher).
+
 
 ### Upload the Secure Connect Bundle to Gitpod
 
-(drag-and-drop the bundle, verify with `ls`)
+NoSQLBench will need to connect to your Astra DB database: to do so, the
+Secure Connect Bundle zip file you downloaded earlier must be uploaded
+to your Gitpod environment.
+
+Locate the bundle file on your computer with the file explorer
+(it will probably be called something like `secure-connect-workshops.zip`
+and be around 12 KB in size) and simply **drag-and-drop** it to
+the file navigator panel ("Explorer") on the left of the Gitpod view.
+
+<details><summary>Show me</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/images/gitpod_uploading_bundle_1_annotated.png?raw=true" />
+</details>
+
+Once you drop it you will see it listed in the file explorer itself.
+As a check, you can issue the command
+```
+ls /workspace/nbws1/*zip -lh
+```
+
+so that you get the _full path to your bundle file_ (and also verify that it is
+the correct size).
+
+<details><summary>Show me</summary>
+    <images/gitpod_uploading_bundle_2_annotated.png src="https://github.com/hemidactylus/nbws1/raw/main/images/IMG?raw=true" />
+</details>
+
 
 ### Configure the Astra DB token
 

@@ -7,7 +7,8 @@ tasks:
       python -m pip install --upgrade pip
       pip install -r hdr_tool/requirements.txt
     command: |
-      echo READY TO START...
+      clear
+      echo -e "\n\n\t\t** READY TO START... **\n\n"
       gp open README.md
 github:
   prebuilds:
