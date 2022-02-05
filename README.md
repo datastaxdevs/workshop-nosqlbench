@@ -312,15 +312,17 @@ Note that some of the parameters (e.g. `keyspace` are workload-specific)
 | `secureconnectbundle=...`                             | Astra DB connection parameters
 | `keyspace=`                                           | target keyspace
 | `cyclerate=100`                                       | rate-limiting (100 per second)
-| `driver=cql`                                          | driver to use (CQL to speak with Astra DB/Cassandra)
-| `rampup-cycles=40000`                                 | 
-| `main-cycles=40000`                                   | how many operations in the "main" phase
-| `--progress console:5s`                               | same for the "rampup" phase
+| `driver=cql`                                          | driver to use (CQL, for AstraDB/Cassandra)
+| `rampup-cycles=40000`                                 | how many operations in the "rampup" phase
+| `main-cycles=40000`                                   | same for the "main" phase
+| `--progress console:5s`                               | frequency of console prints
 | `--log-histograms 'histogram_hdr_data.log:[...]:20s'` | write data to HDR file (see later)
 | `--log-histostats 'hdrstats.log:[...]:20s'`           | write some more stats to this file
 
 
 </details>
+
+With 40k+40k it is 13'42" on a gitpod.
 
 While it runs:
 
