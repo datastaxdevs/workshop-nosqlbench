@@ -135,6 +135,10 @@ nb --version
 ```
 should output the program version (something like `4.15.86` -- or higher).
 
+> You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
+> you start `nb`. You can ignore it: it is a consequence of some settings by
+> Gitpod and does not have to do with NoSQLBench itself.
+
 > Note that if your Gitpod instance gets hibernated (which happens after some
 > inactive time) and you restart it later, recall that only the contents
 > of `/workspace` will be restored: hence, you would have to repeat the
@@ -196,6 +200,14 @@ Now, source this file to make the definitions therein available to this shell:
 ```
 . .env
 ```
+
+To check that the file has been sourced, you can try with:
+```
+echo ${ASTRA_DB_KEYSPACE_NAME}
+```
+
+and make sure the output is not an empty line.
+
 
 (Note that you will have to source the file in any new shell you plan to use).
 
@@ -292,7 +304,7 @@ nb cql-keyvalue                                                           \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
     secureconnectbundle=${ASTRA_DB_BUNDLE_PATH}                           \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}                                    \
-    cyclerate=50                                                         \
+    cyclerate=50                                                          \
     driver=cql                                                            \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
@@ -303,7 +315,7 @@ nb cql-keyvalue                                                           \
 
 <details><summary>Show me the command breakdown</summary>
 
-Note that some of the parameters (e.g. `keyspace` are workload-specific)
+Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 
 | command                   | meaning                                      |
 |---------------------------|----------------------------------------------|
