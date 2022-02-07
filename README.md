@@ -234,8 +234,9 @@ to the three phases defined in the `cql-keyvalue` _workload_: **schema**,
 **main** phase, which mimics the kind of load the database would be subject to
 when operating normally.
 
-Now copy the few last lines of the output to a temporary file in the Gitpod
-editor and re-launch the above dry run:
+Now re-launch the above dry run (you may find it convenient to copy the few
+last lines of the output to a temporary file in the Gitpod editor for an easier
+comparison):
 
 ```
 nb cql-keyvalue astra                   \
@@ -259,8 +260,9 @@ populated with some information from the benchmark at each execution of `nb`.
 ### Benchmark your Astra DB
 
 It is now time to start hitting the database!
-What you launched earlier is the `cql-keyvalue` _workload_, one of several
-ready-to-use included with NoSQLBench (but you can build your own).
+What you launched earlier is the `cql-keyvalue` _workload_, one of the several
+ready-to-use workloads included with NoSQLBench (but you can build your own
+by all means).
 In particular, you ran the `astra` _scenario_, which determines a particular
 way the workload is to be unfolded and executed.
 
@@ -290,10 +292,10 @@ nb cql-keyvalue                                                           \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
     secureconnectbundle=${ASTRA_DB_BUNDLE_PATH}                           \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}                                    \
-    cyclerate=100                                                         \
+    cyclerate=50                                                         \
     driver=cql                                                            \
-    rampup-cycles=40000                                                   \
-    main-cycles=40000                                                     \
+    rampup-cycles=15000                                                   \
+    main-cycles=15000                                                     \
     --progress console:5s                                                 \
     --log-histograms 'histogram_hdr_data.log:.*.cycles.servicetime:20s'   \
     --log-histostats 'hdrstats.log:cqlkeyvalue_default_main.cycles.servicetime:20s'
@@ -303,36 +305,120 @@ nb cql-keyvalue                                                           \
 
 Note that some of the parameters (e.g. `keyspace` are workload-specific)
 
-| command | meaning |
-|---------|---------|
-| `cql-keyvalue`                                        | workload
-| `astra`                                               | scenario
-| `username=...`                                        | authentication
-| `password=...`                                        | authentication
-| `secureconnectbundle=...`                             | Astra DB connection parameters
-| `keyspace=`                                           | target keyspace
-| `cyclerate=100`                                       | rate-limiting (100 per second)
-| `driver=cql`                                          | driver to use (CQL, for AstraDB/Cassandra)
-| `rampup-cycles=40000`                                 | how many operations in the "rampup" phase
-| `main-cycles=40000`                                   | same for the "main" phase
-| `--progress console:5s`                               | frequency of console prints
-| `--log-histograms 'histogram_hdr_data.log:[...]:20s'` | write data to HDR file (see later)
-| `--log-histostats 'hdrstats.log:[...]:20s'`           | write some more stats to this file
-
+| command                   | meaning                                      |
+|---------------------------|----------------------------------------------|
+| `cql-keyvalue`            | workload
+| `astra`                   | scenario
+| `username`                | authentication
+| `password`                | authentication
+| `secureconnectbundle`     | Astra DB connection parameters
+| `keyspace`                | target keyspace
+| `cyclerate`               | rate-limiting (100 per second)
+| `driver=cql`              | driver to use (CQL, for AstraDB/Cassandra)
+| `rampup-cycles`           | how many operations in the "rampup" phase
+| `main-cycles`             | same for the "main" phase
+| `--progress console`      | frequency of console prints
+| `--log-histograms`        | write data to HDR file (see later)
+| `--log-histostats'`       | write some more stats to this file
 
 </details>
 
-With 40k+40k it is 13'42" on a gitpod.
+> _Note_: if you were targeting a "regular" Cassandra instance (as opposed to Astra DB),
+> the command line above would change a little: the scenario would be `default`,
+> you would need to provide a parameter such as `hosts=192.168.1.1,192.168.1.2`,
+> and there would be _no_ `secureconnectbundle` parameter. As for username and password,
+> ... well, that depends on how you configured the Cassandra installation.
 
-While it runs:
+The above command should last approximately ten minutes, during which NoSQLBench
+sends a constant stream of I/O operations to the database and collects timing
+information on how it responds. You will see a **console output** keeping you
+updated on the progress of the
+currently-running phase (`schema`/`rampup`/`main`).
 
-- go to the CQL console, see what is created
-- check the Health tab on Astra UI
+While this runs, let's have a look around.
 
-When it finishes:
+#### Database contents
+
+By this point, you may have a quesiton:
+_"but what is being written to the database, exactly?_
+
+To find out, we will connect to the database and inspect the contents of the
+keyspace. There are several ways one could connect to Astra DB:
+using Cassandra drivers with most programming languages,
+through the HTTP requests enabled by the Stargate Data API, or directly
+with a client that "speaks" the CQL language.
+Today we will make use of the **CQL Console** available in the browser
+within the Astra UI.
+
+Choose your database in the Astra main dashboard and click on it;
+next, go to the "CQL Console" tab in the main panel. In a few seconds the
+console will open in your browser, already connected to your database and
+waiting for your input.
+
+> Commands entered in the CQL Console are terminated with a semicolon (`;`)
+> and can span multiple lines. Run them with the `Enter` key. If you want to
+> interrupt the command you are entering, hit `Ctrl-C` to be brought back
+> to the prompt. See [here](#) for more references to the CQL language commands.
+
+Start by telling the console that you will be using the `nbkeyspace` keyspace:
+```
+USE nbkeyspace;
+```
+
+Check what tables have been created in this keyspace:
+```
+DESC TABLES;
+```
+
+You should see table `keyvalue` listed as the sole output.
+Look at a a few lines from this table:
+```
+SELECT * FROM keyvalue LIMIT 20;
+```
+
+<details><summary>Show me how the output looks like</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/select_cql.png?raw=true" />
+</details>
+
+Ok, mystery solved. It looks like the table contains simple key-value pairs,
+with both columns of numeric type. As a check:
+```
+DESC TABLE keyvalue;
+```
+
+And, surprise!, as a matter of fact both columns are of type `TEXT` (that is,
+variable-length strings).
+
+<details><summary>Show me how the output looks like</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/images/desctable_cql.png?raw=true" />
+</details>
+
+
+#### Database health
+
+Check the Health tab on Astra UI
+
+- rampup: 50 writes/sec, main: 25+25 (read/writes)
+- write and read latency: percentiles. Note down some of them during main phase. They likely look like:
+
+| Percentile  | Write Latency | Read Latency |
+|-------------|---------------|--------------|
+| P50         |  67 _ms_      |   7.5 _ms_   |
+| P75         | 184 _ms_      |  63   _ms_   |
+| P90         | 320 _ms_      | 184   _ms_   |
+| P95         | 393 _ms_      | 295   _ms_   |
+| P99         | 624 _ms_      | 610   _ms_   |
+
+**Explanation of the percentiles HERE**
+
+#### Final summary
+
+By now the benchmark should have finished. If not, give it time to complete:
+you will see a summary being printed to the console and you will see the console
+prompt again.
 
 - inspect summary file
-- inspect HDR file (and histostats). Look at the numbers (num/seconds) for a standard metric.
+- quickly inspect HDR file (and histostats). Look at the numbers (num/seconds) for a standard metric.
 
 ### Your own analysis of the HDR
 
