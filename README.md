@@ -246,6 +246,12 @@ to the three phases defined in the `cql-keyvalue` _workload_: **schema**,
 **main** phase, which mimics the kind of load the database would be subject to
 when operating normally.
 
+> For most workloads, a three-phase structure is the most reasonable choice: first
+> the schema is set up, then an amount of data is poured in, and finally
+> the target system is subject to a mixture of reads and writes. The third
+> and last phase (_main_) usually generates contention on the server, which is
+> the very situation we usually want to put to test.
+
 Now re-launch the above dry run (you may find it convenient to copy the few
 last lines of the output to a temporary file in the Gitpod editor for an easier
 comparison):
@@ -263,7 +269,7 @@ in the `INSERT`s and `DELETE`s?
 Indeed an important goal for any benchmark is its _reproducibility_:
 here, among other
 consequences, this means that the operations (their sequence and contents alike)
-should be completely determined with no trace of randomness.
+should be completely determined with no trace of actual randomness.
 
 You can also peek in the `logs` directory now: it is created automatically and
 populated with some information from the benchmark at each execution of `nb`.
@@ -333,6 +339,10 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `--log-histograms`        | write data to HDR file (see later)
 | `--log-histostats'`       | write some more stats to this file
 
+This way of invoking `nb`, the ["named scenario"](https://docs.nosqlbench.io/docs/workloads_101/11-named-scenarios/)
+way, is not the only one: it is also possible to have a finer-grained control over what activities should
+run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/reference/cli-scripting/) syntax.
+
 </details>
 
 > _Note_: if you were targeting a "regular" Cassandra instance (as opposed to Astra DB),
@@ -340,6 +350,8 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 > you would need to provide a parameter such as `hosts=192.168.1.1,192.168.1.2`,
 > and there would be _no_ `secureconnectbundle` parameter. As for username and password,
 > ... well, that depends on how you configured the Cassandra installation.
+> The crucial thing is that NoSQLBench uses the very same CQL drivers to
+> access the database, regardless of whether Astra DB or any Cassandra cluster.
 
 The above command should last approximately ten minutes, during which NoSQLBench
 sends a constant stream of I/O operations to the database and collects timing
@@ -393,13 +405,16 @@ SELECT * FROM keyvalue LIMIT 20;
 </details>
 
 Ok, mystery solved. It looks like the table contains simple key-value pairs,
-with both columns of numeric type. As a check:
+with two columns seemingly of numeric type. Let's check:
 ```
 DESC TABLE keyvalue;
 ```
 
-And, surprise!, as a matter of fact both columns are of type `TEXT` (that is,
-variable-length strings).
+Surprise! As a matter of fact both columns are of type `TEXT` (that is,
+variable-length strings). Indeed, most key-value stores admit string keys
+and (unless specific schemas are enforced) the values are also either binary
+or ASCII byte sequences: this workload can then be easily adapted for
+benchmarking other key-value databases.
 
 <details><summary>Show me how the output looks like</summary>
     <img src="https://github.com/hemidactylus/nbws1/raw/main/images/images/desctable_cql.png?raw=true" />
@@ -446,3 +461,11 @@ While it runs:
 - check the reported Grafana graphs and connect them to metrics seen earlier / concepts with percentiles etc
 - go to Prometheus and paste these just to have an idea. If you're interested, we just give some links.
 
+
+## Workloads
+
+### dump and inspect the workload
+
+### play with a sample workload
+
+### a semi-finished workload (homework)
