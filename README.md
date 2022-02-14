@@ -337,7 +337,7 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `main-cycles`             | same for the "main" phase
 | `--progress console`      | frequency of console prints
 | `--log-histograms`        | write data to HDR file (see later)
-| `--log-histostats'`       | write some more stats to this file
+| `--log-histostats`       | write some more stats to this file
 
 This way of invoking `nb`, the ["named scenario"](https://docs.nosqlbench.io/docs/workloads_101/11-named-scenarios/)
 way, is not the only one: it is also possible to have a finer-grained control over what activities should
@@ -497,11 +497,13 @@ side, was recorded)".
 
 Under that metric title, you will see something similar to:
 
-             count = 5000
-         mean rate = 49.93 calls/second
-     1-minute rate = 50.14 calls/second
-     5-minute rate = 50.85 calls/second
-    15-minute rate = 51.07 calls/second`
+```
+         count = 5000
+     mean rate = 49.93 calls/second
+ 1-minute rate = 50.14 calls/second
+ 5-minute rate = 50.85 calls/second
+15-minute rate = 51.07 calls/second
+```
 
 This tells you the total count and the per-minute rate
 (as averaged over different time windows) for this operation.
@@ -567,3 +569,5 @@ We have included a sample, easy workload for you to play with:
 ### a semi-finished workload (homework)
 
 And we also provide another workload: ... (homework)
+
+Bindings in the yaml itself, but also link at the "example bindings" on the nb docs.
