@@ -3,6 +3,7 @@
 import sys
 import argparse
 import datetime
+from functools import reduce
 
 from tools import groupBy
 from hdr_manipulation import (
@@ -33,7 +34,8 @@ from output_handling import (
 # constants
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 SIGNIFICANT_FIGURES = 3
-MAX_PERCENTILE_REACHED = 99.75
+# this is pretty low for the plots to focus on the 'interesting' part:
+MAX_PERCENTILE_REACHED = 92.0
 PLOT_POINTS_COUNT = 500
 
 
@@ -216,7 +218,13 @@ if __name__ == '__main__':
             )
         #
         pys = bxs
-        from functools import reduce
+        """
+        each step in this reduce collects value h_i of the histogram, updating a state from
+            [tot, [tot0, tot1, ... tot_i]]
+        to
+            [tot + h_i, [tot0, tot1, ... tot_i, tot_i + h_i]]
+        At the end we just keep the list and we are done
+        """
         pxs0 = reduce(
             lambda ac, newval: (ac[0]+newval, ac[1]+[ac[0]+newval]),
             bys,

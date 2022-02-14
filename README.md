@@ -316,7 +316,7 @@ nb cql-keyvalue                                                           \
     main-cycles=15000                                                     \
     --progress console:5s                                                 \
     --log-histograms 'histogram_hdr_data.log:.*.cycles.servicetime:20s'   \
-    --log-histostats 'hdrstats.log:cqlkeyvalue_default_main.cycles.servicetime:20s'
+    --log-histostats 'hdrstats.log:cqlkeyvalue_astra_main.cycles.servicetime:20s'
 ```
 
 <details><summary>Show me the command breakdown</summary>
@@ -379,6 +379,10 @@ next, go to the "CQL Console" tab in the main panel. In a few seconds the
 console will open in your browser, already connected to your database and
 waiting for your input.
 
+<details><summary>Show me how to get to the CQL Console in Astra</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/astra_get_to_cql_console.gif?raw=true" />
+</details>
+
 > Commands entered in the CQL Console are terminated with a semicolon (`;`)
 > and can span multiple lines. Run them with the `Enter` key. If you want to
 > interrupt the command you are entering, hit `Ctrl-C` to be brought back
@@ -416,42 +420,127 @@ and (unless specific schemas are enforced) the values are also either binary
 or ASCII byte sequences: this workload can then be easily adapted for
 benchmarking other key-value databases.
 
-<details><summary>Show me how the output looks like</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/images/desctable_cql.png?raw=true" />
+<details><summary>Show me what the output looks like</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/desctable_cql.png?raw=true" />
 </details>
-
 
 #### Database health
 
-Check the Health tab on Astra UI
+By now, the benchmark is probably still running. That's good: we get a chance
+to inspect the "database health" while NoSQLBench is writing to it.
+Remember we instructed the tool to work at a steady rate in terms of
+operations per second.
 
-- rampup: 50 writes/sec, main: 25+25 (read/writes)
-- write and read latency: percentiles. Note down some of them during main phase. They likely look like:
+Locate your database in the Astra main dashboard and click on it;
+next, go to the "Health" tab in the main panel. You will see what essentially
+is a Grafana dashboard, with a handful of plots being displayed within the
+tab - all related to how the database is performing in terms of reads and writes.
+
+<details><summary>Show me the Database Health tab in Astra UI</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/astra_db_health_annotated.png?raw=true" />
+</details>
+
+> **Tip**: you can customize the width of the time window in the graphs and the
+> update frequency. Today it could make sense to set these to 15 minutes and 5 seconds respectively.
+
+Take a look at the plot labeled "Requests Combined": this describes the amount
+of write and read requests per second received by the database. You will note
+that the _total_ fluctuates around the value provided with the `cyclerate`
+parameter during the whole test: but during _rampup_ it will be all writes,
+while the _main_ phase will be an equal mixture of reads and writes.
+
+Now turn your attention to the "Write Latency" plot. This provides quantities
+related to the "latency", as experienced by the coordinator node, involved
+in servicing write requests. In particular, some reference
+percentiles are reported as they vary in time: indeed, when describing the
+performance of the target system, percentiles are a much better tool than
+averages or maximum values. Note down the values you read from the plot
+in the middle of the _main_ phase.
+
+<details><summary>Show me "sample values" one could read from the graph</summary>
+
+Below is a real-life example of the values that could result from a `cql-keyvalue`
+benchmark session:
 
 | Percentile  | Write Latency | Read Latency |
 |-------------|---------------|--------------|
-| P50         |  67 _ms_      |   7.5 _ms_   |
-| P75         | 184 _ms_      |  63   _ms_   |
-| P90         | 320 _ms_      | 184   _ms_   |
-| P95         | 393 _ms_      | 295   _ms_   |
-| P99         | 624 _ms_      | 610   _ms_   |
+| P50         | 735   _µs_    |   1.05 _ms_  |
+| P75         | 908   _µs_    |  13    _ms_  |
+| P90         |  33.1 _ms_    |  58    _ms_  |
+| P95         |  78.2 _ms_    | 113    _ms_  |
+| P99         | 220   _ms_    | 254    _ms_  |
 
-**Explanation of the percentiles HERE**
+</details>
+
+What is the meaning of a percentile? Well, if we say "P75 for reading
+is 13 milliseconds," that means "75% of the read requests are serviced
+_within 13 ms from being received by the server_." This kind of
+metric, in most cases, is more meaningful than quoting the maximum value
+recorded (for one, the max tends to fluctuate way more).
 
 #### Final summary
 
-By now the benchmark should have finished. If not, give it time to complete:
-you will see a summary being printed to the console and you will see the console
-prompt again.
+By now the benchmark should have finished. If it hasn't yet, give it time to complete:
+you will see a summary being printed, after which you will get the console
+prompt back.
 
-- inspect summary file
-- quickly inspect HDR file (and histostats). Look at the numbers (num/seconds) for a standard metric.
+Each run of NoSQLBench generates timestamped files in the `logs`
+directory (which is created automatically if not present). The on-screen
+summary is a shortened form of the data found in the summary files there.
+
+Now open the most recent `*.summary` file in that directory, corresponding
+to the `nb` invocation that just completed.
+Find the metric called `cqlkeyvalue_astra_main.cycles.servicetime`: this
+corresponds to events of the type "a command was issued to the database during
+the _main_ phase (and the time needed for it to complete, as seen from the client
+side, was recorded)".
+
+Under that metric title, you will see something similar to:
+
+             count = 5000
+         mean rate = 49.93 calls/second
+     1-minute rate = 50.14 calls/second
+     5-minute rate = 50.85 calls/second
+    15-minute rate = 51.07 calls/second`
+
+This tells you the total count and the per-minute rate
+(as averaged over different time windows) for this operation.
+
+NoSQLBench keeps track of count/timing information for many
+operations, which range from substitution of variables in the
+workload commands to actual sending of an I/O operation to the database.
+
+
+
+** Quick inspection of the HDR histostats** (created by that option in calling nb)
+And look at the numbers for the `cqlkeyvalue_astra_main.cycles.servicetime`.
+
+** Quick inspection of the HDR proper** (see later for more)
+
 
 ### Your own analysis of the HDR
 
-Launch `hdr_tool.py` and look at the results. Note down percentiles and max value.
+The HDR can be analyzed with any post-analysis tool you can imagine, as long as capable of reading [that format](#).
 
-A good point for more stuff on percentiles and "SLO". (theory)
+Here we provide a sample such tool written in Python (have a look at the code, experiment with it, etc).
+
+Try to launch:
+
+    ./hdr_tool/hdr_tool.py histogram_hdr_data.log -b -c -s -p SampleData -m cqlkeyvalue_astra_main.cycles.servicetime
+
+(explanation, or try `-h`)
+
+Three images are generated:
+
+- chunks (may be good for other studies)
+
+- percentiles (check P90. For me it gave 77 ms for 'main', compare with read/write above 58/33 ms. Caution in comparing, hdr mixes everything for main (read/writes)). Difference = network net time (one was on server, other is here in github).
+
+- actual histo (replot with shorter max value in plot?)
+
+TODO add option to control max value of plot.
+
+So imagine you are to write a SLO for your product ...
 
 ### Metrics, metrics, metrics
 
@@ -461,11 +550,20 @@ While it runs:
 - check the reported Grafana graphs and connect them to metrics seen earlier / concepts with percentiles etc
 - go to Prometheus and paste these just to have an idea. If you're interested, we just give some links.
 
-
 ## Workloads
 
 ### dump and inspect the workload
 
+    nb --copy cql-keyvalue
+
+The general structure of a workload
+
 ### play with a sample workload
 
+We have included a sample, easy workload for you to play with:
+
+...
+
 ### a semi-finished workload (homework)
+
+And we also provide another workload: ... (homework)
