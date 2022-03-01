@@ -99,10 +99,11 @@ Gitpod is an IDE in the cloud (modeled after VSCode). It comes with a full
 use as if it were our own computer (e.g. downloading files, executing programs
 and scripts, even launching containers from within it).
 
-The Gitpod button below will: spawn your own Gitpod container + clone this repository
-in it + preinstall the required dependencies. Now **ctrl-click on
-it** to make sure you "Open in new tab" (Note: you may have to authenticate
-through Github in the process):
+Now **ctrl-click on the Gitpod button below**. It will:
+spawn your own Gitpod container + clone this repository
+in it + preinstall the required dependencies.
+_Note that you may have to authenticate through Github in the process._
+(Make sure you "Open in new tab" to keep this readme open alongside.)
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/hemidactylus/nbws1)
 
@@ -137,7 +138,7 @@ Ok, let's check that the program starts: invoking
 ```
 nb --version
 ```
-should output the program version (something like `4.15.86` -- or higher).
+should output the program version (something like `4.15.86` or higher).
 
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
 > you start `nb`. You can ignore it: it is a consequence of some settings by
@@ -181,7 +182,7 @@ paths to files should start with `./`.
 ### Configure the Astra DB parameters
 
 If we want NoSQLBench to access the Astra DB instance, we have to pass it
-the required connection parameters and secret. To do so, we now set up
+the required connection parameters and secrets. To do so, we now set up
 a `.env` file, which will make our life easier later.
 
 Copy the provided template file to a new one and open it in the Gitpod
@@ -230,7 +231,7 @@ to the target system (e.g. a database) and record how the latter responds
 
 Try launching this very short "dry-run benchmark", that instead of actually
 reaching the database simply prints a series of CQL statements to the console
-(as specified by the `driver` parameter):
+(as specified by the `driver=stdout` parameter):
 
 ```
 nb cql-keyvalue astra                   \
@@ -268,8 +269,8 @@ nb cql-keyvalue astra                   \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}
 ```
 
-do you notice that the output is identical down to the actual values used
-in the `INSERT`s and `DELETE`s?
+do you notice that the output of this second run is identical to the first,
+down to the actual values used in the `INSERT`s and `DELETE`s?
 Indeed an important goal for any benchmark is its _reproducibility_:
 here, among other
 consequences, this means that the operations (their sequence and contents alike)
@@ -283,7 +284,8 @@ populated with some information from the benchmark at each execution of `nb`.
 
 It is now time to start hitting the database!
 What you launched earlier is the `cql-keyvalue` _workload_, one of the several
-ready-to-use workloads included with NoSQLBench (but you can build your own
+ready-to-use workloads included with NoSQLBench (but you can
+[build your own](https://docs.nosqlbench.io/docs/workloads_101/00-designing-workloads/)
 by all means).
 In particular, you ran the `astra` _scenario_, which determines a particular
 way the workload is to be unfolded and executed.
@@ -335,13 +337,13 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `password`                | authentication
 | `secureconnectbundle`     | Astra DB connection parameters
 | `keyspace`                | target keyspace
-| `cyclerate`               | rate-limiting (100 per second)
+| `cyclerate`               | rate-limiting (cycles per second)
 | `driver=cql`              | driver to use (CQL, for AstraDB/Cassandra)
 | `rampup-cycles`           | how many operations in the "rampup" phase
-| `main-cycles`             | same for the "main" phase
+| `main-cycles`             | how many operations in the "main" phase
 | `--progress console`      | frequency of console prints
 | `--log-histograms`        | write data to HDR file (see later)
-| `--log-histostats`       | write some more stats to this file
+| `--log-histostats`        | write some more stats to this file
 
 This way of invoking `nb`, the ["named scenario"](https://docs.nosqlbench.io/docs/workloads_101/11-named-scenarios/)
 way, is not the only one: it is also possible to have a finer-grained control over what activities should
@@ -362,6 +364,12 @@ sends a constant stream of I/O operations to the database and collects timing
 information on how it responds. You will see a **console output** keeping you
 updated on the progress of the
 currently-running phase (`schema`/`rampup`/`main`).
+
+> If the execution fails with,
+> `"Cannot construct cloud config from the cloudConfigUrl ..."`,
+> chances are your database is currently in
+> [Standby status](https://docs.datastax.com/en/astra/docs/db-status.html#_standby).
+> To resume it, open its Health tab or the CQL Console tab in the Astra DB UI.
 
 While this runs, let's have a look around.
 
@@ -465,7 +473,7 @@ in the middle of the _main_ phase.
 <details><summary>Show me "sample values" one could read from the graph</summary>
 
 Below is a real-life example of the values that could result from a `cql-keyvalue`
-benchmark session:
+benchmark session in the _main_ phase:
 
 | Percentile  | Write Latency | Read Latency |
 |-------------|---------------|--------------|
@@ -496,9 +504,9 @@ summary is a shortened form of the data found in the summary files there.
 Now open the most recent `*.summary` file in that directory, corresponding
 to the `nb` invocation that just completed.
 Find the metric called `cqlkeyvalue_astra_main.cycles.servicetime`: this
-corresponds to events of the type "a command was issued to the database during
-the _main_ phase (and the time needed for it to complete, as seen from the client
-side, was recorded)".
+corresponds to events of the type _"a command was issued to the database during_
+_the_ main _phase (and the time needed for it to complete, as seen from the client_
+_side, was recorded)"_.
 
 Under that metric title, you will see something similar to:
 

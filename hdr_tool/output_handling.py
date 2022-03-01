@@ -127,3 +127,38 @@ def plotToDatafile(pType, pData, hstep, metric, fName):
         return True
     else:
         raise ValueError('unknown plot type "%s"' % pType)
+
+
+def plotHistostats(xData, pValues, legend, metric, fName):
+    # return True iff image creation succeeds
+    lineStyles = [
+        (0,()),
+        (0, (1, 1)),
+        (0, (5, 5)),
+        (0, (5, 1)),
+        (0, (3, 5, 1, 5)),
+        (0, (3, 1, 1, 1)),
+        (0, (3, 1, 1, 1, 1, 1))
+    ]
+    if plt:
+        plot = openFigure(20, 14)
+        #
+        for curveIndex, curve in enumerate(legend):
+            if curve in pValues:
+                plt.plot(
+                    xData,
+                    pValues[curve],
+                    linestyle=lineStyles[curveIndex % len(lineStyles)],
+                    label=curve,
+                )
+        plt.yscale('log')
+        plt.xlabel('Time since start [ms]')
+        plt.ylabel('Percentile for metric [ms]')
+        plt.legend()
+        plt.title(metric)
+        #
+        saveFigure(plot, fName)
+        return True
+    else:
+        print('      ** matplotlib not available! **')
+        return False
