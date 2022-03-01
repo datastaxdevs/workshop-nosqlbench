@@ -39,7 +39,7 @@ for more coverage of the theory part. There, you will learn more about:
 
 ### FAQ
 
-- What are the prerequisites (for me / my compuer) ?
+- What are the prerequisites?
 
 > This workshop is aimed at data architects, solution architects or anybody who
 > wants to get serious about measuring the performance of their data-intensive system.
@@ -49,8 +49,12 @@ for more coverage of the theory part. There, you will learn more about:
 - Do I need to install a database or anything on my machine?
 
 > No, no need to install anything. We will do everything in the browser.
-> (although the knowledge you gain today will probably be best put to use
-> once you install NoSQLBench on some client machine to run tests).
+> (That being said, the knowledge you gain today will probably be best put to
+> use once you install NoSQLBench on some client machine to run tests.)
+
+> You can also choose to work on your machine instead of using Gitpod: there's
+> no problem with that. We will not provide live support in this case, though,
+> assuming you know what you are doing.
 
 - Is there anything to pay?
 
@@ -74,14 +78,14 @@ we will then benchmark with NoSQLBench.
 
 > Don't worry, we will create
 > it within the "Free Tier", which offers quite a generous free
-> allowance in terms of monthly I/O (40M operations per month)
+> allowance in terms of monthly I/O (about 40M operations per month)
 > and storage (80 GB).
 
 You will need to:
 
-- create an Astra DB instance [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Create-an-AstraDB-Instance), with database name = `workshops` and keyspace = `nbkeyspace`;
+- create an Astra DB instance [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Create-an-AstraDB-Instance), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
 - generate and download a Secure Connect Bundle [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Download-the-secure-connect-bundle);
-- generate and retrieve a DB Token [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Create-an-Astra-Token#c---procedure). **Important**: use the role "DB Administrator" for the token.
+- generate and retrieve a DB Token [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Create-an-Astra-Token#c---procedure). **Important**: use the role _"DB Administrator"_ when creating the token.
 
 Moreover, keep the Astra DB dashboard open: it will be useful later. In particular the
 Health tab and the CQL Console.
@@ -95,8 +99,8 @@ Gitpod is an IDE in the cloud (modeled after VSCode). It comes with a full
 use as if it were our own computer (e.g. downloading files, executing programs
 and scripts, even launching containers from within it).
 
-The button below will: spawn your own Gitpod container + clone this repository
-in it + preinstall the required dependencies: **ctrl-click on
+The Gitpod button below will: spawn your own Gitpod container + clone this repository
+in it + preinstall the required dependencies. Now **ctrl-click on
 it** to make sure you "Open in new tab" (Note: you may have to authenticate
 through Github in the process):
 
@@ -386,7 +390,8 @@ waiting for your input.
 > Commands entered in the CQL Console are terminated with a semicolon (`;`)
 > and can span multiple lines. Run them with the `Enter` key. If you want to
 > interrupt the command you are entering, hit `Ctrl-C` to be brought back
-> to the prompt. See [here](#) for more references to the CQL language commands.
+> to the prompt. See [here](https://docs.datastax.com/en/cql-oss/3.x/cql/cql_reference/cqlCommandsTOC.html)
+> for more references to the CQL language commands.
 
 Start by telling the console that you will be using the `nbkeyspace` keyspace:
 ```
