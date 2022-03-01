@@ -463,8 +463,9 @@ parameter during the whole test: but during _rampup_ it will be all writes,
 while the _main_ phase will be an equal mixture of reads and writes.
 
 Now turn your attention to the "Write Latency" plot. This provides quantities
-related to the "latency", as experienced by the coordinator node, involved
-in servicing write requests. In particular, some reference
+related to the "latency", as experienced by the
+[coordinator node](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlClientRequestsRead.html),
+involved in servicing write requests. In particular, some reference
 percentiles are reported as they vary in time: indeed, when describing the
 performance of the target system, percentiles are a much better tool than
 averages or maximum values. Note down the values you read from the plot
