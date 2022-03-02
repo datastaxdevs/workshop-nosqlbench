@@ -655,12 +655,9 @@ should be logged, at which point the usual `cql-keyvalue` workload will start.
 The Grafana container is running and exposed on local port 3000. Luckily,
 Gitpod is kind enough to map local ports to externally-accessible addresses,
 such as `https://3000-hemidactylus-nbws1-h9c4mky8r86.ws-eu34.gitpod.io`.
-To get your URL you can run, in the `bash` shell, the command `gp url 3000`.
-Then copy it and open a new tab to that address.
-
-<details><summary>Show me how to get the special port-3000 domain</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/gitpod_url_3000.png?raw=true" />
-</details>
+Your URL will be different: to construct it, simply prepend a `3000-`
+to the domain name you are using your IDE at. Then, open this address
+in a new tab.
 
 The default credentials to log in to Grafana are ... `admin/admin`. Once you're
 in, don't bother to reset your password (click "Skip"). You'll get to the Grafana
@@ -688,8 +685,49 @@ Let's see some of them and their significance.
 
 #### A glance at Prometheus
 
+If you want to look at the "raw" source of data feeding the Grafana plots,
+head to the Prometheus UI, exposed at local port 9090. If you are on Gitpod,
+similarly to what you did for Grafana earlier,
+you get there by prepend a `9090-`
+to the domain name you are using your IDE at. Then, open this address
+in a new tab.
 
-- go to Prometheus and paste these just to have an idea. If you're interested, we just give some links.
+<details><summary>Show me the Prometheus UI</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/prometheus.gif?raw=true" />
+</details>
+
+Click on the "world" icon next to the "Execute" button in the search bar:
+in the dialog that appears you can look for specific metrics.
+Try to look for `cycles_servicetime` and confirm, then click "Execute".
+
+The search results are many datapoints, pertaining to several metrics related
+to the service time. Still, those are for different phases and, most important,
+different measurements (percentiles, averages, counts), which does not really
+make sense to inspect together.
+
+> **Tip:** switch to the "Graph" view for a more immediate visualization.
+
+Fortunately, each datapoint is fully equipped with detailed metadata,
+which allow for sophisticated filtering. Further, you can use the flexible,
+powerful [query language used by Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+to even perform aggregations on top of the data queries.
+
+To pique your interest, try pasting these examples and click "Execute":
+
+```
+# filtering by metadata
+{__name__="cycles_servicetime", type="pctile", alias=~".*main.*"}
+
+# aggregation
+avg_over_time({__name__="cycles_servicetime"}[10m])
+
+# another aggregation, + filtering
+max_over_time({__name__="cycles_servicetime", type="pctile", alias=~".*main.*"}[10m])
+```
+
+Also, note that Prometheus exposes a REST access, so you can imagine, for
+instance, a running scripts that tracks the metrics and responds to them
+in real time.
 
 ## Workloads
 
@@ -698,6 +736,8 @@ Let's see some of them and their significance.
     nb --copy cql-keyvalue
 
 The general structure of a workload
+
+highlights of this one
 
 ### play with a sample workload
 
