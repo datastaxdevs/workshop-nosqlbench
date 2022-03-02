@@ -122,20 +122,20 @@ Gitpod console: type `pwd` and see if the output is `/workspace/nbws1`.
 
 We will download the "Linux binary" distribution of NoSQLBench:
 as instructed [here](https://github.com/nosqlbench/nosqlbench/blob/main/DOWNLOADS.md),
-we get the file (it's a few hundred megabytes) with
-```
+we get the latest stable binary (it's a few hundred megabytes) with
+```bash
 curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb
 ```
 
 and when the download is finished we make it executable and move it,
 out of convenience, to a directory which is part of the search path:
-```
+```bash
 chmod +x nb
 sudo mv nb /usr/local/bin/
 ```
 
 Ok, let's check that the program starts: invoking
-```
+```bash
 nb --version
 ```
 should output the program version (something like `4.15.86` or higher).
@@ -166,7 +166,7 @@ the file navigator panel ("Explorer") on the left of the Gitpod view.
 
 Once you drop it you will see it listed in the file explorer itself.
 As a check, you can issue the command
-```
+```bash
 ls ./secure*zip -lh
 ```
 
@@ -187,7 +187,7 @@ a `.env` file, which will make our life easier later.
 
 Copy the provided template file to a new one and open it in the Gitpod
 file editor:
-```
+```bash
 cp .env.sample .env
 gp open .env
 # (you can also simply locate the file
@@ -202,12 +202,12 @@ and, if necessary, adjust the other variables.
 </details>
 
 Now, source this file to make the definitions therein available to this shell:
-```
+```bash
 . .env
 ```
 
 To check that the file has been sourced, you can try with:
-```
+```bash
 echo ${ASTRA_DB_KEYSPACE_NAME}
 ```
 
@@ -233,7 +233,7 @@ Try launching this very short "dry-run benchmark", that instead of actually
 reaching the database simply prints a series of CQL statements to the console
 (as specified by the `driver=stdout` parameter):
 
-```
+```bash
 nb cql-keyvalue astra                   \
     driver=stdout                       \
     main-cycles=10                      \
@@ -261,7 +261,7 @@ Now re-launch the above dry run (you may find it convenient to copy the few
 last lines of the output to a temporary file in the Gitpod editor for an easier
 comparison):
 
-```
+```bash
 nb cql-keyvalue astra                   \
     driver=stdout                       \
     main-cycles=10                      \
@@ -309,7 +309,7 @@ enough statistical support for the results.
 
 Here is the full command to launch:
 
-```
+```bash
 nb cql-keyvalue                                                           \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
@@ -601,7 +601,7 @@ and look at the `SampleData*.png` plots that are generated:
 
 Try to locate the value for the P90 percentile in the last one: it should
 exceed the result reported by the Astra health tab by an amount essentially corresponding
-to the time for the network communication between Gitpod and Astra. Indeed
+to the time for the (two-way) network communication between Gitpod and Astra. Indeed
 we are seeing things from the vantage point of the testing client, which
 runs on Gitpod: this time, the "service time" includes the time to reach
 the server (and back).
@@ -609,13 +609,86 @@ the server (and back).
 > **Tip**: this script is just a demonstration of the versatility of the HDR format:
 > you can invent your own post-analysis tool and attach it to the data collected by
 > NoSQLBench. Look at the (Python) source code of the tool for inspiration!
+> (Or simply take the tool and use it on your data.)
 
 ### Metrics, metrics, metrics
 
-A new run of `nb` with `--docker-metrics`.
-While it runs:
+On top of everything you have seen, it is possible to
+have NoSQLBench start a Grafana dashboard locally alongside the benchmark
+itself, powered behind the scenes by Prometheus-based real-time metric collection.
 
-- check the reported Grafana graphs and connect them to metrics seen earlier / concepts with percentiles etc
+All it takes is the additional `--docker-metrics` option to the command line,
+and Docker must be available on your system (Note: Gitpod comes with Docker preinstalled).
+
+You can try launching another benchmark as follows (note the last option):
+
+```
+nb cql-keyvalue                                                           \
+    astra                                                                 \
+    username=${ASTRA_DB_CLIENT_ID}                                        \
+    password=${ASTRA_DB_CLIENT_SECRET}                                    \
+    secureconnectbundle=${ASTRA_DB_BUNDLE_PATH}                           \
+    keyspace=${ASTRA_DB_KEYSPACE_NAME}                                    \
+    cyclerate=50                                                          \
+    driver=cql                                                            \
+    rampup-cycles=15000                                                   \
+    main-cycles=15000                                                     \
+    --progress console:5s                                                 \
+    --docker-metrics
+```
+
+This command might take a few additional seconds to start the first time,
+as Docker images are being downloaded and the containers are started.
+Then, successful start of the Grafana dashboard
+should be logged, at which point the usual `cql-keyvalue` workload will start.
+
+<details><summary>Show me the run with Docker metrics</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_startingdockermetrics.png?raw=true" width="260" />
+</details>
+
+> It is possible that Gitpod will detect new services running on some local ports
+> and automatically open the Grafana dashboard in its mini-browser. Better to
+> ignore it and re-open the URL in a new, actual browser tab as instructed below.
+
+#### Grafana dashboard
+
+The Grafana container is running and exposed on local port 3000. Luckily,
+Gitpod is kind enough to map local ports to externally-accessible addresses,
+such as `https://3000-hemidactylus-nbws1-h9c4mky8r86.ws-eu34.gitpod.io`.
+To get your URL you can run, in the `bash` shell, the command `gp url 3000`.
+Then copy it and open a new tab to that address.
+
+<details><summary>Show me how to get the special port-3000 domain</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/gitpod_url_3000.png?raw=true" width="260" />
+</details>
+
+The default credentials to log in to Grafana are ... `admin/admin`. Once you're
+in, don't bother to reset your password (click "Skip"). You'll get to the Grafana
+landing page. Find the "Dashboards" icon in the leftmost menu bar and pick the
+"Manage" menu item: finally, click on the "NB4 Dashboard" item you should see
+listed there. Congratulations, you are seeing the data coming from NoSQLBench.
+
+<details><summary>Show me how to get to the Grafana plots</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_dashboard.gif?raw=true" width="260" />
+</details>
+
+> You may find it convenient to set the update frequency to something like 10
+> seconds and the displayed time window to 5 minutes or so (upper-right controls).
+
+The dashboard comprises several (interactive) plots, updated in real time.
+Let's see some of them and their significance.
+
+<details><summary>Show me the dashboard contents</summary>
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_plots.png?raw=true" width="260" />
+</details>
+
+- **"Ops and Successful Ops"**. One-minute averages of the total operations dispatched per second by NoSQLBench. This will match the reported per-second averages found in the `*.summary` file. There are separate curves for each phase, so you will clearly see _rampup_ leaving the room to _main_ at some point during the test.
+- **"p75/p99 client overhead"**. This is related to timing of operations internal to NoSQLBench (note the scale, barely a few _micro_-seconds). You should keep an eye on those to check that the benchmarking client is not experiencing bottlenecks of sorts.
+- **"service time distribution/range"**. Here you can see percentiles for "service time" relative to the various phases. These quantities directly relate to the HDR histogram data analyzed above and should match them. Note that the "min" and "max" are denoted "p0" and "p100" here (indeed this is what they are, by definition).
+
+#### A glance at Prometheus
+
+
 - go to Prometheus and paste these just to have an idea. If you're interested, we just give some links.
 
 ## Workloads
