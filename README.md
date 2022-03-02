@@ -643,7 +643,7 @@ Then, successful start of the Grafana dashboard
 should be logged, at which point the usual `cql-keyvalue` workload will start.
 
 <details><summary>Show me the run with Docker metrics</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_startingdockermetrics.png?raw=true" width="260" />
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_startingdockermetrics.png?raw=true" />
 </details>
 
 > It is possible that Gitpod will detect new services running on some local ports
@@ -659,7 +659,7 @@ To get your URL you can run, in the `bash` shell, the command `gp url 3000`.
 Then copy it and open a new tab to that address.
 
 <details><summary>Show me how to get the special port-3000 domain</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/gitpod_url_3000.png?raw=true" width="260" />
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/gitpod_url_3000.png?raw=true" />
 </details>
 
 The default credentials to log in to Grafana are ... `admin/admin`. Once you're
@@ -669,7 +669,7 @@ landing page. Find the "Dashboards" icon in the leftmost menu bar and pick the
 listed there. Congratulations, you are seeing the data coming from NoSQLBench.
 
 <details><summary>Show me how to get to the Grafana plots</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_dashboard.gif?raw=true" width="260" />
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_dashboard.gif?raw=true" />
 </details>
 
 > You may find it convenient to set the update frequency to something like 10
@@ -679,7 +679,7 @@ The dashboard comprises several (interactive) plots, updated in real time.
 Let's see some of them and their significance.
 
 <details><summary>Show me the dashboard contents</summary>
-    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_plots.png?raw=true" width="260" />
+    <img src="https://github.com/hemidactylus/nbws1/raw/main/images/grafana_plots.png?raw=true" />
 </details>
 
 - **"Ops and Successful Ops"**. One-minute averages of the total operations dispatched per second by NoSQLBench. This will match the reported per-second averages found in the `*.summary` file. There are separate curves for each phase, so you will clearly see _rampup_ leaving the room to _main_ at some point during the test.
