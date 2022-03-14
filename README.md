@@ -731,15 +731,57 @@ in real time.
 
 ## Workloads
 
-### dump and inspect the workload
+We mentioned that `cql-keyvalue` is one of several ready-to-use _workloads_,
+but also that you can easily build your own: for example, to test a specific
+data model or ensure you closely mimic your application's request pattern.
 
+So, now we turn to a close inspection of workloads. Each workload is built as
+a `yaml` file, defining its scenarios and the sequences of phases each scenario
+is made of.
+
+Phases, in turn, consist of several statements that the driver will know how to
+"execute" (i.e. send to the target system as operations to execute).
+
+There is [quite some freedom](https://docs.nosqlbench.io/docs/workloads_101/00-designing-workloads/) in creating workloads: in the following
+we will just explore some of this space. Look into the reference documentation
+for more.
+
+### Inspect "cql-keyvalue" workload
+
+We can ask NoSQLBench to dump to a file the `yaml` defining the workload
+we just ran:
+
+```bash
     nb --copy cql-keyvalue
+```
 
-The general structure of a workload
+(you can also get a comprehensive list of all available workloads with
+`nb --list-workloads`, by the way.)
 
-highlights of this one
+A file `cql-keyvalue.yaml` is created in the working directory.
+You can open it (clicking on it in the Gitpod explorer or by running
+`gp open cql-keyvalue.yaml`).
+
+We are not going to dissect it line by line, but broadly speaking
+there are three important sections:
+
+- **scenarios**. This defines what _phases_ constitute each scenario. More specifically, each phase is expressed as an inline script, which in turn follows the [NoSQLBench CLI scripting syntax](https://docs.nosqlbench.io/docs/reference/cli-scripting/). 
+- **bindings**. Each _binding_ defines a particular recipe to generate a sequence of pseudo-random values. Emphasis is on the "pseudo", since the typical binding is a _fully deterministic_, reproducible, mapping cycle numbers to values. The sequence of "keys" produced as the the _rampup_ phase of key-value workload unfolds, for instance, is defined here by the `seq_key` binding. Bindings are defined using a functional compositional approach, starting from a set of available building blocks, and can generate values of many different data types.
+- **blocks**. Here, groups of "statements" (better: _operations_) are defined for use within scenarios. Within the body of operations, [bindings](https://docs.nosqlbench.io/docs/workloads_101/03-data-bindings/) can be employed (`{binding_name}`), which implies they will take values along the generated sequence as the cycle number unfolds; similarly, [template parameters](https://docs.nosqlbench.io/docs/workloads_101/09-template-params/) can be used (`<<parameter_name:default>>`, or `TEMPLATE(parameter_name,default)`) to be replaced according to settings passed through the command-line or when defining the scenario composition in the "scenarios" section.
+
+Let's try to track what happens when we invoke the `cql-keyspace astra` workload/scenario:
+1. the _schema_ phase is invoked: it consists of running, with the `cql` driver, the blocks whose tags [match the selector](https://docs.nosqlbench.io/docs/workloads_101/05-op-tags/#tag-filtering-rules) `tags==phase:schema-astra`. Also some parameters are passed to the execution. (_Note that the schema phase differs between an Astra DB target and a regular Cassandra target, while later phases do not_.)
+2. When _schema_ is over, the _rampup_ is started. This runs all blocks matching `tags==phase:rampup`, and passes the parameters `threads` and `cycles`. The latter will preferrably read the value passed through command-line (look for `rampup-cycles=...` in the benchmark command you ran earlier), with a default.
+3. Running _rampup_ then entails running the block with `name: rampup` (as can be seen by the tags attached to it). In the block, a [consistency level](https://docs.datastax.com/en/dse/5.1/cql/cql/cql_reference/cqlsh_commands/cqlshConsistency.html) is defined, again using template parameters. The statement (or operation) that is repeatedly executed is an `INSERT` statement, which writes rows to a DB table:
+4. The `INSERT` targets a table whose name, as well as the keyspace containing it, is a default that can be overridden by passing parameters to the NoSQLBench invocation (compare with the `keyspace=...` part of the benchmark command you ran earlier).
+5. In this `INSERT` statement, also the bindings `` and `` occur: that is, you can imagine a loop with an index `i` looping over `rampup-cycles` integer values: each time the `INSERT` statement is executed, "key" and "value" will be equal to the corresponding mapping functions "evaluated at `i`".
+6. When these `rampup-cycles` `INSERT` statements are all executed, the _rampup_ phase will be done and the execution will turn to the _main_ phase. This works similarly as in the previous case, but the tag filtering this time matches _two_ operations. They will be combined in an alternating fashion, according to their `ratio` (see [here](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio) for details), with the final result, in this case, of reproducing a mixed read-write workload.
+7. The scenario will then have completed.
 
 ### play with a sample workload
+
+A good way to understand workload construction is to start from very simple ones.
+
 
 We have included a sample, easy workload for you to play with:
 
