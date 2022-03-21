@@ -1,0 +1,13 @@
+bindings:
+ verb: AddHashRange(21); CSVFrequencySampler('tokens.csv','verb')
+ food: AddHashRange(41); CSVFrequencySampler('tokens.csv','food')
+ adjective: AddHashRange(71); CSVFrequencySampler('tokens.csv','adj')
+ counter: Identity(); Add(1)
+ multiplier: AddHashRange(100); Clamp(5,20); NumberNameToString()
+ month: WeightedStrings('June:0.2;May:0.3;April:0.1;September:0.04')
+ insult: AddHashRange(1000); Combinations('!@#$%^&*;!@#$%^&*;!@#$%^&*;!@#$%^&*')
+ops:
+ - ratio: 3
+   stmt: "{counter}. Eating {adjective} {food} in {month}, I {verb}: \"These {food} truly are {adjective}!\"\n"
+ - ratio: 1
+   stmt: "{counter}. If you tell me that {food} are {adjective}, to thee I yell: \"{insult}!\"\n"

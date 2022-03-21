@@ -778,10 +778,79 @@ Let's try to track what happens when we invoke the `cql-keyspace astra` workload
 6. When these `rampup-cycles` `INSERT` statements are all executed, the _rampup_ phase will be done and the execution will turn to the _main_ phase. This works similarly as in the previous case, but the tag filtering this time matches _two_ operations. They will be combined in an alternating fashion, according to their `ratio` (see [here](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio) for details), with the final result, in this case, of reproducing a mixed read-write workload.
 7. The scenario will then have completed.
 
-### play with a sample workload
+### play with sample workloads
 
-A good way to understand workload construction is to start from very simple ones.
+A good way to understand workload construction is to start from simple ones.
 
+To run the following examples please go to the appropriate subdirectory:
+```
+cd workloads
+```
+
+#### Example 1: talking about food
+
+Take a look at `simple-workload.yaml`. This defines two
+[operations](https://docs.nosqlbench.io/docs/workloads_101/01-op-templates/)
+(formerly called "statements") that are to be interleaved according
+to their 
+[ratio](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio)
+parameter. As we saw earlier, there are values to be
+filled in the operation body that depend on the cycle number
+in a way that is specified by the binding functions defined earlier.
+
+Run the workload with:
+
+```
+nb run driver=stdout workload=simple-workload cycles=12
+```
+
+The driver here is `stdout`, so each operation will simply print its body
+to screen. As you can see, these are not valid CQL statements, indeed one would
+get errors if invoking with `drivers=cql`. This is an important point: the
+operation body itself can take any form, since _the actual syntactical validation
+will happen at driver level_. NoSQLBench offers several drivers, and it is
+important to match statement bodies with the proper drivers (`stdout` in
+particular can take anything as input).
+
+Bindings are defined in a functional way, by providing a sequence of
+functions that will be composed, left-to-right. It is implied that the input to
+the first such function is the cycle number, so for instance the binding:
+```
+ multiplier: AddHashRange(100); Clamp(5,20); NumberNameToString()
+```
+
+means: `multiplier` will be a function that takes the cycle number as input,
+[adds a pseudorandom value](https://docs.nosqlbench.io/docs/bindings/funcref-general/#addhashrange)
+from zero to 100 to it, [adjusts the result](https://docs.nosqlbench.io/docs/bindings/funcref-general/#clamp)
+so that it lies within the [5, 20] interval, and finally
+produces the [spelled-out name](https://docs.nosqlbench.io/docs/bindings/funcref-premade/#numbernametostring)
+of the resulting number.
+
+For a general introduction to bindings and a list of the (many) available
+functions, please see [here](https://docs.nosqlbench.io/docs/bindings/binding-concepts/).
+
+#### Example 2: animal meeting
+
+The previous example, albeit silly, was meant to show the basics of building
+workloads.
+An important feature is the possibility to package several workflows into a
+single sequence that can then be run at once (["named scenarios"](https://docs.nosqlbench.io/docs/workloads_101/11-named-scenarios/)).
+
+The need to perform a _schema_ initialization and to execute a _rampup_ phase
+before doing the actual _main_ benchmarking is, as we discussed earlier,
+almost universal: named scenarios have been designed with that need in mind.
+
+Try to run the following example scenario:
+
+```
+nb workload-with-phases default driver=stdout
+
+```
+
+You see that here we have three clearly distinct phases taking place.
+If you inspect the structure of `workload-with-phases.yaml`, 
+
+`rampup-cycles=10 act_ratio=11`
 
 We have included a sample, easy workload for you to play with:
 
