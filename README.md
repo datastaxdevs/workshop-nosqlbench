@@ -63,13 +63,15 @@ for more coverage of the theory part. There, you will learn more about:
 
 ### Homework
 
-To complete the workshop and get a verified "NoSQLBench" badge, you will
-have to do a little homework and submit it.
+<img src="images/nosqlbench-badge.png?raw=true" width="200" align="right" />
 
-_Homework details TBD. There'll be a workload yaml with ready-made "menu of bindings"
-and you will be asked to use them appropriately._
+To complete the workshop and get a verified "NoSQLBench" badge,
+follow these instructions:
 
-
+1. Do the hands-on practice, either during the workshop or by following the instructions in this README;
+2. (optional) Complete the "Lab" assignment as detailed [here](homework/homework.md);
+3. Fill the submission form [here](#). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
+4. give us a few days to process your submission: you should receive your well-earned badge in your email inbox!
 
 ## Create your Astra DB instance
 
@@ -778,7 +780,7 @@ Let's try to track what happens when we invoke the `cql-keyspace astra` workload
 6. When these `rampup-cycles` `INSERT` statements are all executed, the _rampup_ phase will be done and the execution will turn to the _main_ phase. This works similarly as in the previous case, but the tag filtering this time matches _two_ operations. They will be combined in an alternating fashion, according to their `ratio` (see [here](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio) for details), with the final result, in this case, of reproducing a mixed read-write workload.
 7. The scenario will then have completed.
 
-### play with sample workloads
+### Play with workloads
 
 A good way to understand workload construction is to start from simple ones.
 
@@ -794,9 +796,9 @@ Take a look at `simple-workload.yaml`. This defines two
 (formerly called "statements") that are to be interleaved according
 to their 
 [ratio](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio)
-parameter. As we saw earlier, there are values to be
-filled in the operation body that depend on the cycle number
-in a way that is specified by the binding functions defined earlier.
+parameter. As we saw earlier, there are parts of the
+operation body that depend on the cycle number
+as specified by the binding functions defined under `bindings`.
 
 Run the workload with:
 
@@ -807,10 +809,10 @@ nb run driver=stdout workload=simple-workload cycles=12
 The driver here is `stdout`, so each operation will simply print its body
 to screen. As you can see, these are not valid CQL statements, indeed one would
 get errors if invoking with `drivers=cql`. This is an important point: the
-operation body itself can take any form, since _the actual syntactical validation
+operation body itself can take any form, since _its actual syntactical validation
 will happen at driver level_. NoSQLBench offers several drivers, and it is
 important to match statement bodies with the proper drivers (`stdout` in
-particular can take anything as input).
+particular can take basically anything as input).
 
 Bindings are defined in a functional way, by providing a sequence of
 functions that will be composed, left-to-right. It is implied that the input to
@@ -820,8 +822,8 @@ the first such function is the cycle number, so for instance the binding:
 ```
 
 means: `multiplier` will be a function that takes the cycle number as input,
-[adds a pseudorandom value](https://docs.nosqlbench.io/docs/bindings/funcref-general/#addhashrange)
-from zero to 100 to it, [adjusts the result](https://docs.nosqlbench.io/docs/bindings/funcref-general/#clamp)
+[adds a pseudorandom 0-100 value](https://docs.nosqlbench.io/docs/bindings/funcref-general/#addhashrange)
+to it, [adjusts the result](https://docs.nosqlbench.io/docs/bindings/funcref-general/#clamp)
 so that it lies within the [5, 20] interval, and finally
 produces the [spelled-out name](https://docs.nosqlbench.io/docs/bindings/funcref-premade/#numbernametostring)
 of the resulting number.
@@ -844,20 +846,29 @@ Try to run the following example scenario:
 
 ```
 nb workload-with-phases default driver=stdout
-
 ```
 
-You see that here we have three clearly distinct phases taking place.
+You see that here we have several clearly distinct phases taking place.
 If you inspect the structure of `workload-with-phases.yaml`, 
+you can see that the file begins by defining the `default` scenario
+as a sequence of `run` invocations, each involving certain statement blocks
+selected through tags.
 
-`rampup-cycles=10 act_ratio=11`
+This `yaml` file also shows usage of template parameters:
+with expressions such as `TEMPLATE(rampup-cycles,5)` and `<<act_ratio:1>>`
+we are able to use a command-line-provided parameter (with a default value)
+inside the workload specs. Try to re-run the workload adding
+`rampup-cycles=10 act_ratio=11` to see the difference.
 
-We have included a sample, easy workload for you to play with:
+> Note: keep in mind that `act_ratio` is constrained in its
+> values so that the sum of the `ratio`
+> parameters for the operations in `main` (["stride"](https://docs.nosqlbench.io/docs/reference/standard-metrics/#strides))
+> divides exactly the number of cycles
+> in that phase.
 
-...
 
-### a semi-finished workload (homework)
+### Homework
 
-And we also provide another workload: ... (homework)
-
-Bindings in the yaml itself, but also link at the "example bindings" on the nb docs.
+The "Lab" part of the homework, which requires you to finalize
+a workload `yaml` and make it work according to specifications,
+is detailed on [this page](homework/homework.md).

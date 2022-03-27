@@ -14,48 +14,48 @@ blocks:
   - tags:
       phase: schema
     statements:
-     - introduction: "(schema)     A meeting was called in the Republic of Animals.\n"
-       tags:
-         name: introduction
-     - gathering: "(schema)     One by one, all animals started to show up:\n"
-       tags:
-         name: gathering
+      - introduction: "(schema)     A meeting was called in the Republic of Animals.\n"
+        tags:
+          name: introduction
+      - gathering: "(schema)     One by one, all animals started to show up:\n"
+        tags:
+          name: gathering
   - tags:
       phase: rampup
     statements:
-     - participant-arrival: "(rampup)     The {adjective} {animal} did show up ...\n"
-       tags:
-         name: participant-arrival
+      - participant-arrival: "(rampup)     The {adjective} {animal} did show up ...\n"
+        tags:
+          name: participant-arrival
   - tags:
       phase: main
       type: speaking
     params:
       ratio: <<speak_ratio:3>>
     statements:
-     - participant-speaking: "(main)       The {adjective} {animal} spoke {speechduration} seconds\n"
-       tags:
-         name: participant-speaking
+      - participant-speaking: "(main)       The {adjective} {animal} spoke {speechduration} seconds\n"
+        tags:
+          name: participant-speaking
   - tags:
       phase: main
       type: acting
     params:
       ratio: <<act_ratio:1>>
     statements:
-     - participant-acting: "(main)       But then {animal} kicked the {adjective} {animal2}'s {bodypart}!\n"
-       tags:
-         name: participant-acting
+      - participant-acting: "(main)       But then {animal} kicked the {adjective} {animal2}'s {bodypart}!\n"
+        tags:
+          name: participant-acting
   - tags:
       phase: main
       type: arrival
     params:
       ratio: 1
     statements:
-     - participant-speaking: "(main)       In the midst of the meeting, the {adjective} {animal} appeared!\n"
-       tags:
-         name: participant-arrival
+      - participant-speaking: "(main)       In the midst of the meeting, the {adjective} {animal} appeared!\n"
+        tags:
+          name: participant-arrival
   - tags:
       phase: conclusion
     statements:
-     - end-of-story: "(conclusion)      ... And so, in chaos, the meeting did end up.\n"
-       tags:
-         name: end-of-story
+      - end-of-story: "(conclusion)      ... And so, in chaos, the meeting did end up.\n"
+        tags:
+          name: end-of-story

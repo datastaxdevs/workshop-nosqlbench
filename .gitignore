@@ -1,5 +1,6 @@
 .env
-secure-connect-*.zip
-workloads/logs/*
-logs/*
 __pycache__
+secure-connect-*.zip
+logs/*
+workloads/logs/*
+homework/logs/*

@@ -1,0 +1,77 @@
+scenarios:
+  astra:
+    schema: run driver=cql tags==phase:schema threads==1 cycles==UNDEF
+    rampup: run driver=cql tags==phase:rampup cycles===TEMPLATE(rampup-cycles,1000) threads=auto
+    main: run driver=cql tags==phase:main cycles===TEMPLATE(main-cycles,1000) threads=auto
+bindings:
+  bind0: Mod(1000000); ToHashedUUID()
+  bind1: AddHashRange(86400); Mul(1000); StartingEpochMillis('2022-04-01 00:00:00'); ToDateTime()
+  bind2: AddHashRange(2000000000); Combinations('a-z;a-z;a-z;a-z;a-z;a-z;a-z;.;j;p;g')
+  bind3: Mod(5000); Combinations('qwrgfd;aeiou;kmbvcs;aeiou;zxwpyj;aeiou')
+  bind4: AddHashRange(1000000000); Combinations('0;0-9;0-9;-;0-9;0-9;0-9;0-9;0-9;0-9')
+  bind5: List(Mod(10), Mul(2))
+  bind6: Mod(5000000); ToHashedUUID()
+  bind7: Template('{} in wonderland!', Cities())
+  bind8: Mod(20000); Combinations('u;s;e;r;_;0-9;0-9;A-Z')
+  bind9: Mod(5000); Combinations('u;s;e;r;_;0-9;0-9;A-Z')
+blocks:
+  - name: schema
+    tags:
+      phase: schema
+    statements:
+      - create-table-users: |
+          CREATE TABLE IF NOT EXISTS <<keyspace:homework>>.husers
+            (
+              userid TEXT PRIMARY KEY,
+              username TEXT,
+              phonenumber TEXT
+            );
+        tags:
+          name: create-table-users
+      - create-table-images: |
+          CREATE TABLE IF NOT EXISTS <<keyspace:homework>>.himages
+            (
+              userid TEXT,
+              imageid UUID,
+              imagefile TEXT,
+              PRIMARY KEY ((userid), imageid)
+            );
+        tags:
+          name: create-table-images
+  - name: rampup
+    tags:
+      phase: rampup
+    params:
+      prepared: true
+    statements:
+      - write-users: |
+          INSERT INTO <<keyspace:homework>>.husers
+            (userid, username, phonenumber)
+          VALUES
+            ({???}, {???}, {???});
+        tags:
+          name: write-users
+      - write-images: |
+          INSERT INTO <<keyspace:homework>>.himages
+            (userid, imageid, imagefile)
+          VALUES
+            ({???}, {???}, {???});
+        tags:
+          name: write-images
+  - name: main
+    tags:
+      phase: main
+    params:
+      prepared: true
+    statements:
+      - read-user: |
+          SELECT * FROM <<keyspace:homework>>.husers
+            WHERE userid={???};
+        tags:
+          name: read-user
+      - read-image: |
+          SELECT * FROM <<keyspace:homework>>.himages
+            WHERE userid={???}
+            AND imageid={???};
+        tags:
+          name: read-image
