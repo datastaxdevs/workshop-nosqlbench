@@ -855,16 +855,17 @@ as a sequence of `run` invocations, each involving certain statement blocks
 selected through tags.
 
 This `yaml` file also shows usage of template parameters:
-with expressions such as `TEMPLATE(rampup-cycles,5)` and `<<act_ratio:1>>`
+with (interchangeable) expressions such as `TEMPLATE(rampup-cycles,5)`
+and `<<act_ratio:1>>`
 we are able to use a command-line-provided parameter (with a default value)
 inside the workload specs. Try to re-run the workload adding
 `rampup-cycles=10 act_ratio=11` to see the difference.
 
 > Note: keep in mind that `act_ratio` is constrained in its
 > values so that the sum of the `ratio`
-> parameters for the operations in `main` (["stride"](https://docs.nosqlbench.io/docs/reference/standard-metrics/#strides))
+> parameters for the operations in `main`
 > divides exactly the number of cycles
-> in that phase.
+> in that phase. This sum constitutes the (["stride"](https://docs.nosqlbench.io/docs/reference/standard-metrics/#strides)).
 
 
 ### Homework

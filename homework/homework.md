@@ -1,13 +1,14 @@
 # Homework "Lab" instructions
 
-First go to the appropriate subdirectory: `cd homework`. There you'll find
+First go to the appropriate subdirectory: `cd homework` (first do a
+`cd ..` if you are still in `workloads`). There you'll find
 an unfinished workload `homework-workload.yaml`. Your task is to **complete
 it according to the specs below** (and submit a screenshot of the final yaml
 file in the "homework" form).
 
 > _Note: the practical lab is optional for receiving the badge._
 > _It is very instructive for your learning, however,_
-> _so please give it a chance!__
+> _so please give it a chance!_
 
 #### The workload
 
@@ -28,7 +29,7 @@ it sort-of-writes data to them, and it sort-of performs the reads.
 1. Make sure that four times as many writes to `himages` as to `husers` occur. _Hint: use the
 `ratio` parameter in one of the rampup operations - see the provided sample workloads for examples._
 
-2. At the top of the file there are several "anonymized" bindings to choose from. Use them to finalize the `INSERT` and `SELECT` statements in the _rampup_ and _main_ phases, by replacing the `{???}` parts. The choice must satisfy the required benchmarking specifications, besides of course matching the data types in the Astra DB tables. _Hint: Look at the docs and try testing with `driver=stdout` and very small cycle numbers for quickly seeing what the binding contents look like._
+2. At the top of the file there are several "anonymized" bindings to choose from. Use them to finalize the `INSERT` and `SELECT` statements in the _rampup_ and _main_ phases, by replacing the `{???}` parts. The choice must satisfy the required benchmarking specifications, besides of course matching the data types in the Astra DB tables. _Hints: (1) Look at the docs on bindings; and (2) test with `driver=stdout` and very small cycle numbers for a quick assessment of what the various bindings are._
 
 3. Check that the bindings appearing in the `SELECT` statement ensure many reads will look for rows that cannot have been inserted. _Tip: what does the function `Mod(N)` do as the cycle number increases?_
 
@@ -67,8 +68,8 @@ nb homework-workload astra  \
   --progress console:5s
 ```
 
-_(in this case the scenario is still called "astra" just to denote the fact that
-the keyspace is supposed to already exist and will not be created within the
-workload.)_
+_(in this case, keep in mind that the scenario is still called "astra" simply
+to denote the fact that the keyspace is supposed to already exist and will
+not be created within the workload.)_
 
 Good luck!
