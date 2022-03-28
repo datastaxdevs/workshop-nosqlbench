@@ -556,12 +556,18 @@ and then open, in the Gitpod editor, the `hdrstats.png` image just created.
 
 Look at the values of, say, the P90 percentile: it should be somewhat larger
 than both the read and write corresponding percentiles given in the Astra DB
-"health" tab. That's why this time we are seeing things from the vantage
-point of the testing client, and the (Gitpod-to-Astra) communication over
-the network is measured in the "service time". (Besides, the comparison
-is made somewhat murkier by the fact that NoSQLBench measures "cycles", which
-means reads _and_ writes in the _main_ phase; while the Astra health dashboard
-keeps these two separate).
+"health" tab. That's because this time we are seeing things **from the vantage
+point of the testing client**, and the (Gitpod-to-Astra) communication over
+the network is included in the "service time".
+
+> Besides, the comparison
+> is made somewhat murkier by the fact that NoSQLBench measures "cycles", which
+> means reads _and_ writes in the _main_ phase; while the Astra health dashboard
+> keeps these two separate. A way to make this comparison more apples-to-apples
+> would be to "instrument" the metric collection: adding the `instrument=true`
+> parameter to the invocation will attach a separate timer to each of the
+> named metric in the workload definition, and each of these metrics will
+> be featured e.g. in the summary file or anywhere for further inspection.
 
 #### HDR extensive histogram data
 
