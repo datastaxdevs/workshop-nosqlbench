@@ -50,6 +50,7 @@ nb homework-workload astra                    \
   keyspace=${ASTRA_DB_KEYSPACE_NAME}          \
   rampup-cycles=1000                          \
   main-cycles=1000                            \
+  errors=count                                \
   cyclerate=50                                \
   --progress console:5s
 ```
@@ -64,12 +65,13 @@ nb homework-workload astra  \
   keyspace=nbkeyspace       \
   rampup-cycles=1000        \
   main-cycles=1000          \
+  errors=count              \
   cyclerate=50              \
   --progress console:5s
 ```
 
-_(in this case, keep in mind that the scenario is still called "astra" simply
-to denote the fact that the keyspace is supposed to already exist and will
-not be created within the workload.)_
+_(in this case, keep in mind that the scenario is still called "astra" for simplicity;
+in particular, even in this case the keyspace is expected to already exist and will
+not be created as part of the workload.)_
 
 Good luck!

@@ -295,6 +295,11 @@ way the workload is to be unfolded and executed.
 This time we will have `driver=cql` to actually reach the database:
 for that to work, we will provide all connections parameters we set up earlier.
 
+> Note: for this workload, as you could check by examining its definition
+> (see the _Inspect "cql-keyvalue"_ section below), you can leave the driver
+> specification out since `cql` is the default. We will put it explicitly
+> in the following command just for illustrative purposes.
+
 We will ask NoSQLBench to perform a substantial amount of operations, so to have
 enough statistical support for the results.
 
@@ -322,6 +327,7 @@ nb cql-keyvalue                                                           \
     driver=cql                                                            \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
+    errors=count                                                          \
     --progress console:5s                                                 \
     --log-histograms 'histogram_hdr_data.log:.*.cycles.servicetime:20s'   \
     --log-histostats 'hdrstats.log:cqlkeyvalue_astra_main.cycles.servicetime:20s'
@@ -343,6 +349,7 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `driver=cql`              | driver to use (CQL, for AstraDB/Cassandra)
 | `rampup-cycles`           | how many operations in the "rampup" phase
 | `main-cycles`             | how many operations in the "main" phase
+| `errors`                  | behaviour if errors occur during benchmarking
 | `--progress console`      | frequency of console prints
 | `--log-histograms`        | write data to HDR file (see later)
 | `--log-histostats`        | write some more stats to this file
@@ -628,7 +635,8 @@ itself, powered behind the scenes by Prometheus-based real-time metric collectio
 All it takes is the additional `--docker-metrics` option to the command line,
 and Docker must be available on your system (Note: Gitpod comes with Docker preinstalled).
 
-You can try launching another benchmark as follows (note the last option):
+You can try launching another benchmark as follows (note the last option
+and the fact that this time we dropped the `driver` parameter):
 
 ```
 nb cql-keyvalue                                                           \
@@ -638,9 +646,9 @@ nb cql-keyvalue                                                           \
     secureconnectbundle=${ASTRA_DB_BUNDLE_PATH}                           \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}                                    \
     cyclerate=50                                                          \
-    driver=cql                                                            \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
+    errors=count                                                          \
     --progress console:5s                                                 \
     --docker-metrics
 ```
@@ -754,7 +762,7 @@ There is [quite some freedom](https://docs.nosqlbench.io/docs/workloads_101/00-d
 we will just explore some of this space. Look into the reference documentation
 for more.
 
-### Inspect "cql-keyvalue" workload
+### Inspect "cql-keyvalue"
 
 We can ask NoSQLBench to dump to a file the `yaml` defining the workload
 we just ran:
@@ -764,7 +772,8 @@ we just ran:
 ```
 
 (you can also get a comprehensive list of all available workloads with
-`nb --list-workloads`, by the way.)
+`nb --list-workloads`, by the way, and a more fine-grained output with
+`nb --list-scenarios`.)
 
 A file `cql-keyvalue.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running

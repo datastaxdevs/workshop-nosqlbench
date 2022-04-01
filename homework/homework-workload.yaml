@@ -18,6 +18,8 @@ blocks:
   - name: schema
     tags:
       phase: schema
+    params:
+      prepared: false
     statements:
       - create-table-users: |
           CREATE TABLE IF NOT EXISTS <<keyspace:homework>>.husers
