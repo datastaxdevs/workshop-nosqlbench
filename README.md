@@ -19,10 +19,12 @@ In this repository you will find all material and references you need:
 
 #### Table of Contents
 
-1. Before you start
-2. Create your Astra DB instance
-3. Launch Gitpod and setup NoSQLBench
-4. Run benchmarks
+1. [Before you start](#before-you-start)
+2. [Create your Astra DB instance](#create-your-astra-db-instance)
+3. [Launch Gitpod and setup NoSQLBench](#launch-gitpod-and-setup-nosqlbench)
+4. [Run benchmarks](#run-benchmarks)
+5. [Workloads](#workloads)
+6. [Homework assignment](#homework-assignment)
 
 
 
@@ -883,7 +885,8 @@ inside the workload specs. Try to re-run the workload adding
 > in that phase. This sum constitutes the (["stride"](https://docs.nosqlbench.io/docs/reference/standard-metrics/#strides)).
 
 
-### Homework
+
+## Homework assignment
 
 The "Lab" part of the homework, which requires you to finalize
 a workload `yaml` and make it work according to specifications,
