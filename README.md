@@ -45,7 +45,7 @@ for more coverage of the theory part. There, you will learn more about:
 
 > This workshop is aimed at data architects, solution architects or anybody who
 > wants to get serious about measuring the performance of their data-intensive system.
-> You should know what a database is, and have a general understanding of the
+> You should know what a (distributed) database is, and have a general understanding of the
 > challenges of communicating over a network.
 
 - Do I need to install a database or anything on my machine?
@@ -87,9 +87,9 @@ we will then benchmark with NoSQLBench.
 
 You will need to:
 
-- create an Astra DB instance [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Create-an-AstraDB-Instance), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
-- generate and download a Secure Connect Bundle [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Download-the-secure-connect-bundle);
-- generate and retrieve a DB Token [as explained here](https://github.com/datastaxdevs/awesome-astra/wiki/Create-an-Astra-Token#c---procedure). **Important**: use the role _"DB Administrator"_ when creating the token.
+- create an Astra DB instance [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-instance/#c-procedure), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
+- generate and download a Secure Connect Bundle [as explained here](https://awesome-astra.github.io/docs/pages/astra/download-scb/#c-procedure);
+- generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ when creating the token.
 
 Moreover, keep the Astra DB dashboard open: it will be useful later. In particular the
 Health tab and the CQL Console.
@@ -231,7 +231,7 @@ Everything is set to start running the tool.
 
 From a user's perspective, NoSQLBench sends operations (e.g. reads, writes)
 to the target system (e.g. a database) and record how the latter responds
-(failures and, most important, service time).
+(service time, number of ops/second and failures).
 
 Try launching this very short "dry-run benchmark", that instead of actually
 reaching the database simply prints a series of CQL statements to the console
@@ -249,7 +249,7 @@ You will see 21 (fully-formed, valid CQL) statements being printed:
 one `CREATE TABLE`, then ten `INSERT`s
 and then another ten between `SELECT`s and further `INSERT`s.
 
-This corresponds
+These three blocks correspond
 to the three phases defined in the `cql-keyvalue` _workload_: **schema**,
 **rampup** and **main**. The most relevant benchmark results are from the
 **main** phase, which mimics the kind of load the database would be subject to
@@ -258,7 +258,7 @@ when operating normally.
 > For most workloads, a three-phase structure is the most reasonable choice: first
 > the schema is set up, then an amount of data is poured in, and finally
 > the target system is subject to a mixture of reads and writes. The third
-> and last phase (_main_) usually generates contention on the server, which is
+> and last phase (_main_) in most cases is designed to generate contention on the server, which is
 > the very situation we usually want to put to test.
 
 Now re-launch the above dry run (you may find it convenient to copy the few
@@ -277,10 +277,10 @@ do you notice that the output of this second run is identical to the first,
 down to the actual values used in the `INSERT`s and `DELETE`s?
 Indeed an important goal for any benchmark is its _reproducibility_:
 here, among other
-consequences, this means that the operations (their sequence and contents alike)
+consequences, this means that the operations (their progression and contents alike)
 should be completely determined with no trace of actual randomness.
 
-You can also peek in the `logs` directory now: it is created automatically and
+You can also peek at the `logs` directory now: it is created automatically and
 populated with some information from the benchmark at each execution of `nb`.
 
 
@@ -391,8 +391,8 @@ _"but what is being written to the database, exactly?_
 
 To find out, we will connect to the database and inspect the contents of the
 keyspace. There are several ways one could connect to Astra DB:
-using Cassandra drivers with most programming languages,
-through the HTTP requests enabled by the Stargate Data API, or directly
+using Cassandra drivers with most programming languages;
+through the HTTP requests enabled by the Stargate Data API; or directly
 with a client that "speaks" the CQL language.
 Today we will make use of the **CQL Console** available in the browser
 within the Astra UI.
@@ -541,7 +541,7 @@ workload commands to actual sending of an I/O operation to the database.
 
 We instructed NoSQLBench to output timing information in two other formats:
 
-**First**, with the `--log-histostats` option we get a file with
+**First**, with the `--log-histostats` option we got a file with
 a listing, for selected metrics, of the min, max and some percentiles as
 measured over a desired time window. Try to look at the file `hdrstats.log`
 in the Gitpod editor and figure out its structure.
@@ -580,7 +580,7 @@ the network is included in the "service time".
 
 #### HDR extensive histogram data
 
-The `--log-histograms` option has the effect that NoSQLBench writes
+**Second**, the `--log-histograms` option has the effect that NoSQLBench writes
 the whole of the measurements it takes in the [HDR file format](http://hdrhistogram.org/).
 
 This is an optimized way to save the full histogram of the measured service time
@@ -734,13 +734,13 @@ To pique your interest, try pasting these examples and click "Execute":
 
 ```
 # filtering by metadata
-{__name__="cycles_servicetime", type="pctile", alias=~".*main.*"}
+{__name__="cycles_servicetime", type="pctile", alias=~".*rampup.*"}
 
 # aggregation
 avg_over_time({__name__="cycles_servicetime"}[10m])
 
 # another aggregation, + filtering
-max_over_time({__name__="cycles_servicetime", type="pctile", alias=~".*main.*"}[10m])
+max_over_time({__name__="cycles_servicetime", type="pctile", alias=~".*rampup.*"}[10m])
 ```
 
 Also, note that Prometheus exposes a REST access, so you can imagine, for
@@ -772,6 +772,8 @@ we just ran:
 ```bash
     nb --copy cql-keyvalue
 ```
+
+> **Tip**: feel free to interrupt the previous benchmark, if it still runs, with Ctrl-C.
 
 (you can also get a comprehensive list of all available workloads with
 `nb --list-workloads`, by the way, and a more fine-grained output with
