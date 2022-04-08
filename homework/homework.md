@@ -26,14 +26,12 @@ it sort-of-writes data to them, and it sort-of performs the reads.
 
 #### Your tasks:
 
-1. Enrich the _schema_ phase so that it concludes by emptying the two tables, so that every time the benchmark is run, the same initial state is guaranteed. _Hint: you can dump and inspect the built-in `cql-iot` workload definition for inspiration._
-
-2. Make sure that **four times as many writes** are done to `himages` as they are to `husers`. _Hint: use the
+1. Make sure that **four times as many writes** are done to `himages` as they are to `husers`. _Hint: use the
 `ratio` parameter in one of the rampup operations - see the provided sample workloads for examples._
 
-3. At the top of the file there are several "anonymized" bindings to choose from. Use them to finalize the `INSERT` and `SELECT` statements in the _rampup_ and _main_ phases, by replacing the `{???}` parts. The choice must satisfy the required benchmarking specifications, besides of course matching the data types in the Astra DB tables. _Hints: (1) Look at the docs on bindings; and (2) test with `driver=stdout` and very small cycle numbers for a quick assessment of what the various bindings are. Also, some of the bindings may be a good inspiration for your future workloads: check them out!_
+2. At the top of the file there are several "anonymized" bindings to choose from. Use them to finalize the `INSERT` and `SELECT` statements in the _rampup_ and _main_ phases, by replacing the `{???}` parts. The choice must satisfy the required benchmarking specifications, besides of course matching the data types in the Astra DB tables. _Hints: (1) Look at the docs on bindings; and (2) test with `driver=stdout` and very small cycle numbers for a quick assessment of what the various bindings are. Also, some of the bindings may be a good inspiration for your future workloads: check them out!_
 
-4. Check that the bindings appearing in the `SELECT` statement ensure many reads will look for rows that cannot have been inserted. _Tip: what does the function `Mod(N)` do as the cycle number increases?_
+3. Check that the bindings appearing in the `SELECT` statement ensure many reads will look for rows that cannot have been inserted. _Tip: what does the function `Mod(N)` do as the cycle number increases?_
 
 #### Useful commands, reference, advice
 

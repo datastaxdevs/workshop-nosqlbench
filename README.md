@@ -65,7 +65,7 @@ for more coverage of the theory part. There, you will learn more about:
 
 ### Homework
 
-<img src="images/nosqlbench-badge.png?raw=true" width="200" align="right" />
+<img src="images/nosqlbench_badge_artwork.png?raw=true" width="200" align="right" />
 
 To complete the workshop and get a verified "NoSQLBench" badge,
 follow these instructions:
@@ -171,15 +171,15 @@ the file navigator panel ("Explorer") on the left of the Gitpod view.
 Once you drop it you will see it listed in the file explorer itself.
 As a check, you can issue the command
 ```bash
-ls ./secure*zip -lh
+ls /workspace/workshop-nosqlbench/secure*zip -lh
 ```
 
-so that you get the _relative path to your bundle file_ (and also verify that it is
-the correct size). Note that, as per best practices with NoSQLBench, (relative)
-paths to files should start with `./`.
+so that you get the _absolute path to your bundle file_ (and also verify that it is
+the correct size). As an aside, note that, as per best practices with NoSQLBench, (relative)
+paths to files would start with `./`.
 
 <details><summary>Show me</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/gitpod_uploading_bundle_2_annotated.png?raw=true" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/gitpod_uploading_bundle_2b_annotated.png?raw=true" />
 </details>
 
 
@@ -202,7 +202,7 @@ Insert the "Client ID" and "Client Secret" of the DB Token you created earlier
 and, if necessary, adjust the other variables.
 
 <details><summary>Show me what the .env file could look like</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/dotenv.png?raw=true" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/dotenv2.png?raw=true" />
 </details>
 
 Now, source this file to make the definitions therein available to this shell:
