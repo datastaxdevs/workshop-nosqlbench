@@ -142,7 +142,7 @@ Ok, let's check that the program starts: invoking
 ```bash
 nb --version
 ```
-should output the program version (something like `4.15.86` or higher).
+should output the program version (something like `4.15.91` or higher).
 
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
 > you start `nb`. You can ignore it: it is a consequence of some settings by
@@ -216,7 +216,6 @@ echo ${ASTRA_DB_KEYSPACE_NAME}
 ```
 
 and make sure the output is not an empty line.
-
 
 (Note that you will have to source the file in any new shell you plan to use).
 
@@ -378,9 +377,10 @@ currently-running phase (`schema`/`rampup`/`main`).
 
 > If the execution fails with,
 > `"Cannot construct cloud config from the cloudConfigUrl ..."`,
-> chances are your database is currently in
+> chances are your (free-tier) database is currently in
 > [Standby status](https://docs.datastax.com/en/astra/docs/db-status.html#_standby).
-> To resume it, open its Health tab or the CQL Console tab in the Astra DB UI.
+> To resume it, open its Health tab or the CQL Console tab in the Astra DB UI
+> and wait two or three minutes before retrying.
 
 While this runs, let's have a look around.
 
