@@ -558,7 +558,7 @@ script for plotting**. Simply enter the command (try `-h` for more options)
 and then open, in the Gitpod editor, the `hdrstats.png` image just created.
 
 <details><summary>Show me the generated "histostats" plot</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot2.png?raw=true" width="260" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot2.png?raw=true" width="360" />
 </details>
 
 > Tip: you can use **Ctrl-mousewheel** to zoom on the image in Gitpod.
