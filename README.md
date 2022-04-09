@@ -523,11 +523,12 @@ _side, was recorded)"_.
 Under that metric title, you will see something similar to:
 
 ```
-         count = 5000
-     mean rate = 49.93 calls/second
- 1-minute rate = 50.14 calls/second
- 5-minute rate = 50.85 calls/second
-15-minute rate = 51.07 calls/second
+cqlkeyvalue_astra_main.cycles.servicetime
+             count = 15000
+         mean rate = 50.00 calls/second
+     1-minute rate = 49.94 calls/second
+     5-minute rate = 50.29 calls/second
+    15-minute rate = 50.57 calls/second
 ```
 
 This tells you the total count and the per-minute rate

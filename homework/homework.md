@@ -18,7 +18,7 @@ can be seen in the _schema_ phase of the provided unfinished workload yaml.
 
 The load you are to benchmark unfolds as follows:
 
-- first there are only writes, to both tables: there have to be four times more entries in the images table than in the users table;
+- first, when ramping up, there are only writes, to both tables: there have to be four times more entries in the images table than in the users table;
 - then, in the actual main phase, only reads must take place, from both tables at the same frequency. You have been asked to make sure the reads also try to retrieve rows that cannot possibly exist.
 
 The provided workload file already does most of the job: it creates the tables,
@@ -26,7 +26,7 @@ it sort-of-writes data to them, and it sort-of performs the reads.
 
 #### Your tasks:
 
-1. Make sure that **four times as many writes** are done to `himages` as they are to `husers`. _Hint: use the
+1. Make sure that, during _rampup_, **four times as many writes** are done to `himages` as they are to `husers`. _Hint: use the
 `ratio` parameter in one of the rampup operations - see the provided sample workloads for examples._
 
 2. At the top of the file there are several "anonymized" bindings to choose from. Use them to finalize the `INSERT` and `SELECT` statements in the _rampup_ and _main_ phases, by replacing the `{???}` parts. The choice must satisfy the required benchmarking specifications, besides of course matching the data types in the Astra DB tables. _Hints: (1) Look at the docs on bindings; and (2) test with `driver=stdout` and very small cycle numbers for a quick assessment of what the various bindings are. Also, some of the bindings may be a good inspiration for your future workloads: check them out!_

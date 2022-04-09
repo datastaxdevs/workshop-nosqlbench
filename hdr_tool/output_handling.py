@@ -36,10 +36,20 @@ def plotToFigure(pType, pData, hstep, metric, fName, unitName):
                 ys,
                 width=hstep,
             )
+            #
+            average = sum([
+                _x * _y
+                for _x, _y in zip(xs, ys)
+            ]) / sum(ys)
+            #
             plt.xlabel('t [%s]' % unitName)
             plt.ylabel('p(t) [1/%s]' % unitName)
             plt.ylim((0, None))
-            plt.title('Distribution for "%s"' % metric)
+            plt.title('Distribution for "%s" (avg = %.2f %s)' % (
+                metric,
+                average,
+                unitName,
+            ))
             saveFigure(plot, fName)
             return True
         elif pType == 'stability':
