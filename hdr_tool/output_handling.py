@@ -145,11 +145,17 @@ def plotHistostats(xData, pValues, legend, metric, fName):
         #
         for curveIndex, curve in enumerate(legend):
             if curve in pValues:
+                #
+                if pValues[curve] != []:
+                    average = sum(pValues[curve]) / len(pValues[curve])
+                else:
+                    average = 0.0
+                #
                 plt.plot(
                     xData,
                     pValues[curve],
                     linestyle=lineStyles[curveIndex % len(lineStyles)],
-                    label=curve,
+                    label='%s (avg: %.2f ms)' % (curve, average),
                 )
         plt.yscale('log')
         plt.xlabel('Time since start [ms]')

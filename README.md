@@ -289,7 +289,7 @@ It is now time to start hitting the database!
 What you launched earlier is the `cql-keyvalue` _workload_, one of the several
 ready-to-use workloads included with NoSQLBench (but you can
 [build your own](https://docs.nosqlbench.io/docs/workloads_101/00-designing-workloads/)
-by all means).
+by all means -- see later sections).
 In particular, you ran the `astra` _scenario_, which determines a particular
 way the workload is to be unfolded and executed.
 
@@ -461,7 +461,7 @@ is a Grafana dashboard, with a handful of plots being displayed within the
 tab - all related to how the database is performing in terms of reads and writes.
 
 <details><summary>Show me the Database Health tab in Astra UI</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/astra_db_health_annotated.png?raw=true" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/astra_db_health2_annotated.png?raw=true" />
 </details>
 
 > **Tip**: you can customize the width of the time window in the graphs and the
@@ -487,13 +487,13 @@ in the middle of the _main_ phase.
 Below is a real-life example of the values that could result from a `cql-keyvalue`
 benchmark session in the _main_ phase:
 
-| Percentile  | Write Latency | Read Latency |
-|-------------|---------------|--------------|
-| P50         | 735   _µs_    |   1.05 _ms_  |
-| P75         | 908   _µs_    |  13    _ms_  |
-| P90         |  33.1 _ms_    |  58    _ms_  |
-| P95         |  78.2 _ms_    | 113    _ms_  |
-| P99         | 220   _ms_    | 254    _ms_  |
+| Percentile  | Write Latency  | Read Latency   |
+|-------------|----------------|----------------|
+| P50         | 709     _µs_   |  935     _µs_  |
+| P75         | 831     _µs_   |    1.31  _ms_  |
+| P90         | 904     _µs_   |    1.53  _ms_  |
+| P95         |   1.04  _ms_   |    1.77  _ms_  |
+| P99         |   2.45  _ms_   |   15.6   _ms_  |
 
 </details>
 
@@ -558,12 +558,12 @@ script for plotting**. Simply enter the command (try `-h` for more options)
 and then open, in the Gitpod editor, the `hdrstats.png` image just created.
 
 <details><summary>Show me the generated "histostats" plot</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot.png?raw=true" width="260" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot2.png?raw=true" width="260" />
 </details>
 
 > Tip: you can use **Ctrl-mousewheel** to zoom on the image in Gitpod.
 
-Look at the values of, say, the P90 percentile: it should be somewhat larger
+Look at the values of, say, the P90 percentile: it will be larger
 than both the read and write corresponding percentiles given in the Astra DB
 "health" tab. That's because this time we are seeing things **from the vantage
 point of the testing client**, and the (Gitpod-to-Astra) communication over
