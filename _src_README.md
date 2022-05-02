@@ -30,6 +30,8 @@ In this repository you will find all material and references you need:
 
 ## Before you start
 
+<img src="images/attention.png?raw=true" width="80" align="left" />
+
 > **Heads up**: these instructions are available in two forms:
 <!-- 2L IF long -->
 > a [short and to-the-point](README.md) one,
