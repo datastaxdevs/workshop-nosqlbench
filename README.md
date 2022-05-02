@@ -55,7 +55,8 @@ for more coverage of the theory part. There, you will learn more about:
 > use once you install NoSQLBench on some client machine to run tests.)
 
 > You can also choose to work on your machine instead of using Gitpod: there's
-> no problem with that. We will not provide live support in this case, though,
+> no problem with that, just a few setup and operational changes to keep
+> in mind. We will not provide live support in this case, though,
 > assuming you know what you are doing.
 
 - Is there anything to pay?
@@ -367,6 +368,8 @@ run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/referenc
 > you would need to provide a parameter such as `hosts=192.168.1.1,192.168.1.2`,
 > and there would be _no_ `secureconnectbundle` parameter. As for username and password,
 > ... well, that depends on how you configured the Cassandra installation.
+> Moreover, in the next steps, you will have to look at metric with "default"
+> in their name instead of "astra".
 > The crucial thing is that NoSQLBench uses the very same CQL drivers to
 > access the database, regardless of whether Astra DB or any Cassandra cluster.
 
