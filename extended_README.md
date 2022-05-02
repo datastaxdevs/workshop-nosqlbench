@@ -10,7 +10,7 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 In this repository you will find all material and references you need:
 
 - [slide deck](#)
-- [exercises](#)
+- [exercises](#create-your-astra-db-instance)
 - [workshop video](#)
 - [step-by-step guide](#before-you-start)
 - [additional references](#)
@@ -35,8 +35,8 @@ In this repository you will find all material and references you need:
 > **Heads up**: these instructions are available in two forms:
 > a [short and to-the-point](README.md) one,
 > with just the useful commands if you are watching us live; and
-> a longer one (this one),
-> with lots of explanations and details, suited for those who follow this workshop
+> a longer one (_this one_),
+> with lots of explanations and details, designed for those who follow this workshop
 > at their own pace. Please choose what best suits you!
 
 If you are not watching us live, please look at the provided presentation material
@@ -127,7 +127,6 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 > There are many more other features, probably familiar to those who have
 > experience with VSCode. Feel free to play around a bit!
 
-
 ### Install NoSQLBench
 
 Let's download the latest stable version of NoSQLBench to this machine.
@@ -166,10 +165,11 @@ should output the program version (something like `4.15.91` or higher).
 ### Upload the Secure Connect Bundle to Gitpod
 
 NoSQLBench will need to connect to your Astra DB database: to do so, the
-Secure Connect Bundle zip file you downloaded earlier must be uploaded
+Secure Connect Bundle zip file must be uploaded
 to your Gitpod environment.
 
-Locate the bundle file on your computer with the file explorer
+Locate the bundle file that you downloaded earlier on your computer
+with the file explorer
 (it will probably be called something like `secure-connect-workshops.zip`
 and be around 12 KB in size) and simply **drag-and-drop** it to
 the file navigator panel ("Explorer") on the left of the Gitpod view.
@@ -185,7 +185,8 @@ ls /workspace/workshop-nosqlbench/secure*zip -lh
 ```
 
 so that you get the _absolute path to your bundle file_ (and also verify that it is
-the correct size). As an aside, note that, as per best practices with NoSQLBench, (relative)
+the correct size).
+As an aside, note that, as per best practices with NoSQLBench, (relative)
 paths to files would start with `./`.
 
 <details><summary>Show me</summary>
@@ -398,7 +399,7 @@ While this runs, let's have a look around.
 
 #### Database contents
 
-By this point, you may have a quesiton:
+By this point, you may have a question:
 _"but what is being written to the database, exactly?_
 
 To find out, we will connect to the database and inspect the contents of the
@@ -485,10 +486,10 @@ that the _total_ fluctuates around the value provided with the `cyclerate`
 parameter during the whole test: but during _rampup_ it will be all writes,
 while the _main_ phase will be an equal mixture of reads and writes.
 
-Now turn your attention to the "Write Latency" plot. This provides quantities
-related to the "latency", as experienced by the
+Now turn your attention to the "Write Latency"/"Read Latency" plots. These
+provide quantities related to the "latency", as experienced by the
 [coordinator node](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlClientRequestsRead.html),
-involved in servicing write requests. In particular, some reference
+involved in servicing write/read requests. In particular, some reference
 percentiles are reported as they vary in time: indeed, when describing the
 performance of the target system, percentiles are a much better tool than
 averages or maximum values. Note down the values you read from the plot
@@ -743,7 +744,7 @@ which allow for sophisticated filtering. Further, you can use the flexible,
 powerful [query language used by Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/)
 to even perform aggregations on top of the data queries.
 
-To pique your interest, try pasting these examples and click "Execute":
+Just to pique your interest, try pasting these examples and click "Execute":
 
 ```
 # filtering by metadata
@@ -777,6 +778,9 @@ There is [quite some freedom](https://docs.nosqlbench.io/docs/workloads_101/00-d
 we will just explore some of this space. Look into the reference documentation
 for more.
 
+> **Tip**: feel free to interrupt the previous benchmark, if it still runs,
+> with Ctrl-C. We won't need it anymore.
+
 ### Inspect "cql-keyvalue"
 
 We can ask NoSQLBench to dump to a file the `yaml` defining the workload
@@ -785,8 +789,6 @@ we just ran:
 ```bash
     nb --copy cql-keyvalue
 ```
-
-> **Tip**: feel free to interrupt the previous benchmark, if it still runs, with Ctrl-C.
 
 (you can also get a comprehensive list of all available workloads with
 `nb --list-workloads`, by the way, and a more fine-grained output with

@@ -10,7 +10,7 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 In this repository you will find all material and references you need:
 
 - [slide deck](#)
-- [exercises](#)
+- [exercises](#create-your-astra-db-instance)
 - [workshop video](#)
 - [step-by-step guide](#before-you-start)
 - [additional references](#)
@@ -36,17 +36,18 @@ In this repository you will find all material and references you need:
 <!-- 2L IF long -->
 > a [short and to-the-point](README.md) one,
 <!-- 2L ELIF short -->
-> a short and to-the-point one (this one),
+> a short and to-the-point one (_this one_),
 <!-- 2L ENDIF -->
 > with just the useful commands if you are watching us live; and
 <!-- 2L IF long -->
-> a longer one (this one),
+> a longer one (_this one_),
 <!-- 2L ELIF short -->
 > a [longer one](extended_README.md),
 <!-- 2L ENDIF -->
-> with lots of explanations and details, suited for those who follow this workshop
+> with lots of explanations and details, designed for those who follow this workshop
 > at their own pace. Please choose what best suits you!
 
+<!-- 2L IF long -->
 If you are not watching us live, please look at the provided presentation material
 for more coverage of the theory part. There, you will learn more about:
 
@@ -54,6 +55,7 @@ for more coverage of the theory part. There, you will learn more about:
 - Astra DB, a database-as-a-service in the cloud, built on Cassandra, ready to use in minutes with a few clicks;
 - what "testing a data store" entails;
 - the main features and general principles behind the NoSQLBench benchmarking tool.
+<!-- 2L ENDIF -->
 
 
 ### FAQ
@@ -116,6 +118,7 @@ Health tab and the CQL Console.
 
 ## Launch Gitpod and setup NoSQLBench
 
+<!-- 2L IF long -->
 Gitpod is an IDE in the cloud (modeled after VSCode). It comes with a full
 "virtual machine" (actually a Kubernetes-managed container), which we will
 use as if it were our own computer (e.g. downloading files, executing programs
@@ -126,18 +129,23 @@ spawn your own Gitpod container + clone this repository
 in it + preinstall the required dependencies.
 _Note that you may have to authenticate through Github in the process._
 (Make sure you "Open in new tab" to keep this readme open alongside.)
+<!-- 2L ELIF short -->
+**Ctrl-click on the Gitpod button below** to spawn your very own environment + IDE:
+<!-- 2L ENDIF -->
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/datastaxdevs/workshop-nosqlbench)
 
 In a few minutes, a full IDE will be ready in your browser, with a file
 explorer on the left, a file editor on the top, and a console (`bash`) below it.
 
+<!-- 2L IF long -->
 > There are many more other features, probably familiar to those who have
 > experience with VSCode. Feel free to play around a bit!
-
+<!-- 2L ENDIF -->
 
 ### Install NoSQLBench
 
+<!-- 2L IF long -->
 Let's download the latest stable version of NoSQLBench to this machine.
 First make sure you are in the top-level repository directory with your
 Gitpod console: type `pwd` and see if the output is `/workspace/nbws1`.
@@ -145,12 +153,19 @@ Gitpod console: type `pwd` and see if the output is `/workspace/nbws1`.
 We will download the "Linux binary" distribution of NoSQLBench:
 as instructed [here](https://github.com/nosqlbench/nosqlbench/blob/main/DOWNLOADS.md),
 we get the latest stable binary (it's a few hundred megabytes) with
+<!-- 2L ELIF short -->
+To download NoSQLBench, type or paste this command in your Gitpod console:
+<!-- 2L ENDIF -->
 ```bash
 curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb
 ```
 
+<!-- 2L IF long -->
 and when the download is finished we make it executable and move it,
 out of convenience, to a directory which is part of the search path:
+<!-- 2L ELIF short -->
+then make it executable and move it to a better place:
+<!-- 2L ENDIF -->
 ```bash
 chmod +x nb
 sudo mv nb /usr/local/bin/
@@ -162,6 +177,7 @@ nb --version
 ```
 should output the program version (something like `4.15.91` or higher).
 
+<!-- 2L IF long -->
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
 > you start `nb`. You can ignore it: it is a consequence of some settings by
 > Gitpod and does not have to do with NoSQLBench itself.
@@ -170,14 +186,18 @@ should output the program version (something like `4.15.91` or higher).
 > inactive time) and you restart it later, recall that only the contents
 > of `/workspace` will be restored: hence, you would have to repeat the
 > installation.
+<!-- 2L ENDIF -->
 
 ### Upload the Secure Connect Bundle to Gitpod
 
+<!-- 2L IF long -->
 NoSQLBench will need to connect to your Astra DB database: to do so, the
-Secure Connect Bundle zip file you downloaded earlier must be uploaded
+Secure Connect Bundle zip file must be uploaded
 to your Gitpod environment.
+<!-- 2L ENDIF -->
 
-Locate the bundle file on your computer with the file explorer
+Locate the bundle file that you downloaded earlier on your computer
+with the file explorer
 (it will probably be called something like `secure-connect-workshops.zip`
 and be around 12 KB in size) and simply **drag-and-drop** it to
 the file navigator panel ("Explorer") on the left of the Gitpod view.
@@ -193,8 +213,11 @@ ls /workspace/workshop-nosqlbench/secure*zip -lh
 ```
 
 so that you get the _absolute path to your bundle file_ (and also verify that it is
-the correct size). As an aside, note that, as per best practices with NoSQLBench, (relative)
+the correct size).
+<!-- 2L IF long -->
+As an aside, note that, as per best practices with NoSQLBench, (relative)
 paths to files would start with `./`.
+<!-- 2L ENDIF -->
 
 <details><summary>Show me</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/gitpod_uploading_bundle_2b_annotated.png?raw=true" />
@@ -203,9 +226,11 @@ paths to files would start with `./`.
 
 ### Configure the Astra DB parameters
 
+<!-- 2L IF long -->
 If we want NoSQLBench to access the Astra DB instance, we have to pass it
 the required connection parameters and secrets. To do so, we now set up
 a `.env` file, which will make our life easier later.
+<!-- 2L ENDIF -->
 
 Copy the provided template file to a new one and open it in the Gitpod
 file editor:
@@ -246,9 +271,11 @@ Everything is set to start running the tool.
 
 ### A short dry run
 
+<!-- 2L IF long -->
 From a user's perspective, NoSQLBench sends operations (e.g. reads, writes)
 to the target system (e.g. a database) and record how the latter responds
 (service time, number of ops/second and failures).
+<!-- 2L ENDIF -->
 
 Try launching this very short "dry-run benchmark", that instead of actually
 reaching the database simply prints a series of CQL statements to the console
@@ -266,6 +293,7 @@ You will see 21 (fully-formed, valid CQL) statements being printed:
 one `CREATE TABLE`, then ten `INSERT`s
 and then another ten between `SELECT`s and further `INSERT`s.
 
+<!-- 2L IF long -->
 These three blocks correspond
 to the three phases defined in the `cql-keyvalue` _workload_: **schema**,
 **rampup** and **main**. The most relevant benchmark results are from the
@@ -277,6 +305,7 @@ when operating normally.
 > the target system is subject to a mixture of reads and writes. The third
 > and last phase (_main_) in most cases is designed to generate contention on the server, which is
 > the very situation we usually want to put to test.
+<!-- 2L ENDIF -->
 
 Now re-launch the above dry run (you may find it convenient to copy the few
 last lines of the output to a temporary file in the Gitpod editor for an easier
@@ -290,12 +319,16 @@ nb cql-keyvalue astra                   \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}
 ```
 
+<!-- 2L IF long -->
 do you notice that the output of this second run is identical to the first,
 down to the actual values used in the `INSERT`s and `DELETE`s?
 Indeed an important goal for any benchmark is its _reproducibility_:
 here, among other
 consequences, this means that the operations (their progression and contents alike)
 should be completely determined with no trace of actual randomness.
+<!-- 2L ELIF short -->
+is the output identical to the previous run down to the actual "random" values?
+<!-- 2L ENDIF -->
 
 You can also peek at the `logs` directory now: it is created automatically and
 populated with some information from the benchmark at each execution of `nb`.
@@ -304,24 +337,29 @@ populated with some information from the benchmark at each execution of `nb`.
 ### Benchmark your Astra DB
 
 It is now time to start hitting the database!
+<!-- 2L IF long -->
 What you launched earlier is the `cql-keyvalue` _workload_, one of the several
 ready-to-use workloads included with NoSQLBench (but you can
 [build your own](https://docs.nosqlbench.io/docs/workloads_101/00-designing-workloads/)
 by all means -- see later sections).
 In particular, you ran the `astra` _scenario_, which determines a particular
 way the workload is to be unfolded and executed.
+<!-- 2L ENDIF -->
 
 This time we will have `driver=cql` to actually reach the database:
 for that to work, we will provide all connections parameters we set up earlier.
 
+<!-- 2L IF long -->
 > Note: for this workload, as you could check by examining its definition
 > (see the _Inspect "cql-keyvalue"_ section below), you can leave the driver
 > specification out since `cql` is the default. We will put it explicitly
 > in the following command just for illustrative purposes.
+<!-- 2L ENDIF -->
 
 We will ask NoSQLBench to perform a substantial amount of operations, so to have
 enough statistical support for the results.
 
+<!-- 2L IF long -->
 > On the other hand, we will rate-limit the operations sent to the database
 > (with the `cyclerate` parameter). This is mainly because often the goal
 > of a benchmark is to verify whether the system can withstand
@@ -332,6 +370,7 @@ enough statistical support for the results.
 > (2) if you are running on the Free Tier you may otherwise hit the
 > guardrails and the performance limitations coming with that class of Astra DB
 > instances.
+<!-- 2L ENDIF -->
 
 Here is the full command to launch:
 
@@ -379,6 +418,7 @@ run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/referenc
 
 </details>
 
+<!-- 2L IF long -->
 > _Note_: if you were targeting a "regular" Cassandra instance (as opposed to Astra DB),
 > the command line above would change a little: the scenario would be `default`,
 > you would need to provide a parameter such as `hosts=192.168.1.1,192.168.1.2`,
@@ -388,25 +428,34 @@ run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/referenc
 > in their name instead of "astra".
 > The crucial thing is that NoSQLBench uses the very same CQL drivers to
 > access the database, regardless of whether Astra DB or any Cassandra cluster.
+<!-- 2L ENDIF -->
 
+<!-- 2L IF long -->
 The above command should last approximately ten minutes, during which NoSQLBench
 sends a constant stream of I/O operations to the database and collects timing
 information on how it responds. You will see a **console output** keeping you
 updated on the progress of the
 currently-running phase (`schema`/`rampup`/`main`).
+<!-- 2L ELIF short -->
+The benchmark should last about ten minutes, with the progress being
+printed on the console as it proceeds.
+<!-- 2L ENDIF -->
 
+<!-- 2L IF long -->
 > If the execution fails with,
 > `"Cannot construct cloud config from the cloudConfigUrl ..."`,
 > chances are your (free-tier) database is currently in
 > [Standby status](https://docs.datastax.com/en/astra/docs/db-status.html#_standby).
 > To resume it, open its Health tab or the CQL Console tab in the Astra DB UI
 > and wait two or three minutes before retrying.
+<!-- 2L ENDIF -->
 
 While this runs, let's have a look around.
 
 #### Database contents
 
-By this point, you may have a quesiton:
+<!-- 2L IF long -->
+By this point, you may have a question:
 _"but what is being written to the database, exactly?_
 
 To find out, we will connect to the database and inspect the contents of the
@@ -416,6 +465,9 @@ through the HTTP requests enabled by the Stargate Data API; or directly
 with a client that "speaks" the CQL language.
 Today we will make use of the **CQL Console** available in the browser
 within the Astra UI.
+<!-- 2L ELIF short -->
+Now it's time to find out _what is actually being written to the database_.
+<!-- 2L ENDIF -->
 
 Choose your database in the Astra main dashboard and click on it;
 next, go to the "CQL Console" tab in the main panel. In a few seconds the
@@ -426,11 +478,13 @@ waiting for your input.
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/astra_get_to_cql_console.gif?raw=true" />
 </details>
 
+<!-- 2L IF long -->
 > Commands entered in the CQL Console are terminated with a semicolon (`;`)
 > and can span multiple lines. Run them with the `Enter` key. If you want to
 > interrupt the command you are entering, hit `Ctrl-C` to be brought back
 > to the prompt. See [here](https://docs.datastax.com/en/cql-oss/3.x/cql/cql_reference/cqlCommandsTOC.html)
 > for more references to the CQL language commands.
+<!-- 2L ENDIF -->
 
 Start by telling the console that you will be using the `nbkeyspace` keyspace:
 ```
@@ -458,11 +512,16 @@ with two columns seemingly of numeric type. Let's check:
 DESC TABLE keyvalue;
 ```
 
+<!-- 2L IF long -->
 Surprise! As a matter of fact both columns are of type `TEXT` (that is,
 variable-length strings). Indeed, most key-value stores admit string keys
 and (unless specific schemas are enforced) the values are also either binary
 or ASCII byte sequences: this workload can then be easily adapted for
 benchmarking other key-value databases.
+<!-- 2L ELIF short -->
+Oh, looks like both the key and the value columns are of type `TEXT`:
+good for adapting this ready-made benchmark to other key/value stores.
+<!-- 2L ENDIF -->
 
 <details><summary>Show me what the output looks like</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/desctable_cql.png?raw=true" />
@@ -470,10 +529,12 @@ benchmarking other key-value databases.
 
 #### Database health
 
+<!-- 2L IF long -->
 By now, the benchmark is probably still running. That's good: we get a chance
 to inspect the "database health" while NoSQLBench is writing to it.
 Remember we instructed the tool to work at a steady rate in terms of
 operations per second.
+<!-- 2L ENDIF -->
 
 Locate your database in the Astra main dashboard and click on it;
 next, go to the "Health" tab in the main panel. You will see what essentially
@@ -484,6 +545,7 @@ tab - all related to how the database is performing in terms of reads and writes
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/astra_db_health2_annotated.png?raw=true" />
 </details>
 
+<!-- 2L IF long -->
 > **Tip**: you can customize the width of the time window in the graphs and the
 > update frequency. Today it could make sense to set these to 15 minutes and 5 seconds respectively.
 
@@ -493,14 +555,19 @@ that the _total_ fluctuates around the value provided with the `cyclerate`
 parameter during the whole test: but during _rampup_ it will be all writes,
 while the _main_ phase will be an equal mixture of reads and writes.
 
-Now turn your attention to the "Write Latency" plot. This provides quantities
-related to the "latency", as experienced by the
+Now turn your attention to the "Write Latency"/"Read Latency" plots. These
+provide quantities related to the "latency", as experienced by the
 [coordinator node](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlClientRequestsRead.html),
-involved in servicing write requests. In particular, some reference
+involved in servicing write/read requests. In particular, some reference
 percentiles are reported as they vary in time: indeed, when describing the
 performance of the target system, percentiles are a much better tool than
 averages or maximum values. Note down the values you read from the plot
 in the middle of the _main_ phase.
+<!-- 2L ELIF short -->
+Check the operations per second from the "Requests Combined" plot;
+then have a look at the "Write Latency" and "Read Latency" plots
+and take note of some of the percentiles shown there.
+<!-- 2L ENDIF -->
 
 <details><summary>Show me "sample values" one could read from the graph</summary>
 
@@ -517,14 +584,17 @@ benchmark session in the _main_ phase:
 
 </details>
 
+<!-- 2L IF long -->
 What is the meaning of a percentile? Well, if we say "P75 for reading
 is 13 milliseconds," that means "75% of the read requests are serviced
 _within 13 ms from being received by the server_." This kind of
 metric, in most cases, is more meaningful than quoting the maximum value
 recorded (for one, the max tends to fluctuate way more).
+<!-- 2L ENDIF -->
 
 #### Final summary
 
+<!-- 2L IF long -->
 By now the benchmark should have finished. If it hasn't yet, give it time to complete:
 you will see a summary being printed, after which you will get the console
 prompt back.
@@ -539,6 +609,10 @@ Find the metric called `cqlkeyvalue_astra_main.cycles.servicetime`: this
 corresponds to events of the type _"a command was issued to the database during_
 _the_ main _phase (and the time needed for it to complete, as seen from the client_
 _side, was recorded)"_.
+<!-- 2L ELIF short -->
+When the benchmark has finished, open the latest `*.summary` file and look
+for `cqlkeyvalue_astra_main.cycles.servicetime`.
+<!-- 2L ENDIF -->
 
 Under that metric title, you will see something similar to:
 
@@ -551,15 +625,18 @@ cqlkeyvalue_astra_main.cycles.servicetime
     15-minute rate = 50.57 calls/second
 ```
 
+<!-- 2L IF long -->
 This tells you the total count and the per-minute rate
 (as averaged over different time windows) for this operation.
 
 NoSQLBench keeps track of count/timing information for many
 operations, which range from substitution of variables in the
 workload commands to actual sending of an I/O operation to the database.
+<!-- 2L ENDIF -->
 
 #### Additional "histostats" datafile
 
+<!-- 2L IF long -->
 We instructed NoSQLBench to output timing information in two other formats:
 
 **First**, with the `--log-histostats` option we got a file with
@@ -569,6 +646,9 @@ in the Gitpod editor and figure out its structure.
 
 If you want to graphically look at the data thus collected, **we provide a sample
 script for plotting**. Simply enter the command (try `-h` for more options)
+<!-- 2L ELIF short -->
+Use this script to generate a graph of the data collected as "histostats":
+<!-- 2L ENDIF -->
 
 ```bash
 ./hdr_tool/histostats_quick_plotter.py \
@@ -582,6 +662,7 @@ and then open, in the Gitpod editor, the `hdrstats.png` image just created.
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot2.png?raw=true" width="360" />
 </details>
 
+<!-- 2L IF long -->
 > Tip: you can use **Ctrl-mousewheel** to zoom on the image in Gitpod.
 
 Look at the values of, say, the P90 percentile: it will be larger
@@ -589,7 +670,12 @@ than both the read and write corresponding percentiles given in the Astra DB
 "health" tab. That's because this time we are seeing things **from the vantage
 point of the testing client**, and the (Gitpod-to-Astra) communication over
 the network is included in the "service time".
+<!-- 2L ELIF short -->
+The timings will be larger than those from the Astra health tab: indeed,
+these are "as seen on the client side" and include more network hops.
+<!-- 2L ENDIF -->
 
+<!-- 2L IF long -->
 > Besides, the comparison
 > is made somewhat murkier by the fact that NoSQLBench measures "cycles", which
 > means reads _and_ writes in the _main_ phase; while the Astra health dashboard
@@ -598,9 +684,11 @@ the network is included in the "service time".
 > parameter to the invocation will attach a separate timer to each of the
 > named metric in the workload definition, and each of these metrics will
 > be featured e.g. in the summary file or anywhere for further inspection.
+<!-- 2L ENDIF -->
 
 #### HDR extensive histogram data
 
+<!-- 2L IF long -->
 **Second**, the `--log-histograms` option has the effect that NoSQLBench writes
 the whole of the measurements it takes in the [HDR file format](http://hdrhistogram.org/).
 
@@ -612,6 +700,10 @@ Fortunately for you, **we provide a sophisticated plotting tool**
 for this file, which may serve as inspiration or be directly used in your own benchmarks.
 
 Try running the command (run with `-h` to see more options)
+<!-- 2L ELIF short -->
+Use this script to generate plots from the detailed "HDR histogram data"
+generated during the benchmark:
+<!-- 2L ENDIF -->
 
 ```bash
 ./hdr_tool/hdr_tool.py \
@@ -637,20 +729,29 @@ and look at the `SampleData*.png` plots that are generated:
 
 </details>
 
+<!-- 2L IF long -->
 Try to locate the value for the P90 percentile in the last one: it should
 exceed the result reported by the Astra health tab by an amount essentially corresponding
 to the time for the (two-way) network communication between Gitpod and Astra. Indeed
 we are seeing things from the vantage point of the testing client, which
 runs on Gitpod: this time, the "service time" includes the time to reach
 the server (and back).
+<!-- 2L ELIF short -->
+Again, the timings are larger than reported in the Astra health tab
+(i.e. on server-side): these
+measurements are reported "as seen by the testing client".
+<!-- 2L ENDIF -->
 
+<!-- 2L IF long -->
 > **Tip**: this script is just a demonstration of the versatility of the HDR format:
 > you can invent your own post-analysis tool and attach it to the data collected by
 > NoSQLBench. Look at the (Python) source code of the tool for inspiration!
 > (Or simply take the tool and use it on your data.)
+<!-- 2L ENDIF -->
 
 ### Metrics, metrics, metrics
 
+<!-- 2L IF long -->
 On top of everything you have seen, it is possible to
 have NoSQLBench start a Grafana dashboard locally alongside the benchmark
 itself, powered behind the scenes by Prometheus-based real-time metric collection.
@@ -660,6 +761,10 @@ and Docker must be available on your system (Note: Gitpod comes with Docker prei
 
 You can try launching another benchmark as follows (note the last option
 and the fact that this time we dropped the `driver` parameter):
+<!-- 2L ELIF short -->
+Launch a new benchmark, this time having NoSQLBench start a dockerized
+Grafana/Prometheus stack for metrics (it will take a few more seconds to start):
+<!-- 2L ENDIF -->
 
 ```
 nb cql-keyvalue                                                           \
@@ -676,27 +781,37 @@ nb cql-keyvalue                                                           \
     --docker-metrics
 ```
 
+<!-- 2L IF long -->
 This command might take a few additional seconds to start the first time,
 as Docker images are being downloaded and the containers are started.
 Then, successful start of the Grafana dashboard
 should be logged, at which point the usual `cql-keyvalue` workload will start.
+<!-- 2L ENDIF -->
 
 <details><summary>Show me the run with Docker metrics</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/grafana_startingdockermetrics.png?raw=true" />
 </details>
 
+<!-- 2L IF long -->
 > It is possible that Gitpod will detect new services running on some local ports
 > and automatically open the Grafana dashboard in its mini-browser. Better to
 > ignore it and re-open the URL in a new, actual browser tab as instructed below.
+<!-- 2L ENDIF -->
 
 #### Grafana dashboard
 
+<!-- 2L IF long -->
 The Grafana container is running and exposed on local port 3000. Luckily,
 Gitpod is kind enough to map local ports to externally-accessible addresses,
 such as `https://3000-datastaxdevs-workshopnos-nq5y2jf5uw9.ws-eu38.gitpod.io`.
 Your URL will be different: to construct it, simply prepend a `3000-`
 to the domain name you are using your IDE at. Then, open this address
 in a new tab.
+<!-- 2L ELIF short -->
+Reach the Grafana container in a new tab, with an URL that has `3000-`
+in front of your Gitpod URL (e.g.
+`https://3000-datastaxdevs-workshopnos-[...].gitpod.io`).
+<!-- 2L ENDIF -->
 
 The default credentials to log in to Grafana are ... `admin/admin`. Once you're
 in, don't bother to reset your password (click "Skip"). You'll get to the Grafana
@@ -712,24 +827,33 @@ listed there. Congratulations, you are seeing the data coming from NoSQLBench.
 > seconds and the displayed time window to 5 minutes or so (upper-right controls).
 
 The dashboard comprises several (interactive) plots, updated in real time.
+<!-- 2L IF long -->
 Let's see some of them and their significance.
+<!-- 2L ENDIF -->
 
 <details><summary>Show me the dashboard contents</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/grafana_plots.png?raw=true" />
 </details>
 
+<!-- 2L IF long -->
 - **"Ops and Successful Ops"**. One-minute averages of the total operations dispatched per second by NoSQLBench. This will match the reported per-second averages found in the `*.summary` file. There are separate curves for each phase, so you will clearly see _rampup_ leaving the room to _main_ at some point during the test.
 - **"p75/p99 client overhead"**. This is related to timing of operations internal to NoSQLBench (note the scale, barely a few _micro_-seconds). You should keep an eye on those to check that the benchmarking client is not experiencing bottlenecks of sorts.
 - **"service time distribution/range"**. Here you can see percentiles for "service time" relative to the various phases. These quantities directly relate to the HDR histogram data analyzed above and should match them. Note that the "min" and "max" are denoted "p0" and "p100" here (indeed this is what they are, by definition).
+<!-- 2L ENDIF -->
 
 #### A glance at Prometheus
 
+<!-- 2L IF long -->
 If you want to look at the "raw" source of data feeding the Grafana plots,
 head to the Prometheus UI, exposed at local port 9090. If you are on Gitpod,
 similarly to what you did for Grafana earlier,
 you get there by prepend a `9090-`
 to the domain name you are using your IDE at. Then, open this address
 in a new tab.
+<!-- 2L ELIF short -->
+To reach the Prometheus container, which handles the "raw" data behind Grafana,
+open a modified URL (this time with `9090-`) in a new tab.
+<!-- 2L ENDIF -->
 
 <details><summary>Show me the Prometheus UI</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/prometheus.gif?raw=true" />
@@ -739,19 +863,26 @@ Click on the "world" icon next to the "Execute" button in the search bar:
 in the dialog that appears you can look for specific metrics.
 Try to look for `cycles_servicetime` and confirm, then click "Execute".
 
+<!-- 2L IF long -->
 The search results are many datapoints, pertaining to several metrics related
 to the service time. Still, those are for different phases and, most important,
 different measurements (percentiles, averages, counts), which does not really
 make sense to inspect together.
+<!-- 2L ENDIF -->
 
 > **Tip:** switch to the "Graph" view for a more immediate visualization.
 
+<!-- 2L IF long -->
 Fortunately, each datapoint is fully equipped with detailed metadata,
 which allow for sophisticated filtering. Further, you can use the flexible,
 powerful [query language used by Prometheus](https://prometheus.io/docs/prometheus/latest/querying/basics/)
 to even perform aggregations on top of the data queries.
+<!-- 2L ELIF short -->
+To make sense of the (heterogeneous) results, some filtering is in order --
+but we are not entering too much into the details of Prometheus here.
+<!-- 2L ENDIF -->
 
-To pique your interest, try pasting these examples and click "Execute":
+Just to pique your interest, try pasting these examples and click "Execute":
 
 ```
 # filtering by metadata
@@ -764,12 +895,15 @@ avg_over_time({__name__="cycles_servicetime"}[10m])
 max_over_time({__name__="cycles_servicetime", type="pctile", alias=~".*rampup.*"}[10m])
 ```
 
+<!-- 2L IF long -->
 Also, note that Prometheus exposes a REST access, so you can imagine, for
 instance, a running scripts that tracks the metrics and responds to them
 in real time.
+<!-- 2L ENDIF -->
 
 ## Workloads
 
+<!-- 2L IF long -->
 We mentioned that `cql-keyvalue` is one of several ready-to-use _workloads_,
 but also that you can easily build your own: for example, to test a specific
 data model or ensure you closely mimic your application's request pattern.
@@ -784,6 +918,12 @@ Phases, in turn, consist of several statements that the driver will know how to
 There is [quite some freedom](https://docs.nosqlbench.io/docs/workloads_101/00-designing-workloads/) in creating workloads: in the following
 we will just explore some of this space. Look into the reference documentation
 for more.
+<!-- 2L ELIF short -->
+This part is about how workloads are defined.
+<!-- 2L ENDIF -->
+
+> **Tip**: feel free to interrupt the previous benchmark, if it still runs,
+> with Ctrl-C. We won't need it anymore.
 
 ### Inspect "cql-keyvalue"
 
@@ -794,8 +934,6 @@ we just ran:
     nb --copy cql-keyvalue
 ```
 
-> **Tip**: feel free to interrupt the previous benchmark, if it still runs, with Ctrl-C.
-
 (you can also get a comprehensive list of all available workloads with
 `nb --list-workloads`, by the way, and a more fine-grained output with
 `nb --list-scenarios`.)
@@ -804,6 +942,7 @@ A file `cql-keyvalue.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running
 `gp open cql-keyvalue.yaml`).
 
+<!-- 2L IF long -->
 We are not going to dissect it line by line, but broadly speaking
 there are three important sections:
 
@@ -819,6 +958,10 @@ Let's try to track what happens when we invoke the `cql-keyspace astra` workload
 5. In this `INSERT` statement, also the bindings `` and `` occur: that is, you can imagine a loop with an index `i` looping over `rampup-cycles` integer values: each time the `INSERT` statement is executed, "key" and "value" will be equal to the corresponding mapping functions "evaluated at `i`".
 6. When these `rampup-cycles` `INSERT` statements are all executed, the _rampup_ phase will be done and the execution will turn to the _main_ phase. This works similarly as in the previous case, but the tag filtering this time matches _two_ operations. They will be combined in an alternating fashion, according to their `ratio` (see [here](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio) for details), with the final result, in this case, of reproducing a mixed read-write workload.
 7. The scenario will then have completed.
+<!-- 2L ELIF short -->
+Have a look at the file and try to identify its structure and the various
+phases the benchmark is organized into.
+<!-- 2L ENDIF -->
 
 ### Play with workloads
 
@@ -831,6 +974,7 @@ cd workloads
 
 #### Example 1: talking about food
 
+<!-- 2L IF long -->
 Take a look at `simple-workload.yaml`. This defines two
 [operations](https://docs.nosqlbench.io/docs/workloads_101/01-op-templates/)
 (formerly called "statements") that are to be interleaved according
@@ -841,11 +985,16 @@ operation body that depend on the cycle number
 as specified by the binding functions defined under `bindings`.
 
 Run the workload with:
+<!-- 2L ELIF short -->
+Run the first example (and then look at the corresponding
+`simple-workload.yaml`) with:
+<!-- 2L ENDIF -->
 
 ```
 nb run driver=stdout workload=simple-workload cycles=12
 ```
 
+<!-- 2L IF long -->
 The driver here is `stdout`, so each operation will simply print its body
 to screen. As you can see, these are not valid CQL statements, indeed one would
 get errors if invoking with `drivers=cql`. This is an important point: the
@@ -870,9 +1019,15 @@ of the resulting number.
 
 For a general introduction to bindings and a list of the (many) available
 functions, please see [here](https://docs.nosqlbench.io/docs/bindings/binding-concepts/).
+<!-- 2L ELIF short -->
+Look at how _bindings_ connect the sequence of operations to "execute"
+(in this case, simply print on screen) with the data to be used in
+them.
+<!-- 2L ENDIF -->
 
 #### Example 2: animal meeting
 
+<!-- 2L IF long -->
 The previous example, albeit silly, was meant to show the basics of building
 workloads.
 An important feature is the possibility to package several workflows into a
@@ -883,11 +1038,16 @@ before doing the actual _main_ benchmarking is, as we discussed earlier,
 almost universal: named scenarios have been designed with that need in mind.
 
 Try to run the following example scenario:
+<!-- 2L ELIF short -->
+Run the second example, which is an example of structuring a workload
+in _phases_ (and then open `workload-with-phases.yaml`):
+<!-- 2L ENDIF -->
 
 ```
 nb workload-with-phases default driver=stdout
 ```
 
+<!-- 2L IF long -->
 You see that here we have several clearly distinct phases taking place.
 If you inspect the structure of `workload-with-phases.yaml`, 
 you can see that the file begins by defining the `default` scenario
@@ -906,6 +1066,12 @@ inside the workload specs. Try to re-run the workload adding
 > parameters for the operations in `main`
 > divides exactly the number of cycles
 > in that phase. This sum constitutes the (["stride"](https://docs.nosqlbench.io/docs/reference/standard-metrics/#strides)).
+<!-- 2L ELIF short -->
+Notable features of this workload are its multi-phase structure
+(a nearly universal feature of actual benchmarks), the use
+of the `ratio` parameter, and the usage of template parameters in the
+definition.
+<!-- 2L ENDIF -->
 
 
 
