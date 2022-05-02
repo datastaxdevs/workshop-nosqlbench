@@ -31,9 +31,17 @@ In this repository you will find all material and references you need:
 ## Before you start
 
 > **Heads up**: these instructions are available in two forms:
+<!-- 2L IF long -->
+> a [short and to-the-point](README.md) one,
+<!-- 2L ELIF short -->
 > a short and to-the-point one (this one),
+<!-- 2L ENDIF -->
 > with just the useful commands if you are watching us live; and
+<!-- 2L IF long -->
+> a longer one (this one),
+<!-- 2L ELIF short -->
 > a [longer one](extended_README.md),
+<!-- 2L ENDIF -->
 > with lots of explanations and details, suited for those who follow this workshop
 > at their own pace. Please choose what best suits you!
 
