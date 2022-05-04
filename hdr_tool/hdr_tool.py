@@ -35,7 +35,7 @@ from output_handling import (
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 SIGNIFICANT_FIGURES = 3
 # this is set pretty low, for the plots to focus on the 'interesting' part:
-MAX_PERCENTILE_REACHED = 92.0
+MAX_PERCENTILE_REACHED = 97.5
 PLOT_POINTS_COUNT = 500
 
 

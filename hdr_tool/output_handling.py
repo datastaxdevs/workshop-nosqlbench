@@ -79,7 +79,7 @@ def plotToFigure(pType, pData, hstep, metric, fName, unitName):
             plt.plot(xs, ys, '-')
             plt.xlabel('Percentile')
             plt.ylabel('t [%s]' % unitName)
-            xticks = [i for i in range(0, 110, 10)]
+            xticks = [i for i in range(0, 100, 10)] + [95, 100]
 
             def _firstOrNone(lst):
                 return lst[0] if len(lst) > 0 else None
