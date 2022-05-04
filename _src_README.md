@@ -622,7 +622,7 @@ for `cqlkeyvalue_astra_main.result-success`.
 Under that metric title, you will see something similar to:
 
 ```
-cqlkeyvalue_astra_main.result
+cqlkeyvalue_astra_main.result-success
              count = 15000
          mean rate = 50.00 calls/second
      1-minute rate = 49.94 calls/second
