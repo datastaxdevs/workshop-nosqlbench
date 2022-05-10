@@ -580,9 +580,9 @@ and then open, in the Gitpod editor, the `hdrstats.png` image just created.
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot3.png?raw=true" width="360" />
 </details>
 
-> The version included in this repo is for **educational purposes only**:
+> The version of the plotter script included in this repo is for **educational purposes only**:
 > for general use, please head to
-> [the official release page](https://pypi.org/project/nb-hdr-plotter/)
+> [the official release page](https://pypi.org/project/nb-hdr-plotter/).
 
 > Tip: you can use **Ctrl-mousewheel** to zoom on the image in Gitpod.
 
@@ -639,9 +639,9 @@ and look at the `SampleData*.png` plots that are generated:
 
 </details>
 
-> The version included in this repo is for **educational purposes only**:
+> The version of the plotter script included in this repo is for **educational purposes only**:
 > for general use, please head to
-> [the official release page](https://pypi.org/project/nb-hdr-plotter/)
+> [the official release page](https://pypi.org/project/nb-hdr-plotter/).
 
 Try to locate the value for the P90 percentile in the last one: it should
 exceed the result reported by the Astra health tab by an amount essentially corresponding
