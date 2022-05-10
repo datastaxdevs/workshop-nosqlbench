@@ -94,7 +94,15 @@ def loadHistostats(filename):
 if __name__ == '__main__':
     # cmdline parsing
     parser = argparse.ArgumentParser(
-        description='Quickly plot "--log-histostats" output from NoSQLBench to an image.'
+        description=(
+            'Quickly plot "--log-histostats" output from NoSQLBench to an image.\n'
+            '*******************************************************************\n'
+            '****                     DEPRECATION NOTICE                    ****\n'
+            '* For production usage please head over to:                       *\n'
+            '* https://pypi.org/project/nb-hdr-plotter/                        *\n'
+            '*******************************************************************\n'
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument('filename', help='Histostats input file')
     parser.add_argument('-m', '--metric', metavar='METRICTAG', nargs=1, help='Work on the specified metric tag (interactive choice if not provided)')

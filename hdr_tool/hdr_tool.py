@@ -42,7 +42,15 @@ PLOT_POINTS_COUNT = 500
 if __name__ == '__main__':
     # cmdline parsing
     parser = argparse.ArgumentParser(
-        description='Manipulate HDR data generated in NoSQLBench.'
+        description=(
+            'Manipulate HDR data generated in NoSQLBench.\n'
+            '********************************************\n'
+            '****          DEPRECATION NOTICE        ****\n'
+            '* For production usage please head over to:*\n'
+            '* https://pypi.org/project/nb-hdr-plotter/ *\n'
+            '********************************************\n'
+        ),
+        formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument('filename', help='HDR input data')
     parser.add_argument('-i', '--inspect', help='Detailed input breakdown', action='store_true')

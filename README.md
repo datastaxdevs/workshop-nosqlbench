@@ -411,6 +411,10 @@ and then open, in the Gitpod editor, the `hdrstats.png` image just created.
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/histostats_plot3.png?raw=true" width="360" />
 </details>
 
+> The version included in this repo is for **educational purposes only**:
+> for general use, please head to
+> [the official release page](https://pypi.org/project/nb-hdr-plotter/)
+
 The timings will be larger than those from the Astra health tab: indeed,
 these are "as seen on the client side" and include more network hops.
 
@@ -438,6 +442,10 @@ generated during the benchmark:
 <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/hdr_percentileplot2.png?raw=true" width="260"/>
 
 </details>
+
+> The version included in this repo is for **educational purposes only**:
+> for general use, please head to
+> [the official release page](https://pypi.org/project/nb-hdr-plotter/)
 
 Again, the timings are larger than reported in the Astra health tab
 (i.e. on server-side): these
