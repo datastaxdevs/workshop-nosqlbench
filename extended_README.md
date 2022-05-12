@@ -4,6 +4,8 @@
 [![License Apache2](https://img.shields.io/hexpm/l/plug.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Discord](https://img.shields.io/discord/685554030159593522)](https://discord.com/widget?id=685554030159593522&theme=dark)
 
+<img src="images/nosqlbench_banner.png?raw=true" />
+
 Time: *2 hours*. Difficulty: *Intermediate*. [Start Building!](#create-your-astra-db-instance)
 
 The goal of this workshop is to get you familiar with the powerful and versatile
@@ -24,8 +26,6 @@ In this repository you will find all material and references you need:
 - [step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
 - [our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
-
-<img src="images/nosqlbench_banner.png?raw=true" />
 
 #### Table of Contents
 
