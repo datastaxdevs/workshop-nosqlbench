@@ -3,7 +3,7 @@ tasks:
     before: |
       sudo apt install -y fuse
       sudo apt-get install -y python3.8-dev
-      cd /workspace/nbws1
+      cd /workspace/workshop-nosqlbench
       python -m pip install --upgrade pip
       pip install -r hdr_tool/requirements.txt
     command: |

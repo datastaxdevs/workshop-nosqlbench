@@ -1,21 +1,31 @@
 # Benchmark your Astra DB with NoSQLBench
 
-The goal of this workshop is to get you familiar with the powerful and versatile
-tool `NoSQLBench`. With that, you can perform industry-grade, robust benchmarks
-aimed at several (distributed) target systems, especially NoSQL databases.
+[![Gitpod hands-on](https://img.shields.io/badge/Gitpod-hands--on-blue?logo=gitpod)](https://gitpod.io/#https://github.com/datastaxdevs/workshop-nosqlbench)
+[![License Apache2](https://img.shields.io/hexpm/l/plug.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Discord](https://img.shields.io/discord/685554030159593522)](https://discord.com/widget?id=685554030159593522&theme=dark)
 
-Today we are going to benchmark Astra DB, a database-as-a-service built on top of
+Time: *2 hours*. Difficulty: *Intermediate*. [Start Building!](#create-your-astra-db-instance)
+
+The goal of this workshop is to get you familiar with the powerful and versatile
+tool **[`NoSQLBench`](https://docs.nosqlbench.io/)**. With that, you can perform
+**industry-grade, robust benchmarks
+aimed at several (distributed) target systems, especially NoSQL databases**.
+
+Today you'll be benchmarking Astra DB, a database-as-a-service built on top of
 Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
 In this repository you will find all material and references you need:
 
 - [slide deck](#)
-- [exercises](#create-your-astra-db-instance)
+- [NoSQLBench Discord](https://discord.gg/dBHRakusMN)
+- [NoSQLBench homepage](https://docs.nosqlbench.io/)
 - [workshop video](#)
+- [exercises](#create-your-astra-db-instance)
 - [step-by-step guide](#before-you-start)
-- [additional references](#)
-- [our Discord server](https://dtsx.io/discord) for keeping in touch with DataStax Developers
+- [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
 - [our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
+
+<img src="images/nosqlbench_banner.png?raw=true" />
 
 #### Table of Contents
 
@@ -45,14 +55,14 @@ In this repository you will find all material and references you need:
 
 - What are the prerequisites?
 
-> This workshop is aimed at data architects, solution architects or anybody who
+> This workshop is aimed at data architects, solution architects, developers, or anybody who
 > wants to get serious about measuring the performance of their data-intensive system.
 > You should know what a (distributed) database is, and have a general understanding of the
 > challenges of communicating over a network.
 
 - Do I need to install a database or anything on my machine?
 
-> No, no need to install anything. We will do everything in the browser.
+> No, no need to install anything. You will do everything in the browser.
 > (That being said, the knowledge you gain today will probably be best put to
 > use once you install NoSQLBench on some client machine to run tests.)
 
@@ -63,7 +73,7 @@ In this repository you will find all material and references you need:
 
 - Is there anything to pay?
 
-> **No.** All materials, services and software we'll use today is _free_.
+> **No.** All materials, services and software used in this workshop is _free_.
 
 
 ### Homework
@@ -80,15 +90,15 @@ follow these instructions:
 
 ## Create your Astra DB instance
 
-First let's create a database: an instance of Astra DB, which
-we will then benchmark with NoSQLBench.
+First you must create a database: an instance of Astra DB, which
+you will then benchmark with NoSQLBench.
 
-> Don't worry, we will create
+> Don't worry, you will create
 > it within the "Free Tier", which offers quite a generous free
 > allowance in terms of monthly I/O (about 40M operations per month)
 > and storage (80 GB).
 
-You will need to:
+You need to:
 
 - create an Astra DB instance [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-instance/#c-procedure), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
 - generate and download a Secure Connect Bundle [as explained here](https://awesome-astra.github.io/docs/pages/astra/download-scb/#c-procedure);
@@ -122,7 +132,7 @@ chmod +x nb
 sudo mv nb /usr/local/bin/
 ```
 
-Ok, let's check that the program starts: invoking
+Ok, now check that the program starts: invoking
 ```bash
 nb --version
 ```
@@ -132,11 +142,11 @@ should output the program version (something like `4.15.91` or higher).
 ### Upload the Secure Connect Bundle to Gitpod
 
 
-Locate the bundle file that you downloaded earlier on your computer
-with the file explorer
-(it will probably be called something like `secure-connect-workshops.zip`
-and be around 12 KB in size) and simply **drag-and-drop** it to
-the file navigator panel ("Explorer") on the left of the Gitpod view.
+Locate, with the file explorer on your computer, the bundle file that
+you downloaded earlier (it should be called
+`secure-connect-workshops.zip`)
+and simply **drag-and-drop** it to the file navigator panel
+("Explorer") on the left of the Gitpod view.
 
 <details><summary>Show me</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/gitpod_uploading_bundle_1_annotated.png?raw=true" />
@@ -149,7 +159,7 @@ ls /workspace/workshop-nosqlbench/secure*zip -lh
 ```
 
 so that you get the _absolute path to your bundle file_ (and also verify that it is
-the correct size).
+the correct size, about 12-13 KB).
 
 <details><summary>Show me</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/gitpod_uploading_bundle_2b_annotated.png?raw=true" />
@@ -171,7 +181,7 @@ gp open .env
 Insert the "Client ID" and "Client Secret" of the DB Token you created earlier
 and, if necessary, adjust the other variables.
 
-<details><summary>Show me what the .env file could look like</summary>
+<details><summary>Show me what the .env file would look like</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/dotenv2.png?raw=true" />
 </details>
 
@@ -216,9 +226,7 @@ one `CREATE TABLE`, then ten `INSERT`s
 and then another ten between `SELECT`s and further `INSERT`s.
 
 
-Now re-launch the above dry run (you may find it convenient to copy the few
-last lines of the output to a temporary file in the Gitpod editor for an easier
-comparison):
+Now re-launch the above dry run and look for differences in the output:
 
 ```bash
 nb cql-keyvalue astra                   \
@@ -238,12 +246,12 @@ populated with some information from the benchmark at each execution of `nb`.
 
 It is now time to start hitting the database!
 
-This time we will have `driver=cql` to actually reach the database:
-for that to work, we will provide all connections parameters we set up earlier.
+This time you will run with `driver=cql` to actually reach the database:
+for that to work, you will provide all connections parameters set up earlier.
 
 
-We will ask NoSQLBench to perform a substantial amount of operations, so to have
-enough statistical support for the results.
+The next run will ask NoSQLBench to perform a substantial amount of operations,
+in order to collect enough statistical support for the results.
 
 
 Here is the full command to launch:
@@ -297,7 +305,7 @@ The benchmark should last about ten minutes, with the progress being
 printed on the console as it proceeds.
 
 
-While this runs, let's have a look around.
+While this runs, have a look around.
 
 #### Database contents
 
@@ -318,7 +326,7 @@ Start by telling the console that you will be using the `nbkeyspace` keyspace:
 USE nbkeyspace;
 ```
 
-Check what tables have been created in this keyspace:
+Check what tables have been created by NoSQLBench in this keyspace:
 ```
 DESC TABLES;
 ```
@@ -329,12 +337,12 @@ Look at a a few lines from this table:
 SELECT * FROM keyvalue LIMIT 20;
 ```
 
-<details><summary>Show me how the output looks like</summary>
+<details><summary>Show me what the output looks like</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/select_cql.png?raw=true" />
 </details>
 
 Ok, mystery solved. It looks like the table contains simple key-value pairs,
-with two columns seemingly of numeric type. Let's check:
+with two columns seemingly of numeric type. Check with:
 ```
 DESC TABLE keyvalue;
 ```
@@ -447,7 +455,7 @@ generated during the benchmark:
 > for general use, please head to
 > [the official release page](https://pypi.org/project/nb-hdr-plotter/).
 
-Again, the timings are larger than reported in the Astra health tab
+Again, the timings are larger than those found on the Astra health tab
 (i.e. on server-side): these
 measurements are reported "as seen by the testing client".
 
@@ -543,12 +551,12 @@ max_over_time({__name__="result_success", type="pctile", alias=~".*main.*"}[10m]
 This part is about how workloads are defined.
 
 > **Tip**: feel free to interrupt the previous benchmark, if it still runs,
-> with Ctrl-C. We won't need it anymore.
+> with Ctrl-C. You won't need it anymore.
 
 ### Inspect "cql-keyvalue"
 
-We can ask NoSQLBench to dump to a file the `yaml` defining the workload
-we just ran:
+Ask NoSQLBench to dump to a file the `yaml` defining the workload
+you just ran:
 
 ```bash
     nb --copy cql-keyvalue
