@@ -595,11 +595,6 @@ To run the following examples please go to the appropriate subdirectory:
 cd workloads
 ```
 
-_Note_: we provide an "nb4-style" version of the two workload yaml files
-available as well. You can run them with nb4 as well as nb5
-(e.g. `nb run workload=simple-workload-nb4 [...]`)
-and the output will be identical. You should probably look forward and prefer
-the newer syntax ("map form") when building new workloads.
 
 #### Example 1: talking about food
 

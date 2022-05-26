@@ -892,11 +892,13 @@ To run the following examples please go to the appropriate subdirectory:
 cd workloads
 ```
 
-_Note_: we provide an "nb4-style" version of the two workload yaml files
-available as well. You can run them with nb4 as well as nb5
-(e.g. `nb run workload=simple-workload-nb4 [...]`)
-and the output will be identical. You should probably look forward and prefer
-the newer syntax ("map form") when building new workloads.
+_Note_: You will find `*-nb4.yaml` files for the example
+workload yamls. These are written with the previous ("list") style syntax
+and can be run in the same way
+(e.g. `nb run workload=simple-workload-nb4 [...]`),
+yielding the same result. Still, when creating new workloads you
+will probably stick to the newer "map" style as exemplified in the primary
+yaml files provided here.
 
 #### Example 1: talking about food
 
