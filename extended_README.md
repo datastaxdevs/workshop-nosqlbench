@@ -883,6 +883,21 @@ Try to track what happens when you invoke the `cql-keyspace astra` workload/scen
 6. When these `rampup-cycles` `INSERT` statements are all executed, the _rampup_ phase will be done and the execution will turn to the _main_ phase. The tag filtering this time matches _two_ operations. They will be combined in an alternating fashion, according to their `ratio` (see [here](https://docs.nosqlbench.io/docs/reference/core-op-params/#ratio) for details), with the final result, in this case, of reproducing a mixed read-write workload.
 7. The scenario will then have completed.
 
+_Note_: The yaml file corresponding to this workload (embedded in NoSQLBench)
+is an egregious example of the improvements in the workload syntax. You can
+inspect the yaml shipping with nb4 and nb5 (provided in this repo for
+your convenience) and observe the differences:
+
+- One can do without "tags" and, since lists are generally replaced by key-value (ordered) maps, use the keys themselves to refer to phases;
+- In a style called "type-and-target", the fact that, for example, a statement is _prepared_ (a Cassandra-specific concept) is expressed directly with the key/value relationship in a map;
+- Operation-specific properties (such as `ratio`) are next to the statement body, and in general information logically pertaining to the same item stays packed together;
+- The map-based syntax allows for a way more synthetic workload definition yaml.
+
+
+<details><summary>(DRAFT IMAGE) Show me the differences</summary>
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5_DRAFT.png?raw=true" />
+</details>
+
 ### Play with workloads
 
 A good way to understand workload construction is to start from simple ones.
@@ -892,13 +907,14 @@ To run the following examples please go to the appropriate subdirectory:
 cd workloads
 ```
 
-_Note_: You will find `*-nb4.yaml` files for the example
-workload yamls. These are written with the previous ("list") style syntax
-and can be run in the same way
-(e.g. `nb run workload=simple-workload-nb4 [...]`),
-yielding the same result. Still, when creating new workloads you
-will probably stick to the newer "map" style as exemplified in the primary
-yaml files provided here.
+_Note_: The two example yaml files that follow are also provided
+in the "nb4 list-based syntax" (as `*-nb4.yaml` files).
+In general, the modern map-based syntax is not guaranteed to be
+parseable by NoSQLBench 4;
+however, for these rather simple examples, it turns out that you can
+indeed run e.g. `nb run workload=simple-workload-nb4 [...]` obtaining
+the very same result as with the "modern" yaml regardless of the version
+of NoSQLBench.
 
 #### Example 1: talking about food
 

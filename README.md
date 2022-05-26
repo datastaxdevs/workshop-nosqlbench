@@ -586,6 +586,13 @@ You can open it (clicking on it in the Gitpod explorer or by running
 Have a look at the file and try to identify its structure and the various
 phases the benchmark is organized into.
 
+There are profound differences in the way the same workload is expressed
+in the NoSQLBench 4 yaml file and the NoSQLBench 5 format.
+
+<details><summary>(DRAFT IMAGE) Show me the differences</summary>
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5_DRAFT.png?raw=true" />
+</details>
+
 ### Play with workloads
 
 A good way to understand workload construction is to start from simple ones.
