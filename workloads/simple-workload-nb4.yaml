@@ -7,13 +7,7 @@ bindings:
  month: WeightedStrings('June:0.2;May:0.3;April:0.1;September:0.04')
  insult: AddHashRange(1000); Combinations('!@#$%^&*;!@#$%^&*;!@#$%^&*;!@#$%^&*')
 ops:
-  op1:
-    op:
-      stmt: "{counter}. Eating {adjective} {food} in {month}, I {verb}: \"These {food} truly are {adjective}!\"\n"
-    params:
-      ratio: 3
-  op2:
-    op:
-      stmt: "{counter}. If you tell me that {food} are {adjective}, to thee I yell: \"{insult}!\"\n"
-    params:
-      ratio: 1
+ - ratio: 3
+   stmt: "{counter}. Eating {adjective} {food} in {month}, I {verb}: \"These {food} truly are {adjective}!\"\n"
+ - ratio: 1
+   stmt: "{counter}. If you tell me that {food} are {adjective}, to thee I yell: \"{insult}!\"\n"

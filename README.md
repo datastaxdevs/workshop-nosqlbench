@@ -130,7 +130,8 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 
 To download NoSQLBench, type or paste this command in your Gitpod console:
 ```bash
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb
+# Note: at the moment we aim at a specific nb5 (a.k.a. "4.17.*") version - soon to change
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.14/nb
 ```
 
 then make it executable and move it to a better place:
@@ -143,7 +144,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb --version
 ```
-should output the program version (something like `4.15.91` or higher).
+should output the program version (something like `4.17.14` or higher - _soon to change_).
 
 
 #### Version used
@@ -593,6 +594,12 @@ To run the following examples please go to the appropriate subdirectory:
 ```
 cd workloads
 ```
+
+_Note_: we provide an "nb4-style" version of the two workload yaml files
+available as well. You can run them with nb4 as well as nb5
+(e.g. `nb run workload=simple-workload-nb4 [...]`)
+and the output will be identical. You should probably look forward and prefer
+the newer syntax ("map form") when building new workloads.
 
 #### Example 1: talking about food
 

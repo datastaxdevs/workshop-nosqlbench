@@ -180,7 +180,8 @@ you can obtain the latest stable binary (it's a few hundred megabytes) with
 To download NoSQLBench, type or paste this command in your Gitpod console:
 <!-- 2L ENDIF -->
 ```bash
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb
+# Note: at the moment we aim at a specific nb5 (a.k.a. "4.17.*") version - soon to change
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.14/nb
 ```
 
 <!-- 2L IF long -->
@@ -198,7 +199,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb --version
 ```
-should output the program version (something like `4.15.91` or higher).
+should output the program version (something like `4.17.14` or higher - _soon to change_).
 
 <!-- 2L IF long -->
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
@@ -471,10 +472,13 @@ run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/referenc
 > _Note_: if you were targeting a "regular" Cassandra instance (as opposed to Astra DB),
 > the command line above would change a little: the scenario would be `default`,
 > you would need to provide a parameter such as `hosts=192.168.1.1,192.168.1.2`,
-> and there would be _no_ `secureconnectbundle` parameter. As for username and password,
+> and you would have additionally to provide a parameter `localdc=datacenter1`
+> (change to reflect the name of one of your Cassandra datacenters). The latter
+> is required starting from NoSQLBench 5, but is a good practice with earlier versions too.
+> Further, there would be _no_ `secureconnectbundle` parameter. As for username and password,
 > ... well, that depends on how the Cassandra cluster is configured.
-> Moreover, in the next steps, you will have to look at metric with "default"
-> in their name instead of "astra".
+> As far as benchmark results are concerned, in the next steps you will have to
+> look at metric with "default" in their name instead of "astra".
 > Note that NoSQLBench uses the very same CQL drivers to
 > access the database, regardless of whether Astra DB or a Cassandra cluster.
 
@@ -1036,6 +1040,12 @@ To run the following examples please go to the appropriate subdirectory:
 ```
 cd workloads
 ```
+
+_Note_: we provide an "nb4-style" version of the two workload yaml files
+available as well. You can run them with nb4 as well as nb5
+(e.g. `nb run workload=simple-workload-nb4 [...]`)
+and the output will be identical. You should probably look forward and prefer
+the newer syntax ("map form") when building new workloads.
 
 #### Example 1: talking about food
 
