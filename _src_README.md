@@ -18,14 +18,14 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
 In this repository you will find all material and references you need:
 
-- [slide deck](#)
+- [Slide deck](#)
 - [NoSQLBench Discord](https://discord.gg/dBHRakusMN)
 - [NoSQLBench homepage](https://docs.nosqlbench.io/)
-- [workshop video](#)
-- [exercises](#create-your-astra-db-instance)
-- [step-by-step guide](#before-you-start)
+- [Workshop video](#)
+- [Exercises](#create-your-astra-db-instance)
+- [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
-- [our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
+- [Our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
 
 #### Table of Contents
 
@@ -92,6 +92,13 @@ for more coverage of the theory part. There, you will learn more about:
 
 > **No.** All materials, services and software used in this workshop is _free_.
 
+- Do you cover NoSQLBench 4 or 5?
+
+> Ah, I see you are a connoisseur. We focus on the newly-release **NoSQLBench 5**,
+> but we provide tips and remarks aimed at those still using nb4.
+<!-- 2L IF long -->
+> See [here](#version-used) for a bit of context.
+<!-- 2L ENDIF -->
 
 ### Homework
 
@@ -104,6 +111,8 @@ follow these instructions:
 2. (optional) Complete the "Lab" assignment as detailed [here](homework/homework.md);
 3. Fill the submission form [here](#). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
 4. give us a few days to process your submission: you should receive your well-earned badge in your email inbox!
+
+
 
 ## Create your Astra DB instance
 
@@ -156,6 +165,7 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 > experience with VSCode. Feel free to play around a bit!
 <!-- 2L ENDIF -->
 
+
 ### Install NoSQLBench
 
 <!-- 2L IF long -->
@@ -201,6 +211,35 @@ should output the program version (something like `4.15.91` or higher).
 > installation.
 
 <!-- 2L ENDIF -->
+
+#### Version used
+
+This workshop is built for the newly-released NoSQLBench 5.
+<!-- 2L IF long -->
+Compared to
+version 4, there are many differences both under the hood and for the user.
+We will provide tips and remarks to help users of version 4 as well throughout
+the following.
+
+<details><summary>Tell me more</summary>
+
+NoSQLBench 5 comes with a completely redesigned architecture for drivers,
+which grants _all_ drivers (present and future) a set of nice features for free
+and makes it easier to develop new ones.
+
+On a more user-facing side, among several improvements,
+the error handling logic has been enhanced; the workload
+`yaml` syntax has been streamlined; new and upgraded drivers are available
+for various databases.
+
+Great care has been taken to maintain backward compatibility (e.g. in the
+workload yaml syntax); in the following, some of the most relevant
+changes will be highlighted, especially concerning the workload syntax,
+to support users of version 4 as well.
+
+</details>
+<!-- 2L ENDIF -->
+
 
 ### Upload the Secure Connect Bundle to Gitpod
 

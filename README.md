@@ -18,14 +18,14 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
 In this repository you will find all material and references you need:
 
-- [slide deck](#)
+- [Slide deck](#)
 - [NoSQLBench Discord](https://discord.gg/dBHRakusMN)
 - [NoSQLBench homepage](https://docs.nosqlbench.io/)
-- [workshop video](#)
-- [exercises](#create-your-astra-db-instance)
-- [step-by-step guide](#before-you-start)
+- [Workshop video](#)
+- [Exercises](#create-your-astra-db-instance)
+- [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
-- [our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
+- [Our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
 
 #### Table of Contents
 
@@ -75,6 +75,10 @@ In this repository you will find all material and references you need:
 
 > **No.** All materials, services and software used in this workshop is _free_.
 
+- Do you cover NoSQLBench 4 or 5?
+
+> Ah, I see you are a connoisseur. We focus on the newly-release **NoSQLBench 5**,
+> but we provide tips and remarks aimed at those still using nb4.
 
 ### Homework
 
@@ -87,6 +91,8 @@ follow these instructions:
 2. (optional) Complete the "Lab" assignment as detailed [here](homework/homework.md);
 3. Fill the submission form [here](#). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
 4. give us a few days to process your submission: you should receive your well-earned badge in your email inbox!
+
+
 
 ## Create your Astra DB instance
 
@@ -119,6 +125,7 @@ In a few minutes, a full IDE will be ready in your browser, with a file
 explorer on the left, a file editor on the top, and a console (`bash`) below it.
 
 
+
 ### Install NoSQLBench
 
 To download NoSQLBench, type or paste this command in your Gitpod console:
@@ -137,6 +144,11 @@ Ok, now check that the program starts: invoking
 nb --version
 ```
 should output the program version (something like `4.15.91` or higher).
+
+
+#### Version used
+
+This workshop is built for the newly-released NoSQLBench 5.
 
 
 ### Upload the Secure Connect Bundle to Gitpod
