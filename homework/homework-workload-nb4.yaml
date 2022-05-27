@@ -1,8 +1,8 @@
 scenarios:
   astra:
-    schema: run driver=cql tags==block:schema threads==1 cycles==UNDEF
-    rampup: run driver=cql tags==block:rampup cycles===TEMPLATE(rampup-cycles,1000) threads=auto
-    main: run driver=cql tags==block:main cycles===TEMPLATE(main-cycles,1000) threads=auto
+    schema: run driver=cql tags==phase:schema threads==1 cycles==UNDEF
+    rampup: run driver=cql tags==phase:rampup cycles===TEMPLATE(rampup-cycles,1000) threads=auto
+    main: run driver=cql tags==phase:main cycles===TEMPLATE(main-cycles,1000) threads=auto
 bindings:
   bind0: Mod(1000000); ToHashedUUID()
   bind1: AddHashRange(86400); Mul(1000); StartingEpochMillis('2022-04-01 00:00:00'); ToDateTime()
@@ -15,18 +15,22 @@ bindings:
   bind8: Mod(20000); Combinations('u;s;e;r;_;0-9;0-9;A-Z')
   bind9: Mod(5000); Combinations('u;s;e;r;_;0-9;0-9;A-Z')
 blocks:
-  schema:
-    ops:
-      create-table-users:
-        stmt: |
+  - name: schema
+    tags:
+      phase: schema
+    params:
+      prepared: false
+    statements:
+      - create-table-users: |
           CREATE TABLE IF NOT EXISTS <<keyspace:homework>>.husers
             (
               userid TEXT PRIMARY KEY,
               username TEXT,
               phonenumber TEXT
             );
-      create-table-images:
-        stmt: |
+        tags:
+          name: create-table-users
+      - create-table-images: |
           CREATE TABLE IF NOT EXISTS <<keyspace:homework>>.himages
             (
               userid TEXT,
@@ -34,36 +38,42 @@ blocks:
               imagefile TEXT,
               PRIMARY KEY ((userid), imageid)
             );
-  rampup:
-    ops:
-      write-users:
-        stmt: |
+        tags:
+          name: create-table-images
+  - name: rampup
+    tags:
+      phase: rampup
+    params:
+      prepared: true
+    statements:
+      - write-users: |
           INSERT INTO <<keyspace:homework>>.husers
             (userid, username, phonenumber)
           VALUES
             ({???}, {???}, {???});
-        params:
-          prepared: true
-      write-images:
-        stmt: |
+        tags:
+          name: write-users
+      - write-images: |
           INSERT INTO <<keyspace:homework>>.himages
             (userid, imageid, imagefile)
           VALUES
             ({???}, {???}, {???});
-        params:
-          prepared: true
-  main:
-    ops:
-      read-user:
-        stmt: |
+        tags:
+          name: write-images
+  - name: main
+    tags:
+      phase: main
+    params:
+      prepared: true
+    statements:
+      - read-user: |
           SELECT * FROM <<keyspace:homework>>.husers
             WHERE userid={???};
-        params:
-          prepared: true
-      read-images:
-        stmt: |
+        tags:
+          name: read-user
+      - read-image: |
           SELECT * FROM <<keyspace:homework>>.himages
             WHERE userid={???}
             AND imageid={???};
-        params:
-          prepared: true
+        tags:
+          name: read-image

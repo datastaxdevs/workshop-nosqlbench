@@ -3,4 +3,5 @@ __pycache__
 secure-connect-*.zip
 logs/*
 workloads/logs/*
+workloads/cql-keyvalue-versions/logs/*
 homework/logs/*

@@ -1034,13 +1034,14 @@ phases the benchmark is organized into.
 
 <!-- 2L IF long -->
 _Note_: The yaml file corresponding to this workload (embedded in NoSQLBench)
-is an egregious example of the improvements in the workload syntax. You can
-inspect the yaml shipping with nb4 and nb5 (provided in this repo for
-your convenience) and observe the differences:
+is an egregious example of the improvements in the workload syntax offered in version 5.
+You can inspect the yaml files shipping with nb4 and nb5 (both
+[provided in this repo](workloads/cql-keyvalue-versions/)
+for your convenience) and observe the differences:
 
-- One can do without "tags" and, since lists are generally replaced by key-value (ordered) maps, use the keys themselves to refer to phases;
-- In a style called "type-and-target", the fact that, for example, a statement is _prepared_ (a Cassandra-specific concept) is expressed directly with the key/value relationship in a map;
-- Operation-specific properties (such as `ratio`) are next to the statement body, and in general information logically pertaining to the same item stays packed together;
+- One can do without "tags" and, since lists are generally replaced by key-value (ordered) maps, use the keys themselves to refer to blocks of operations in defining phases;
+<!-- - In a style called "type-and-target", the fact that, for example, a statement is _prepared_ (a Cassandra-specific concept) is expressed directly with the key/value relationship in a map; -->
+- Operation-specific parameters (such as `ratio`) are next to the statement body, and in general information logically pertaining to the same item stays packed together;
 - The map-based syntax allows for a way more synthetic workload definition yaml.
 
 <!-- 2L ELIF short -->

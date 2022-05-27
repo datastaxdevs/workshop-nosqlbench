@@ -22,7 +22,7 @@ The load you are to benchmark unfolds as follows:
 - then, in the actual main phase, only reads must take place, from both tables at the same frequency. You have been asked to make sure the reads also try to retrieve rows that cannot possibly exist.
 
 The provided workload file already does most of the job: it creates the tables,
-it sort-of-writes data to them, and it sort-of performs the reads.
+it sort-of-writes data to them, and it sort-of-performs the reads.
 
 #### Your tasks:
 
@@ -62,6 +62,7 @@ that would be something like:
 nb homework-workload astra  \
   driver=cql                \
   hosts=192.168.1.100       \
+  localdc=datacenter1       \
   keyspace=nbkeyspace       \
   rampup-cycles=1000        \
   main-cycles=1000          \
