@@ -112,6 +112,8 @@ you will then benchmark with NoSQLBench.
 > allowance in terms of monthly I/O (about 40M operations per month)
 > and storage (80 GB).
 
+<a href="https://astra.datastax.com"><img src="images/create_astra_db.png?raw=true" /></a>
+
 You need to:
 
 - create an Astra DB instance [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-instance/#c-procedure), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
