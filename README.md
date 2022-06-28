@@ -592,7 +592,7 @@ There are profound differences in the way the same workload is expressed
 in the NoSQLBench 4 yaml file and the NoSQLBench 5 format.
 
 <details><summary>(DRAFT IMAGE) Show me the differences</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5_DRAFT.png?raw=true" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5_DRAFT2.png?raw=true" />
 </details>
 
 ### Play with workloads
