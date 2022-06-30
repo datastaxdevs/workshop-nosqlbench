@@ -229,7 +229,7 @@ reaching the database simply prints a series of CQL statements to the console
 (as specified by the `driver=stdout` parameter):
 
 ```bash
-nb cql-keyvalue astra                   \
+nb cql-keyvalue2 astra                  \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -240,11 +240,17 @@ You will see 21 (fully-formed, valid CQL) statements being printed:
 one `CREATE TABLE`, then ten `INSERT`s
 and then another ten between `SELECT`s and further `INSERT`s.
 
+> **Note**: we will use workload `cql-keyvalue2` throughout. This is functionally
+> identical to the `cql-keyvalue` workload but is expressed in the newer syntax for
+> `yaml` workloads, which comes handy when later dissecting its content.
+> If you are working with NoSQLBench 4, remember to drop the trailing `2`
+> from the workload name in the following!
+
 
 Now re-launch the above dry run and look for differences in the output:
 
 ```bash
-nb cql-keyvalue astra                   \
+nb cql-keyvalue2 astra                  \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -272,7 +278,7 @@ in order to collect enough statistical support for the results.
 Here is the full command to launch:
 
 ```bash
-nb cql-keyvalue                                                           \
+nb cql-keyvalue2                                                          \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -282,7 +288,7 @@ nb cql-keyvalue                                                           \
     driver=cql                                                            \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
-    errors=count                                                          \
+    errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
     --log-histograms 'histogram_hdr_data.log:.*.main.result*:20s'         \
     --log-histostats 'hdrstats.log:.*.main.result.*:20s'
@@ -294,7 +300,7 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 
 | command                   | meaning                                      |
 |---------------------------|----------------------------------------------|
-| `cql-keyvalue`            | workload
+| `cql-keyvalue2`           | workload
 | `astra`                   | scenario
 | `username`                | authentication
 | `password`                | authentication
@@ -307,11 +313,17 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `errors`                  | behaviour if errors occur during benchmarking
 | `--progress console`      | frequency of console prints
 | `--log-histograms`        | write data to HDR file (see later)
-| `--log-histostats`        | write some more stats to this file
+| `--log-histostats`        | write some basic stats to a file (see later)
 
 This way of invoking `nb`, the ["named scenario"](https://docs.nosqlbench.io/docs/workloads_101/11-named-scenarios/)
 way, is not the only one: it is also possible to have a finer-grained control over what activities should
 run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/reference/cli-scripting/) syntax.
+
+>**Note**: the syntax of the `errors` parameter has been improved in NoSQLBench 5
+> to allow for a [finer control](https://docs.nosqlbench.io/docs/reference/error-handlers/) (with multiple directives,
+> such as `errors='NoNodeAvailable.*:ignore;InvalidQueryException.*:counter;OverloadedException:warn'`).
+> On version 4 you should revert to a simpler parameter,
+> such as `errors=count`, instead of the above.
 
 </details>
 
@@ -387,7 +399,7 @@ and take note of some of the percentiles shown there.
 
 <details><summary>Show me "sample values" one could read from the graph</summary>
 
-Below is a real-life example of the values that could result from a `cql-keyvalue`
+Below is a real-life example of the values that could result from a `cql-keyvalue2`
 benchmark session in the _main_ phase:
 
 | Percentile  | Write Latency  | Read Latency   |
@@ -481,7 +493,7 @@ Launch a new benchmark, this time having NoSQLBench start a dockerized
 Grafana/Prometheus stack for metrics (it will take a few more seconds to start):
 
 ```
-nb cql-keyvalue                                                           \
+nb cql-keyvalue2                                                          \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -490,7 +502,7 @@ nb cql-keyvalue                                                           \
     cyclerate=50                                                          \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
-    errors=count                                                          \
+    errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
     --docker-metrics
 ```
@@ -574,16 +586,16 @@ Ask NoSQLBench to dump to a file the `yaml` defining the workload
 you just ran:
 
 ```bash
-    nb --copy cql-keyvalue
+    nb --copy cql-keyvalue2
 ```
 
 _(you can also get a comprehensive list of all available workloads with
 `nb --list-workloads`, by the way, and a more fine-grained output with
 `nb --list-scenarios`.)_
 
-A file `cql-keyvalue.yaml` is created in the working directory.
+A file `cql-keyvalue2.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running
-`gp open cql-keyvalue.yaml`).
+`gp open cql-keyvalue2.yaml`).
 
 Have a look at the file and try to identify its structure and the various
 phases the benchmark is organized into.

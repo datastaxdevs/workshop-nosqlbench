@@ -342,7 +342,7 @@ reaching the database simply prints a series of CQL statements to the console
 (as specified by the `driver=stdout` parameter):
 
 ```bash
-nb cql-keyvalue astra                   \
+nb cql-keyvalue2 astra                  \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -353,9 +353,15 @@ You will see 21 (fully-formed, valid CQL) statements being printed:
 one `CREATE TABLE`, then ten `INSERT`s
 and then another ten between `SELECT`s and further `INSERT`s.
 
+> **Note**: we will use workload `cql-keyvalue2` throughout. This is functionally
+> identical to the `cql-keyvalue` workload but is expressed in the newer syntax for
+> `yaml` workloads, which comes handy when later dissecting its content.
+> If you are working with NoSQLBench 4, remember to drop the trailing `2`
+> from the workload name in the following!
+
 <!-- 2L IF long -->
 These three blocks correspond
-to the three phases defined in the `cql-keyvalue` _workload_: **schema**,
+to the three phases defined in the `cql-keyvalue2` _workload_: **schema**,
 **rampup** and **main**. The most relevant benchmark results are from the
 **main** phase, which mimics the kind of load the database would be subject to
 when operating normally.
@@ -371,7 +377,7 @@ when operating normally.
 Now re-launch the above dry run and look for differences in the output:
 
 ```bash
-nb cql-keyvalue astra                   \
+nb cql-keyvalue2 astra                  \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -397,7 +403,7 @@ populated with some information from the benchmark at each execution of `nb`.
 
 It is now time to start hitting the database!
 <!-- 2L IF long -->
-What you launched earlier is the `cql-keyvalue` _workload_, one of the several
+What you launched earlier is the `cql-keyvalue2` _workload_, one of the several
 ready-to-use workloads included with NoSQLBench.
 In particular, you ran the `astra` _scenario_, which determines a particular
 way the workload is to be unfolded and executed.
@@ -431,7 +437,7 @@ in order to collect enough statistical support for the results.
 Here is the full command to launch:
 
 ```bash
-nb cql-keyvalue                                                           \
+nb cql-keyvalue2                                                          \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -441,7 +447,7 @@ nb cql-keyvalue                                                           \
     driver=cql                                                            \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
-    errors=count                                                          \
+    errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
     --log-histograms 'histogram_hdr_data.log:.*.main.result*:20s'         \
     --log-histostats 'hdrstats.log:.*.main.result.*:20s'
@@ -453,7 +459,7 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 
 | command                   | meaning                                      |
 |---------------------------|----------------------------------------------|
-| `cql-keyvalue`            | workload
+| `cql-keyvalue2`           | workload
 | `astra`                   | scenario
 | `username`                | authentication
 | `password`                | authentication
@@ -466,11 +472,17 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `errors`                  | behaviour if errors occur during benchmarking
 | `--progress console`      | frequency of console prints
 | `--log-histograms`        | write data to HDR file (see later)
-| `--log-histostats`        | write some more stats to this file
+| `--log-histostats`        | write some basic stats to a file (see later)
 
 This way of invoking `nb`, the ["named scenario"](https://docs.nosqlbench.io/docs/workloads_101/11-named-scenarios/)
 way, is not the only one: it is also possible to have a finer-grained control over what activities should
 run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/reference/cli-scripting/) syntax.
+
+>**Note**: the syntax of the `errors` parameter has been improved in NoSQLBench 5
+> to allow for a [finer control](https://docs.nosqlbench.io/docs/reference/error-handlers/) (with multiple directives,
+> such as `errors='NoNodeAvailable.*:ignore;InvalidQueryException.*:counter;OverloadedException:warn'`).
+> On version 4 you should revert to a simpler parameter,
+> such as `errors=count`, instead of the above.
 
 </details>
 
@@ -633,7 +645,7 @@ and take note of some of the percentiles shown there.
 
 <details><summary>Show me "sample values" one could read from the graph</summary>
 
-Below is a real-life example of the values that could result from a `cql-keyvalue`
+Below is a real-life example of the values that could result from a `cql-keyvalue2`
 benchmark session in the _main_ phase:
 
 | Percentile  | Write Latency  | Read Latency   |
@@ -841,7 +853,7 @@ Grafana/Prometheus stack for metrics (it will take a few more seconds to start):
 <!-- 2L ENDIF -->
 
 ```
-nb cql-keyvalue                                                           \
+nb cql-keyvalue2                                                          \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -850,7 +862,7 @@ nb cql-keyvalue                                                           \
     cyclerate=50                                                          \
     rampup-cycles=15000                                                   \
     main-cycles=15000                                                     \
-    errors=count                                                          \
+    errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
     --docker-metrics
 ```
@@ -859,7 +871,7 @@ nb cql-keyvalue                                                           \
 This command might take a few additional seconds to start the first time,
 as Docker images are being downloaded and the containers are started.
 Then, successful start of the Grafana dashboard
-should be logged, at which point the usual `cql-keyvalue` workload will start.
+should be logged, at which point the usual `cql-keyvalue2` workload will start.
 <!-- 2L ENDIF -->
 
 <details><summary>Show me the run with Docker metrics</summary>
@@ -979,7 +991,7 @@ in real time.
 ## Workloads
 
 <!-- 2L IF long -->
-We mentioned that `cql-keyvalue` is one of several ready-to-use _workloads_,
+We mentioned that `cql-keyvalue2` is one of several ready-to-use _workloads_,
 but also that you can easily build your own: for example, to test a specific
 data model or ensure you closely mimic your application's request pattern.
 
@@ -1006,16 +1018,16 @@ Ask NoSQLBench to dump to a file the `yaml` defining the workload
 you just ran:
 
 ```bash
-    nb --copy cql-keyvalue
+    nb --copy cql-keyvalue2
 ```
 
 _(you can also get a comprehensive list of all available workloads with
 `nb --list-workloads`, by the way, and a more fine-grained output with
 `nb --list-scenarios`.)_
 
-A file `cql-keyvalue.yaml` is created in the working directory.
+A file `cql-keyvalue2.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running
-`gp open cql-keyvalue.yaml`).
+`gp open cql-keyvalue2.yaml`).
 
 <!-- 2L IF long -->
 This is not a line-by-line analysis, but broadly speaking
@@ -1025,7 +1037,7 @@ there are three important sections:
 - **bindings**. Each [_binding_](https://docs.nosqlbench.io/docs/bindings/) defines a particular recipe to generate a sequence of pseudo-random values. Emphasis is on the "pseudo", since bindings are (usually) _fully deterministic_, reproducible, mappings of cycle numbers to values. The sequence of "keys" produced as the the _rampup_ phase of key-value workload unfolds, for instance, is defined here by the `seq_key` binding. Bindings are defined using a functional compositional approach, starting from a set of available building blocks, and can generate values of many different data types.
 - **blocks**. Here, groups of "statements" (better: _operations_) are defined for use within scenarios. Within the body of operations, [bindings](https://docs.nosqlbench.io/docs/workloads_101/03-data-bindings/) can be employed (`{binding_name}`), which implies they will take values along the generated sequence as the cycle number unfolds; similarly, [template parameters](https://docs.nosqlbench.io/docs/workloads_101/09-template-params/) can be used (`<<parameter_name:default>>`, or `TEMPLATE(parameter_name,default)`) to be replaced according to settings passed through the command-line or when defining the scenario composition in the "scenarios" section.
 
-Try to track what happens when you invoke the `cql-keyvalue astra` workload/scenario _(Note: this focuses on the version 5 syntax)_:
+Try to track what happens when you invoke the `cql-keyvalue2 astra` workload/scenario _(Note: this focuses on the version 5 syntax)_:
 1. the _schema_ phase is invoked: it consists of running, with the `cql` driver, the blocks whose naming [matches the selector](https://docs.nosqlbench.io/docs/workloads_101/05-op-tags/#tag-filtering-rules) `tags==block:schema`. Also some parameters are passed to the execution. (_Note that the schema phase differs between an Astra DB target and a regular Cassandra target, while later phases do not_.)
 2. When _schema_ is over, the _rampup_ is started. This runs all blocks matching `tags==block:rampup`, and passes the parameters `threads` and `cycles`. The latter will preferrably read the value passed through command-line (look for `rampup-cycles=...` in the benchmark command you ran earlier), with a default.
 3. Running _rampup_ then entails running the block with the tag `block: rampup` (the tag is [automatically attached to the block](https://github.com/nosqlbench/nosqlbench/blob/main/adapters-api/src/main/resources/workload_definition/workload_structure.md#blocks) from its name). In the block, a [consistency level](https://docs.datastax.com/en/dse/5.1/cql/cql/cql_reference/cqlsh_commands/cqlshConsistency.html) is defined, again using template parameters. The statement (or operation) that is repeatedly executed is an `INSERT` statement, which writes rows to a DB table:
