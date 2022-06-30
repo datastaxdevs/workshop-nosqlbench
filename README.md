@@ -577,9 +577,9 @@ you just ran:
     nb --copy cql-keyvalue
 ```
 
-(you can also get a comprehensive list of all available workloads with
+_(you can also get a comprehensive list of all available workloads with
 `nb --list-workloads`, by the way, and a more fine-grained output with
-`nb --list-scenarios`.)
+`nb --list-scenarios`.)_
 
 A file `cql-keyvalue.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running
@@ -591,7 +591,7 @@ phases the benchmark is organized into.
 There are profound differences in the way the same workload is expressed
 in the NoSQLBench 4 yaml file and the NoSQLBench 5 format.
 
-<details><summary>(DRAFT IMAGE) Show me the differences</summary>
+<details><summary>Show me the differences</summary>
     <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5.png?raw=true" />
 </details>
 
