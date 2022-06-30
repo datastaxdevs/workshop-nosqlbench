@@ -18,14 +18,14 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
 In this repository you will find all material and references you need:
 
-<!-- - [Slide deck](#) -->
 - [NoSQLBench Discord](https://discord.gg/dBHRakusMN)
 - [NoSQLBench homepage](https://docs.nosqlbench.io/)
-<!-- - [Workshop video](#) -->
 - [Exercises](#create-your-astra-db-instance)
 - [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
 - [Our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
+<!-- - [Slide deck](#) -->
+<!-- - [Workshop video](#) -->
 
 #### Table of Contents
 
@@ -109,10 +109,10 @@ you will then benchmark with NoSQLBench.
 You need to:
 
 - create an Astra DB instance [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-instance/#c-procedure), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
+- _(this will happen automatically with the previous one)_ generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ if manually creating the token.
 - generate and download a Secure Connect Bundle [as explained here](https://awesome-astra.github.io/docs/pages/astra/download-scb/#c-procedure);
-- generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ when creating the token.
 
-Moreover, keep the Astra DB dashboard open: it will be useful later. In particular the
+Moreover, keep the Astra DB dashboard open: it will be useful later. In particular, locate the
 Health tab and the CQL Console.
 
 
@@ -138,13 +138,13 @@ curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench
 
 then make it executable and move it to a better place:
 ```bash
-chmod +x nb
-sudo mv nb /usr/local/bin/
+chmod +x nb5
+sudo mv nb5 /usr/local/bin/
 ```
 
 Ok, now check that the program starts: invoking
 ```bash
-nb --version
+nb5 --version
 ```
 should output the program version (something like `4.17.14` or higher - _soon to change_).
 
@@ -229,7 +229,7 @@ reaching the database simply prints a series of CQL statements to the console
 (as specified by the `driver=stdout` parameter):
 
 ```bash
-nb cql-keyvalue2 astra                  \
+nb5 cql-keyvalue2 astra                 \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -250,7 +250,7 @@ and then another ten between `SELECT`s and further `INSERT`s.
 Now re-launch the above dry run and look for differences in the output:
 
 ```bash
-nb cql-keyvalue2 astra                  \
+nb5 cql-keyvalue2 astra                 \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -278,7 +278,7 @@ in order to collect enough statistical support for the results.
 Here is the full command to launch:
 
 ```bash
-nb cql-keyvalue2                                                          \
+nb5 cql-keyvalue2                                                         \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -493,7 +493,7 @@ Launch a new benchmark, this time having NoSQLBench start a dockerized
 Grafana/Prometheus stack for metrics (it will take a few more seconds to start):
 
 ```
-nb cql-keyvalue2                                                          \
+nb5 cql-keyvalue2                                                         \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -586,12 +586,12 @@ Ask NoSQLBench to dump to a file the `yaml` defining the workload
 you just ran:
 
 ```bash
-    nb --copy cql-keyvalue2
+    nb5 --copy cql-keyvalue2
 ```
 
 _(you can also get a comprehensive list of all available workloads with
-`nb --list-workloads`, by the way, and a more fine-grained output with
-`nb --list-scenarios`.)_
+`nb5 --list-workloads`, by the way, and a more fine-grained output with
+`nb5 --list-scenarios`.)_
 
 A file `cql-keyvalue2.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running
@@ -623,7 +623,7 @@ Run the first example (and then look at the corresponding
 `simple-workload.yaml`) with:
 
 ```
-nb run driver=stdout workload=simple-workload cycles=12
+nb5 run driver=stdout workload=simple-workload cycles=12
 ```
 
 Look at how _bindings_ connect the sequence of operations to "execute"
@@ -636,7 +636,7 @@ Run the second example, which is an example of structuring a workload
 in _phases_ (and then open `workload-with-phases.yaml`):
 
 ```
-nb workload-with-phases default driver=stdout
+nb5 workload-with-phases default driver=stdout
 ```
 
 Notable features of this workload are its multi-phase structure

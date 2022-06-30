@@ -42,7 +42,7 @@ Info on the [`ratio` parameter](https://docs.nosqlbench.io/docs/reference/core-o
 A possible way to run the workload with Astra DB would be similar to:
 
 ```
-nb homework-workload astra                    \
+nb5 homework-workload astra                   \
   driver=cql                                  \
   username=${ASTRA_DB_CLIENT_ID}              \
   password=${ASTRA_DB_CLIENT_SECRET}          \
@@ -59,7 +59,7 @@ On a "regular" Cassandra installation (assuming no authentication required)
 that would be something like:
 
 ```
-nb homework-workload astra  \
+nb5 homework-workload astra \
   driver=cql                \
   hosts=192.168.1.100       \
   localdc=datacenter1       \

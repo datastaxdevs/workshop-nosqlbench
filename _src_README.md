@@ -18,14 +18,14 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
 In this repository you will find all material and references you need:
 
-<!-- - [Slide deck](#) -->
 - [NoSQLBench Discord](https://discord.gg/dBHRakusMN)
 - [NoSQLBench homepage](https://docs.nosqlbench.io/)
-<!-- - [Workshop video](#) -->
 - [Exercises](#create-your-astra-db-instance)
 - [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
 - [Our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
+<!-- - [Slide deck](#) -->
+<!-- - [Workshop video](#) -->
 
 #### Table of Contents
 
@@ -129,10 +129,10 @@ you will then benchmark with NoSQLBench.
 You need to:
 
 - create an Astra DB instance [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-instance/#c-procedure), with **database name** = `workshops` and **keyspace name** = `nbkeyspace`;
+- _(this will happen automatically with the previous one)_ generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ if manually creating the token.
 - generate and download a Secure Connect Bundle [as explained here](https://awesome-astra.github.io/docs/pages/astra/download-scb/#c-procedure);
-- generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ when creating the token.
 
-Moreover, keep the Astra DB dashboard open: it will be useful later. In particular the
+Moreover, keep the Astra DB dashboard open: it will be useful later. In particular, locate the
 Health tab and the CQL Console.
 
 
@@ -193,19 +193,19 @@ out of convenience, to a directory which is part of the search path:
 then make it executable and move it to a better place:
 <!-- 2L ENDIF -->
 ```bash
-chmod +x nb
-sudo mv nb /usr/local/bin/
+chmod +x nb5
+sudo mv nb5 /usr/local/bin/
 ```
 
 Ok, now check that the program starts: invoking
 ```bash
-nb --version
+nb5 --version
 ```
 should output the program version (something like `4.17.14` or higher - _soon to change_).
 
 <!-- 2L IF long -->
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
-> launching `nb`. You can ignore it: it is a consequence of some settings by
+> launching `nb5`. You can ignore it: it is a consequence of some settings by
 > Gitpod and does not have to do with NoSQLBench itself.
 
 > Note that if your Gitpod instance gets hibernated (which happens after some
@@ -342,7 +342,7 @@ reaching the database simply prints a series of CQL statements to the console
 (as specified by the `driver=stdout` parameter):
 
 ```bash
-nb cql-keyvalue2 astra                  \
+nb5 cql-keyvalue2 astra                 \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -377,7 +377,7 @@ when operating normally.
 Now re-launch the above dry run and look for differences in the output:
 
 ```bash
-nb cql-keyvalue2 astra                  \
+nb5 cql-keyvalue2 astra                 \
     driver=stdout                       \
     main-cycles=10                      \
     rampup-cycles=10                    \
@@ -437,7 +437,7 @@ in order to collect enough statistical support for the results.
 Here is the full command to launch:
 
 ```bash
-nb cql-keyvalue2                                                          \
+nb5 cql-keyvalue2                                                         \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -853,7 +853,7 @@ Grafana/Prometheus stack for metrics (it will take a few more seconds to start):
 <!-- 2L ENDIF -->
 
 ```
-nb cql-keyvalue2                                                          \
+nb5 cql-keyvalue2                                                         \
     astra                                                                 \
     username=${ASTRA_DB_CLIENT_ID}                                        \
     password=${ASTRA_DB_CLIENT_SECRET}                                    \
@@ -1018,12 +1018,12 @@ Ask NoSQLBench to dump to a file the `yaml` defining the workload
 you just ran:
 
 ```bash
-    nb --copy cql-keyvalue2
+    nb5 --copy cql-keyvalue2
 ```
 
 _(you can also get a comprehensive list of all available workloads with
-`nb --list-workloads`, by the way, and a more fine-grained output with
-`nb --list-scenarios`.)_
+`nb5 --list-workloads`, by the way, and a more fine-grained output with
+`nb5 --list-scenarios`.)_
 
 A file `cql-keyvalue2.yaml` is created in the working directory.
 You can open it (clicking on it in the Gitpod explorer or by running
@@ -1083,12 +1083,9 @@ cd workloads
 <!-- 2L IF long -->
 _Note_: The two example yaml files that follow are also provided
 in the "nb4 list-based syntax" (as `*-nb4.yaml` files).
-In general, the modern map-based syntax is not guaranteed to be
-parseable by NoSQLBench 4;
-however, for these rather simple examples, it turns out that you can
-indeed run e.g. `nb run workload=simple-workload-nb4 [...]` obtaining
-the very same result as with the "modern" yaml regardless of the version
-of NoSQLBench.
+Just keep in mind that modern `nb5` can run any format, while
+the modern map-based syntax is not guaranteed to be
+parseable by NoSQLBench 4.
 <!-- 2L ENDIF -->
 
 #### Example 1: talking about food
@@ -1110,7 +1107,7 @@ Run the first example (and then look at the corresponding
 <!-- 2L ENDIF -->
 
 ```
-nb run driver=stdout workload=simple-workload cycles=12
+nb5 run driver=stdout workload=simple-workload cycles=12
 ```
 
 <!-- 2L IF long -->
@@ -1163,7 +1160,7 @@ in _phases_ (and then open `workload-with-phases.yaml`):
 <!-- 2L ENDIF -->
 
 ```
-nb workload-with-phases default driver=stdout
+nb5 workload-with-phases default driver=stdout
 ```
 
 <!-- 2L IF long -->
