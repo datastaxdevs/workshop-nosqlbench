@@ -201,7 +201,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb5 --version
 ```
-should output the program version (something like `4.17.14` or higher - _soon to change_).
+should output the program version (something like `4.17.15-SNAPSHOT` or higher - _soon to change_).
 
 <!-- 2L IF long -->
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
@@ -410,7 +410,7 @@ way the workload is to be unfolded and executed.
 <!-- 2L ENDIF -->
 
 This time you will run with `driver=cql` to actually reach the database:
-for that to work, you will provide all connections parameters set up earlier.
+for that to work, you will provide all connection parameters set up earlier.
 
 <!-- 2L IF long -->
 > Note: for this workload, as you could check by examining its definition
@@ -449,7 +449,7 @@ nb5 cql-keyvalue2                                                         \
     main-cycles=15000                                                     \
     errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
-    --log-histograms 'histogram_hdr_data.log:.*.main.result*:20s'         \
+    --log-histograms 'histogram_hdr_data.log:.*.main.result.*:20s'         \
     --log-histostats 'hdrstats.log:.*.main.result.*:20s'
 ```
 
@@ -669,7 +669,7 @@ Quoting high percentiles such as P95, P99 or similar is a standard practice
 when expressing the performance of a data system.
 <!-- 2L ENDIF -->
 
-#### Final summary
+#### Final summary in "logs/"
 
 <!-- 2L IF long -->
 By now the benchmark should have finished. If it hasn't yet, give it time to complete:
@@ -682,25 +682,25 @@ summary is a shortened form of the data found in the summary files there.
 
 Now open the most recent `*.summary` file in that directory, corresponding
 to the `nb` invocation that just completed.
-Find the metric called `cqlkeyvalue_astra_main.result-success`: this
+Find the metric called `cqlkeyvalue2_astra_main.result-success`: this
 corresponds to events of the type _"a command was issued to the database during_
 _the_ main _phase and succeeded (and the time needed for it to complete, as seen from the client_
 _side, was recorded)"_.
 
-> The related metric `cqlkeyvalue_astra_main.result` is similar,
+> The related metric `cqlkeyvalue2_astra_main.result` is similar,
 > but comprises all events regardless of whether they succeeded or not.
 > In "healthy" cases, these two are identical or at most very close to each other.
 > This difference is sometimes characterized as the "goodput/throughput" dichotomy.
 
 <!-- 2L ELIF short -->
 When the benchmark has finished, open the latest `*.summary` file and look
-for `cqlkeyvalue_astra_main.result-success`.
+for `cqlkeyvalue2_astra_main.result-success`.
 <!-- 2L ENDIF -->
 
 Under that metric title, you will see something similar to:
 
 ```
-cqlkeyvalue_astra_main.result-success
+cqlkeyvalue2_astra_main.result-success
              count = 15000
          mean rate = 50.00 calls/second
      1-minute rate = 49.94 calls/second
@@ -736,7 +736,7 @@ Use this script to generate a graph of the data collected as "histostats":
 ```bash
 ./hdr_tool/histostats_quick_plotter.py \
     hdrstats.log \
-    -m cqlkeyvalue_astra_main.result-success
+    -m cqlkeyvalue2_astra_main.result-success
 ```
 
 and then open, in the Gitpod editor, the `hdrstats.png` image just created.
@@ -798,7 +798,7 @@ generated during the benchmark:
     histogram_hdr_data.log \
     -b -c -s \
     -p SampleData \
-    -m cqlkeyvalue_astra_main.result-success
+    -m cqlkeyvalue2_astra_main.result-success
 ```
 
 <!-- 2L IF long -->

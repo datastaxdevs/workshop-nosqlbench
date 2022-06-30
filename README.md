@@ -146,7 +146,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb5 --version
 ```
-should output the program version (something like `4.17.14` or higher - _soon to change_).
+should output the program version (something like `4.17.15-SNAPSHOT` or higher - _soon to change_).
 
 
 #### Version used
@@ -268,7 +268,7 @@ populated with some information from the benchmark at each execution of `nb`.
 It is now time to start hitting the database!
 
 This time you will run with `driver=cql` to actually reach the database:
-for that to work, you will provide all connections parameters set up earlier.
+for that to work, you will provide all connection parameters set up earlier.
 
 
 The next run will ask NoSQLBench to perform a substantial amount of operations,
@@ -290,7 +290,7 @@ nb5 cql-keyvalue2                                                         \
     main-cycles=15000                                                     \
     errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
-    --log-histograms 'histogram_hdr_data.log:.*.main.result*:20s'         \
+    --log-histograms 'histogram_hdr_data.log:.*.main.result.*:20s'         \
     --log-histostats 'hdrstats.log:.*.main.result.*:20s'
 ```
 
@@ -413,15 +413,15 @@ benchmark session in the _main_ phase:
 </details>
 
 
-#### Final summary
+#### Final summary in "logs/"
 
 When the benchmark has finished, open the latest `*.summary` file and look
-for `cqlkeyvalue_astra_main.result-success`.
+for `cqlkeyvalue2_astra_main.result-success`.
 
 Under that metric title, you will see something similar to:
 
 ```
-cqlkeyvalue_astra_main.result-success
+cqlkeyvalue2_astra_main.result-success
              count = 15000
          mean rate = 50.00 calls/second
      1-minute rate = 49.94 calls/second
@@ -437,7 +437,7 @@ Use this script to generate a graph of the data collected as "histostats":
 ```bash
 ./hdr_tool/histostats_quick_plotter.py \
     hdrstats.log \
-    -m cqlkeyvalue_astra_main.result-success
+    -m cqlkeyvalue2_astra_main.result-success
 ```
 
 and then open, in the Gitpod editor, the `hdrstats.png` image just created.
@@ -464,7 +464,7 @@ generated during the benchmark:
     histogram_hdr_data.log \
     -b -c -s \
     -p SampleData \
-    -m cqlkeyvalue_astra_main.result-success
+    -m cqlkeyvalue2_astra_main.result-success
 ```
 
 
