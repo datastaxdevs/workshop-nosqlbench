@@ -18,10 +18,10 @@ Apache Cassandra. Along the way, you will learn the basics of NoSQLBench.
 
 In this repository you will find all material and references you need:
 
-- [Slide deck](#)
+<!-- - [Slide deck](#) -->
 - [NoSQLBench Discord](https://discord.gg/dBHRakusMN)
 - [NoSQLBench homepage](https://docs.nosqlbench.io/)
-- [Workshop video](#)
+<!-- - [Workshop video](#) -->
 - [Exercises](#create-your-astra-db-instance)
 - [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
@@ -1052,7 +1052,7 @@ in the NoSQLBench 4 yaml file and the NoSQLBench 5 format.
 <!-- 2L ENDIF -->
 
 <details><summary>(DRAFT IMAGE) Show me the differences</summary>
-    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5_DRAFT2.png?raw=true" />
+    <img src="https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/cql-keyvalue-nb4-vs-nb5.png?raw=true" />
 </details>
 
 ### Play with workloads
