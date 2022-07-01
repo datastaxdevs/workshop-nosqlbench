@@ -395,11 +395,11 @@ nb5 cql-keyvalue2                                                         \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}                                    \
     cyclerate=50                                                          \
     driver=cql                                                            \
-    rampup-cycles=15000                                                   \
-    main-cycles=15000                                                     \
+    rampup-cycles=9000                                                    \
+    main-cycles=9000                                                      \
     errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
-    --log-histograms 'histogram_hdr_data.log:.*.main.result.*:20s'         \
+    --log-histograms 'histogram_hdr_data.log:.*.main.result.*:20s'        \
     --log-histostats 'hdrstats.log:.*.main.result.*:20s'
 ```
 
@@ -450,7 +450,7 @@ run with a full-fledged [CLI scripting](https://docs.nosqlbench.io/docs/referenc
 > access the database, regardless of whether Astra DB or a Cassandra cluster.
 
 
-The above command should last approximately ten minutes, during which NoSQLBench
+The above command should run for approximately six minutes, during which NoSQLBench
 sends a constant stream of I/O operations to the database and collects timing
 information on how it responds. You will see a **console output** keeping you
 updated on the progress of the
