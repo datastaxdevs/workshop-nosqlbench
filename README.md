@@ -89,7 +89,7 @@ follow these instructions:
 
 1. Do the hands-on practice, either during the workshop or by following the instructions in this README;
 2. (optional) Complete the "Lab" assignment as detailed [here](homework/homework.md);
-3. Fill the submission form [here](#). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
+3. Fill the submission form [here](https://dtsx.io/homework-nosqlbench). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
 4. give us a few days to process your submission: you should receive your well-earned badge in your email inbox!
 
 

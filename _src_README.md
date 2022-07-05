@@ -109,7 +109,7 @@ follow these instructions:
 
 1. Do the hands-on practice, either during the workshop or by following the instructions in this README;
 2. (optional) Complete the "Lab" assignment as detailed [here](homework/homework.md);
-3. Fill the submission form [here](#). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
+3. Fill the submission form [here](https://dtsx.io/homework-nosqlbench). Answer the theory questions and (optionally) provide a _screenshot_ of the completed "Lab" part;
 4. give us a few days to process your submission: you should receive your well-earned badge in your email inbox!
 
 
@@ -872,6 +872,13 @@ This command might take a few additional seconds to start the first time,
 as Docker images are being downloaded and the containers are started.
 Then, successful start of the Grafana dashboard
 should be logged, at which point the usual `cql-keyvalue2` workload will start.
+
+> *Note*: on some versions of NoSQLBench 5 you may see an error such as
+> `Java HttpClient was not authorized, [...] :WWW-Authenticate header missing for response code 401`.
+> This is due to the Grafana server not complying with the HTTP 401 specifications, and can be fixed
+> by running the script `./_grafana_docker_key_fetcher.sh` and then re-starting the above `nb5` command.
+> (the script manually generates an API key for interacting with Grafana, storing it where then `nb5` expects to find it.)
+
 <!-- 2L ENDIF -->
 
 <details><summary>Show me the run with Docker metrics</summary>
