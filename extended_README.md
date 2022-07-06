@@ -979,7 +979,9 @@ produces the [spelled-out name](https://docs.nosqlbench.io/docs/bindings/funcref
 of the resulting number.
 
 For a general introduction to bindings and a list of the (many) available
-functions, please see [here](https://docs.nosqlbench.io/docs/bindings/binding-concepts/).
+functions, please see [here](https://docs.nosqlbench.io/docs/bindings/binding-concepts/). You can also find several valueble example "recipes"
+in the [`/nbr/src/main/resources/examples`](https://github.com/nosqlbench/nosqlbench/tree/main/nbr/src/main/resources/examples)
+directory of NoSQLBench source code.
 
 #### Example 2: animal meeting
 
