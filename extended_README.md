@@ -160,8 +160,7 @@ Please download the "Linux binary" distribution of NoSQLBench:
 as instructed [here](https://github.com/nosqlbench/nosqlbench/blob/main/DOWNLOADS.md),
 you can obtain the latest stable binary (it's a few hundred megabytes) with
 ```bash
-# Note: at the moment we aim at a specific nb5 (a.k.a. "4.17.*") version - soon to change
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.14/nb
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.19/nb5
 ```
 
 and, when the download is finished, make it executable and move it,
@@ -175,7 +174,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb5 --version
 ```
-should output the program version (something like `4.17.15-SNAPSHOT` or higher - _soon to change_).
+should output the program version (something like `4.17.19` or higher).
 
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when
 > launching `nb5`. You can ignore it: it is a consequence of some settings by

@@ -132,8 +132,7 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 
 To download NoSQLBench, type or paste this command in your Gitpod console:
 ```bash
-# Note: at the moment we aim at a specific nb5 (a.k.a. "4.17.*") version - soon to change
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.14/nb
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.19/nb5
 ```
 
 then make it executable and move it to a better place:
@@ -146,7 +145,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb5 --version
 ```
-should output the program version (something like `4.17.15-SNAPSHOT` or higher - _soon to change_).
+should output the program version (something like `4.17.19` or higher).
 
 
 #### Version used
