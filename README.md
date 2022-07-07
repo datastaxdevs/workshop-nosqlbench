@@ -230,8 +230,8 @@ reaching the database simply prints a series of CQL statements to the console
 ```bash
 nb5 cql-keyvalue2 astra                 \
     driver=stdout                       \
-    main-cycles=10                      \
     rampup-cycles=10                    \
+    main-cycles=10                      \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}
 ```
 
@@ -251,8 +251,8 @@ Now re-launch the above dry run and look for differences in the output:
 ```bash
 nb5 cql-keyvalue2 astra                 \
     driver=stdout                       \
-    main-cycles=10                      \
     rampup-cycles=10                    \
+    main-cycles=10                      \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}
 ```
 
@@ -285,8 +285,8 @@ nb5 cql-keyvalue2                                                         \
     keyspace=${ASTRA_DB_KEYSPACE_NAME}                                    \
     cyclerate=50                                                          \
     driver=cql                                                            \
-    rampup-cycles=9000                                                    \
     main-cycles=9000                                                      \
+    rampup-cycles=9000                                                    \
     errors='OverloadedException:warn'                                     \
     --progress console:5s                                                 \
     --log-histograms 'histogram_hdr_data.log:.*.main.result.*:20s'        \
@@ -307,8 +307,8 @@ Note that some of the parameters (e.g. `keyspace`) are workload-specific.
 | `keyspace`                | target keyspace
 | `cyclerate`               | rate-limiting (cycles per second)
 | `driver=cql`              | driver to use (CQL, for AstraDB/Cassandra)
-| `rampup-cycles`           | how many operations in the "rampup" phase
 | `main-cycles`             | how many operations in the "main" phase
+| `rampup-cycles`           | how many operations in the "rampup" phase
 | `errors`                  | behaviour if errors occur during benchmarking
 | `--progress console`      | frequency of console prints
 | `--log-histograms`        | write data to HDR file (see later)
@@ -650,3 +650,5 @@ definition.
 The "Lab" part of the homework, which requires you to finalize
 a workload `yaml` and make it work according to specifications,
 is detailed on [this page](homework/homework.md).
+
+**To submit your homework, please use [this form](https://dtsx.io/homework-nosqlbench).**

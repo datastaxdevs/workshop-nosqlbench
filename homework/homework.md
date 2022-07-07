@@ -76,3 +76,5 @@ in particular, even in this case the keyspace is expected to already exist and w
 not be created as part of the workload.)_
 
 Good luck!
+
+**To submit your homework, please use [this form](https://dtsx.io/homework-nosqlbench).**
