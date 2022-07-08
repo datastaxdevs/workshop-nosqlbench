@@ -3,7 +3,7 @@ bindings:
  food: AddHashRange(41); CSVFrequencySampler('tokens.csv','food')
  adjective: AddHashRange(71); CSVFrequencySampler('tokens.csv','adj')
  counter: Identity(); Add(1)
- multiplier: AddHashRange(100); Clamp(5,20); NumberNameToString()
+ multiplier: AddHashRange(50); Mod(20); Clamp(2,20); NumberNameToString()
  month: WeightedStrings('June:0.2;May:0.3;April:0.1;September:0.04')
  insult: AddHashRange(1000); Combinations('!@#$%^&*;!@#$%^&*;!@#$%^&*;!@#$%^&*')
 ops:
@@ -14,6 +14,6 @@ ops:
       ratio: 3
   reply-angrily:
     op:
-      stmt: "{counter}. If you tell me that {food} are {adjective}, to thee I yell: \"{insult}!\"\n"
+      stmt: "{counter}. If you tell me that {food} are {adjective}, to thee I yell {multiplier} times: \"{insult}!\"\n"
     params:
       ratio: 1
