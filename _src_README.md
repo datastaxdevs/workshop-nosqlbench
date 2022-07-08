@@ -24,7 +24,7 @@ In this repository you will find all material and references you need:
 - [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
 - [Our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
-<!-- - [Slide deck](#) -->
+- [Slide deck](slides/datastaxdevs-workshop-benchmarking-nosqlbench.pdf)
 <!-- - [Workshop video](#) -->
 
 #### Table of Contents
@@ -1129,14 +1129,15 @@ Bindings are defined in a functional way, by providing a sequence of
 functions that will be composed, left-to-right. It is implied that the input to
 the first such function is the cycle number, so for instance the binding:
 ```
- multiplier: AddHashRange(100); Clamp(5,20); NumberNameToString()
+ multiplier: AddHashRange(50); Mod(20); Clamp(2,20); NumberNameToString()
 ```
 
 means: the `multiplier` binding will be a function that takes the cycle number as input,
-[adds a pseudorandom 0-100 value](https://docs.nosqlbench.io/docs/bindings/funcref-general/#addhashrange)
-to it, [adjusts the result](https://docs.nosqlbench.io/docs/bindings/funcref-general/#clamp)
-so that it lies within the [5, 20] interval, and finally
-produces the [spelled-out name](https://docs.nosqlbench.io/docs/bindings/funcref-premade/#numbernametostring)
+[adds a pseudorandom 0-50 value](https://docs.nosqlbench.io/docs/bindings/funcref-general/#addhashrange)
+to it, takes the [modulo-20](https://docs.nosqlbench.io/docs/bindings/funcref-general/#mod) of the result,
+[adjusts it](https://docs.nosqlbench.io/docs/bindings/funcref-general/#clamp)
+so that it lies within the [2, 20] interval, and finally
+produces the [spelled-out name in words](https://docs.nosqlbench.io/docs/bindings/funcref-premade/#numbernametostring)
 of the resulting number.
 
 For a general introduction to bindings and a list of the (many) available
