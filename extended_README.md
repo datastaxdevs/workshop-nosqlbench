@@ -24,7 +24,7 @@ In this repository you will find all material and references you need:
 - [Step-by-step guide](#before-you-start)
 - [DataStaxDevs Discord server](https://dtsx.io/discord) to keep in touch with us
 - [Our Q&A forum](https://community.datastax.com/) (think StackOverflow for Cassandra and all things DataStax)
-<!-- - [Slide deck](#) -->
+- [Slide deck](slides/datastaxdevs-workshop-benchmarking-nosqlbench.pdf)
 <!-- - [Workshop video](#) -->
 
 #### Table of Contents
