@@ -112,6 +112,12 @@ You need to:
 - _(this will happen automatically with the previous one)_ generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ if manually creating the token.
 - generate and download a Secure Connect Bundle [as explained here](https://awesome-astra.github.io/docs/pages/astra/download-scb/#c-procedure);
 
+> **⚠️ Important**
+> ```
+> The instructor will show you on screen how to create a token 
+> but will have to destroy to token immediately for security reasons.
+> ```
+
 Moreover, keep the Astra DB dashboard open: it will be useful later. In particular, locate the
 Health tab and the CQL Console.
 
