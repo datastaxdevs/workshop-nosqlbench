@@ -1,0 +1,13 @@
+{
+  "name": "Benchmark your Astra DB with NoSQLBench",
+  "description": "The goal of this workshop is to get you familiar with the powerful and versatile tool NoSQLBench. With that, you can perform industry-grade, robust benchmarks aimed at several (distributed) target systems, especially NoSQL databases.",
+  "duration": "2 hours",
+  "skillLevel": "Intermediate",
+  "githubUrl": "https://github.com/datastaxdevs/workshop-nosqlbench",
+  "tags": [
+    { "name": "workshop" }
+  ],
+  "category": "workshop",
+  "priority": 2,
+  "heroImage": "https://github.com/datastaxdevs/workshop-nosqlbench/raw/main/images/nosqlbench_banner.png?raw=true"
+}
