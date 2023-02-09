@@ -4,17 +4,16 @@
   "duration": "120 minutes",
   "skillLevel": "Intermediate",
   "language":["java"],
-  "stack":["nosqlbench", "numpy", "skit-learn"],
-  "githubUrl": "https://github.com/datastaxdevs/workshop-introduction-to-machine-learning",
+  "stack":["gitpod", "nosqlbench"],
+  "githubUrl": "https://github.com/datastaxdevs/workshop-nosqlbench",
   "badge": "https://media.badgr.com/uploads/badges/7d9e1746-280a-4498-bdfb-368318028fb2.png",
-  "youTubeUrl": [ "https://www.youtube.com/watch?v=rLx2uJCeJKk" ],
   "tags": [
-    { "name": "workshop" },
-    { "name":"nosqlbench" },
-    { "name":"performance" },
-    { "name":"cassandra" }
+    {"name": "workshop"},
+    {"name":"nosqlbench"},
+    {"name":"performance"},
+    {"name":"benchmark"},
+    {"name":"cassandra"}
   ],
   "category": "workshop",
   "usecases": ["Tests"]
 }
-
