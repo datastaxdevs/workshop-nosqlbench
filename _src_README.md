@@ -182,9 +182,7 @@ you can obtain the latest stable binary (it's a few hundred megabytes) with
 To download NoSQLBench, type or paste this command in your Gitpod console:
 <!-- 2L ENDIF -->
 ```bash
-# Update to the latest release if necessary
-#   (https://github.com/nosqlbench/nosqlbench/releases/latest)
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/5.17.3-release/nb5
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/latest/download/nb5
 ```
 
 <!-- 2L IF long -->
