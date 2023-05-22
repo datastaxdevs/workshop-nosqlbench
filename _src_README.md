@@ -182,7 +182,9 @@ you can obtain the latest stable binary (it's a few hundred megabytes) with
 To download NoSQLBench, type or paste this command in your Gitpod console:
 <!-- 2L ENDIF -->
 ```bash
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.19/nb5
+# Update to the latest release if necessary
+#   (https://github.com/nosqlbench/nosqlbench/releases/latest)
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/5.17.3-release/nb5
 ```
 
 <!-- 2L IF long -->
@@ -200,7 +202,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb5 --version
 ```
-should output the program version (something like `4.17.19` or higher).
+should output the program version (something like `5.17.3` or higher).
 
 <!-- 2L IF long -->
 > You will probably see a message like `Picked up JAVA_TOOL_OPTIONS ...` when

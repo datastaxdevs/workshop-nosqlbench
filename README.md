@@ -112,12 +112,6 @@ You need to:
 - _(this will happen automatically with the previous one)_ generate and retrieve a DB Token [as explained here](https://awesome-astra.github.io/docs/pages/astra/create-token/#c-procedure). **Important**: use the role _"DB Administrator"_ if manually creating the token.
 - generate and download a Secure Connect Bundle [as explained here](https://awesome-astra.github.io/docs/pages/astra/download-scb/#c-procedure);
 
-> **⚠️ Important**
-> ```
-> The instructor will show you on screen how to create a token 
-> but will have to destroy to token immediately for security reasons.
-> ```
-
 Moreover, keep the Astra DB dashboard open: it will be useful later. In particular, locate the
 Health tab and the CQL Console.
 
@@ -138,7 +132,9 @@ explorer on the left, a file editor on the top, and a console (`bash`) below it.
 
 To download NoSQLBench, type or paste this command in your Gitpod console:
 ```bash
-curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/nosqlbench-4.17.19/nb5
+# Update to the latest release if necessary
+#   (https://github.com/nosqlbench/nosqlbench/releases/latest)
+curl -L -O https://github.com/nosqlbench/nosqlbench/releases/download/5.17.3-release/nb5
 ```
 
 then make it executable and move it to a better place:
@@ -151,7 +147,7 @@ Ok, now check that the program starts: invoking
 ```bash
 nb5 --version
 ```
-should output the program version (something like `4.17.19` or higher).
+should output the program version (something like `5.17.3` or higher).
 
 
 #### Version used
